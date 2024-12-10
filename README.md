@@ -7,8 +7,7 @@ Welcome to the **EcoSynergy** project!
 ---
 
 ### **1. Repository Setup**
-1. Clone the repository to your local machine (**Only for the first time**) (move to your desired folder for the project (eg. AndroidStudioProject) using ```
-   cd path/to/folder```):
+1. Clone the repository to your local machine (**Only for the first time**) (move to your desired folder for the project (eg. AndroidStudioProject) using ```cd path/to/folder```):
    ```bash
    git clone https://github.com/taqyss/EcoSynergy.git
    ```
