@@ -17,7 +17,7 @@ Welcome to the **EcoSynergy** project!
    ```
 (**After first time**)
 
-Pull the latest changes from the `main` branch before starting any work:
+Pull the latest changes from the `main` branch before starting any work (**IMPORTANT**):
    ```bash
    git pull origin main
    ```
