@@ -29,7 +29,7 @@ Pull the latest changes from the `main` branch before starting any work (**IMPOR
 ---
 
 ### **2. Branching and Workflow**
-We follow a **feature branch workflow** to keep development organized and prevent conflicts. Each team member works on their assigned branch.
+We follow a **feature branch workflow** to keep development organized and prevent conflicts. Each team member works on their assigned branch, according to their activities.
 
 #### **Steps:**
 1. Create a new branch for your assigned activity:
