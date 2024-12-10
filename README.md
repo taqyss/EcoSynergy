@@ -15,7 +15,7 @@ Welcome to the **EcoSynergy** project!
    ```bash
    cd EcoSynergy
    ```
-(**After first time**)
+(**Everytime before working**)
 
 Pull the latest changes from the `main` branch before starting any work (**IMPORTANT**):
    ```bash
