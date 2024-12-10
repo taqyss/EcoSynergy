@@ -5,6 +5,7 @@
 Welcome to the **EcoSynergy** project! 
 
 **IMPORANT NOTES**
+
 -The main branch is called ```main```
 
 ---
