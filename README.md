@@ -2,7 +2,7 @@
 
 ## **Collaboration Guide**
 
-Welcome to the **EcoSynergy** project! This guide provides instructions on how team members can collaborate effectively to build a cohesive and fully functional app.
+Welcome to the **EcoSynergy** project! 
 
 ---
 
