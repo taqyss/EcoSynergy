@@ -16,6 +16,7 @@ Welcome to the **EcoSynergy** project!
    cd EcoSynergy
    ```
 (**After first time**)
+
 3. Pull the latest changes from the `main` branch before starting any work:
    ```bash
    git pull origin main
