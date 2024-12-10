@@ -49,7 +49,7 @@ We follow a **feature branch workflow** to keep development organized and preven
     
     **Afterwards**
     ```bash
-   git push <branch-name>
+   git push 
    ```
 4. When your feature is complete, submit a **Pull Request (PR)** to merge it into the `main` branch.
 
