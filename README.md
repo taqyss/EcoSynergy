@@ -7,7 +7,9 @@ Welcome to the **EcoSynergy** project!
 ---
 
 ### **1. Repository Setup**
-1. Clone the repository to your local machine (**Only for the first time**) (move to your desired folder for the project using cd *filepath*):
+1. Clone the repository to your local machine (**Only for the first time**) (move to your desired folder for the project (eg. AndroidStudioProject) using ```bash
+   cd path/to/folder
+   ```):
    ```bash
    git clone https://github.com/taqyss/EcoSynergy.git
    ```
@@ -17,7 +19,7 @@ Welcome to the **EcoSynergy** project!
    ```
 (**After first time**)
 
-3. Pull the latest changes from the `main` branch before starting any work:
+Pull the latest changes from the `main` branch before starting any work:
    ```bash
    git pull origin main
    ```
