@@ -41,10 +41,15 @@ We follow a **feature branch workflow** to keep development organized and preven
    ```
 
 3. Push your branch to the remote repository:
+    **For first time**
    ```bash
    git push -u origin <branch-name>
    ```
-
+    
+    **Afterwards**
+    ```bash
+   git push <branch-name>
+   ```
 4. When your feature is complete, submit a **Pull Request (PR)** to merge it into the `main` branch.
 
 ---
