@@ -2,7 +2,7 @@
 
 ## **Collaboration Guide**
 
-Welcome to the **EcoSynergy** project! :)
+Welcome to the **EcoSynergy** project! 
 
 **IMPORANT NOTES**
 
