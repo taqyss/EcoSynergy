@@ -39,12 +39,19 @@ We follow a **feature branch workflow** to keep development organized and preven
    - Replace `<branch-name>` with the name of your feature, e.g., `main-activity`, `dashboard-activity`.
 
 2. Work on your branch and commit changes regularly:
+   For adding changes specific to a folder/directory:
+   ```bash
+   git add path/to/directory
+   git commit -m "Describe your changes"
+   ```
+
+   For adding ALL changes:
    ```bash
    git add .
    git commit -m "Describe your changes"
    ```
 
-3. Push your branch to the remote repository:
+4. Push your branch to the remote repository:
 
     **For first time**
    ```bash
@@ -55,7 +62,7 @@ We follow a **feature branch workflow** to keep development organized and preven
     ```bash
    git push 
    ```
-4. When your feature is complete, submit a **Pull Request (PR)** to merge it into the `main` branch.
+5. When your feature is complete, submit a **Pull Request (PR)** to merge it into the `main` branch.
 
 ---
 
