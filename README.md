@@ -39,9 +39,11 @@ We follow a **feature branch workflow** to keep development organized and preven
    - Replace `<branch-name>` with the name of your feature, e.g., `main-activity`, `dashboard-activity`.
 
 2. Work on your branch and commit changes regularly:
-   For adding changes specific to a folder/directory:
+
+   For adding changes specific to a folder/directory, use ```git add path/to/directory```
+   For example, only adding changes to drawable folder:
    ```bash
-   git add path/to/directory
+   git add app/src/main/res/drawable
    git commit -m "Describe your changes"
    ```
 
