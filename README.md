@@ -10,9 +10,9 @@ Welcome to the **EcoSynergy** project! hai :DDDDDDD
 
 -No need to make a new project. You can CLONE the project from github to your local machine, as shown in step 1. 
 
--(**!!!Everytime before working!!!**)
+-(**EVERYTIME BEFORE WORKING**)
 
-Pull the latest changes from the `main` branch before starting any work (**!!!VERY VERY IMPORTANT!!!**):
+Pull the latest changes from the `main` branch before starting any work (**VERY IMPORTANT!**):
 
    Pull from main branch from github, regardless of whichever branch you're on:
    ```bash
