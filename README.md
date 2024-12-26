@@ -10,18 +10,13 @@ Welcome to the **EcoSynergy** project! hai :DDDDDDD
 
 -No need to make a new project. You can CLONE the project from github to your local machine, as shown in step 1. 
 
--(**Everytime before working**)
+-(**!!!Everytime before working!!!**)
 
-Pull the latest changes from the `main` branch before starting any work (**IMPORTANT**):
+Pull the latest changes from the `main` branch before starting any work (**!!!VERY VERY IMPORTANT!!!**):
 
-   Go to your branch (after setting up on part 2.Branching and Workflow. For example, your branch name is Dashboard):
+   Pull from main branch from github, regardless of whichever branch you're on:
    ```bash
-   git chechkout Dashboard
-   ```
-
-   Pull from current branch and unpstream branch (main) from github:
-   ```bash
-   git pull 
+   git pull origin main
    ```
 
 ---
