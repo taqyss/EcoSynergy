@@ -7,6 +7,7 @@ Welcome to the **EcoSynergy** project!
 **IMPORANT NOTES**
 
 -The main branch is called ```main```
+-No need to make a new project. You can CLONE the project from github to your local machine, as shown in step 1. 
 
 ---
 
