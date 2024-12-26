@@ -10,18 +10,26 @@ Welcome to the **EcoSynergy** project! hai :DDDDDDD
 
 -No need to make a new project. You can CLONE the project from github to your local machine, as shown in step 1. 
 
+-(**Everytime before working**)
+
+Pull the latest changes from the `main` branch before starting any work (**IMPORTANT**):
+
+   Go to your branch (after setting up on part 2.Branching and Workflow. For example, your branch name is Dashboard):
+   ```bash
+   git chechkout Dashboard
+   ```
+
+   Pull from current branch and unpstream branch (main) from github:
+   ```bash
+   git pull 
+   ```
+
 ---
 
 ### **1. Repository Setup**
 1. Open windows command prompt and Clone the repository to your local machine (**Only for the first time**) (FIRST move to your desired folder for the project (eg. AndroidStudioProject) using ```cd path/to/folder```):
    ```bash
    git clone https://github.com/taqyss/EcoSynergy.git
-   ```
-(**Everytime before working**)
-
-Pull the latest changes from the `main` branch before starting any work (**IMPORTANT**):
-   ```bash
-   git pull origin main
    ```
 
 ---
