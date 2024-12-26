@@ -1,8 +1,8 @@
-# EcoSynergy :D
+# EcoSynergy
 
 ## **Collaboration Guide**
 
-Welcome to the **EcoSynergy** project! sdfghj
+Welcome to the **EcoSynergy** project! hai :DDDDDDD
 
 **IMPORANT NOTES**
 
