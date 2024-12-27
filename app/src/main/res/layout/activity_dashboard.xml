@@ -67,7 +67,7 @@
         android:padding="16dp"
         app:layout_constraintDimensionRatio="1:1"
         tools:layout_editor_absoluteX="54dp"
-        tools:layout_editor_absoluteY="257dp">
+        tools:layout_editor_absoluteY="370dp">
 
 
         <!-- Text Section -->
