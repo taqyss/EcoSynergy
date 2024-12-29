@@ -1,5 +1,4 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,80 +10,165 @@
         android:layout_height="wrap_content"
         android:text="Learning Activity"
         android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Header Section -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayoutHeader"
+        android:layout_width="413dp"
+        android:layout_height="67dp"
+        android:background="#4B7254"
+        app:layout_constraintBottom_toTopOf="linearLayoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="84dp"
+            android:background="#4C7355"
+            android:fontFamily="sans-serif-medium"
+            android:text="Modules and Resources"
+            android:textColor="@android:color/white"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toEndOf="@id/linearLayoutHeader"
+            app:layout_constraintTop_toTopOf="@id/linearLayoutHeader" />
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="51dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintEnd_toStartOf="header"
+            tools:layout_editor_absoluteY="10dp">
+
+            <ImageButton
+                android:id="@+id/backButtonlayout"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:backgroundTint="#00FFFFFF"
+                android:orientation="horizontal"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toStartOf="@id/linearLayoutHeader"
+                android:src="@drawable/back_button_white" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayoutButton"
+        android:layout_width="417dp"
+        android:layout_height="653dp"
+        android:background="#4B7254"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStar_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutHeader"
+        tools:layout_editor_absoluteY="65dp">
+
+        <!-- Tabs -->
+
+        <Button
+            android:id="@+id/todays_pick_button"
+            android:layout_width="139dp"
+            android:layout_height="46dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Today's Pick"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="@id/linearLayoutButton"
+            app:layout_constraintEnd_toStartOf="@id/modules_button"
+            app:layout_constraintTop_toTopOf="@id/linearLayoutButton" />
+
+        <Button
+            android:id="@+id/modules_button"
+            android:layout_width="138dp"
+            android:layout_height="46dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Modules"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toStartOf="@id/resources_button"
+            app:layout_constraintTop_toTopOf="@id/linearLayoutButton" />
+
+        <Button
+            android:id="@+id/resources_button"
+            android:layout_width="138dp"
+            android:layout_height="46dp"
+            android:backgroundTint="#00FFFFFF"
+            android:text="Resources"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="@id/linearLayoutButton"
+            app:layout_constraintTop_toTopOf="@id/linearLayoutButton" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="370dp"
+            android:layout_height="86dp"
+            tools:layout_editor_absoluteX="22dp"
+            tools:layout_editor_absoluteY="492dp" />
+
+        <TextView
+            android:id="@+id/test_knowledge_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="Test your knowledge!"
+            android:textColor="#4C7355"
+            android:textSize="18sp"
+            tools:layout_editor_absoluteX="24dp"
+            tools:layout_editor_absoluteY="455dp" />
+
+        <FrameLayout
+            android:id="@+id/video_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@android:color/darker_gray"
+            tools:layout_editor_absoluteX="21dp"
+            tools:layout_editor_absoluteY="248dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="174dp"
+                android:gravity="center"
+                android:text="Video Placeholder"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/check_this_out_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="Check this out!"
+            android:textColor="#4C7355"
+            android:textSize="18sp"
+            tools:layout_editor_absoluteX="18dp"
+            tools:layout_editor_absoluteY="213dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <LinearLayout
-        android:layout_width="388dp"
-        android:layout_height="676dp"
-        android:layout_margin="8dp"
+        android:id="@+id/linearLayoutBottom"
+        android:layout_width="417dp"
+        android:layout_height="553dp"
         android:background="@android:color/white"
         android:clipToPadding="false"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="linearLayoutButton"
+        tools:layout_editor_absoluteY="123dp">
 
-        <!-- Header Section -->
-        <TextView
-            android:id="@+id/header"
-            android:layout_width="346dp"
-            android:layout_height="wrap_content"
-            android:background="#4C7355"
-            android:fontFamily="sans-serif-medium"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:text="Modules and Resources"
-            android:textColor="@android:color/white"
-            android:textSize="24sp" />
-
-        <!-- Tabs -->
 
         <!-- Did You Know Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="95dp"
-            android:layout_marginTop="8dp"
-            android:background="#4B7254"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <Button
-                android:id="@+id/todays_pick_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:text="Today's Pick"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/modules_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:text="Modules"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/resources_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:text="Resources"
-                android:textStyle="bold" />
-        </LinearLayout>
-
 
         <TextView
             android:id="@+id/did_you_know_header"
@@ -98,80 +182,14 @@
 
         <EditText
             android:id="@+id/did_you_know_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edittext_background"
+            android:layout_width="369dp"
+            android:layout_height="87dp"
             android:hint="Enter text here"
             android:padding="8dp" />
 
         <!-- Video Section -->
-        <TextView
-            android:id="@+id/check_this_out_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Check this out!"
-            android:textColor="#4C7355"
-            android:textSize="18sp" />
-
-        <FrameLayout
-            android:id="@+id/video_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/darker_gray">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="174dp"
-                android:gravity="center"
-                android:text="Video Placeholder"
-                android:textColor="@android:color/white"
-                android:textStyle="bold" />
-        </FrameLayout>
 
         <!-- Test Your Knowledge Section -->
-        <TextView
-            android:id="@+id/test_knowledge_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Test your knowledge!"
-            android:textColor="#4C7355"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/quiz_question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            android:text="True or False? Biomass energy can be made from food waste and agricultural byproducts."
-            android:textSize="16sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/true_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="True" />
-
-            <Button
-                android:id="@+id/false_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="False" />
-        </LinearLayout>
 
     </LinearLayout>
 
