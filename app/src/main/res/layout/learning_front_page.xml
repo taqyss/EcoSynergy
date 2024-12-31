@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#4C7355">
+
+    <!-- Header Section -->
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modules and Resources"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-medium"
+        android:background="#4C7355"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp" />
+
+
+
+    <!-- List Items -->
+    <ListView
+        android:id="@+id/modules_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="#CCCCCC"
+        android:dividerHeight="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white" />
+
+
+</LinearLayout>

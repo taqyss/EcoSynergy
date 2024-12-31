@@ -3,4 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primaryColor">#46644b</color>
+    <color name="c4bcbc">#c4bcbc</color>
+    <color name ="SubTabColor">#8aa087</color>
+    <color name ="selected_tab_color">#80FFFFFF</color>
+
 </resources>
