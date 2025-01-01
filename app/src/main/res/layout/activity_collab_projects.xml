@@ -1,0 +1,263 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/WorkOnProjectsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Work on Projects"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        app:itemIconSize="50dp"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_navigation_menu"
+        style="@style/CustomBottomNavigationView"
+        app:itemIconTint="@color/custom_icon_tint"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/roundedRectCollab4"
+        android:layout_width="330dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/roundedrect2_collab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WorkOnProjectsTitle" />
+
+    <ImageView
+        android:id="@+id/roundedRectCollab5"
+        android:layout_width="330dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/roundedrect1_collab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab4" />
+
+    <TextView
+        android:id="@+id/ProjectsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="26dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Projects"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WorkOnProjectsTitle" />
+
+    <TextView
+        android:id="@+id/projectsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Effective Energy Research"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab5"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab5" />
+
+    <ImageView
+        android:id="@+id/collabFilterIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="42dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/roundedRectCollab4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/collab_filter_icon" />
+
+    <ImageView
+        android:id="@+id/collabSearchIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/roundedRectCollab4"
+        app:layout_constraintEnd_toStartOf="@+id/textFilter"
+        app:srcCompat="@drawable/collab_search_icon" />
+
+    <TextView
+        android:id="@+id/addNewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:text="Add new"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab4"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab4"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab4"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab4" />
+
+    <ImageView
+        android:id="@+id/circleNotStarted"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/collab_circle_notstarted"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab4" />
+
+    <ImageView
+        android:id="@+id/circleInProgress1"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/collab_circle_inprogress"
+        app:layout_constraintStart_toEndOf="@+id/inProgressTitle3"
+        app:layout_constraintTop_toBottomOf="@+id/projectsTitle" />
+
+    <ImageView
+        android:id="@+id/circleInProgress2"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/collab_circle_inprogress"
+        app:layout_constraintStart_toEndOf="@+id/notStartedTitle"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab4" />
+
+    <ImageView
+        android:id="@+id/circleCompleted"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/collab_circle_completed"
+        app:layout_constraintStart_toEndOf="@+id/inProgressTitle"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab4" />
+
+    <TextView
+        android:id="@+id/notStartedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="7dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Not started"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/circleNotStarted"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab4" />
+
+    <TextView
+        android:id="@+id/inProgressTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="7dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="In progress"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/circleInProgress2"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab4" />
+
+    <TextView
+        android:id="@+id/inProgressTitle3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="(2/4 members)"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/collabFolderIcon"
+        app:layout_constraintTop_toBottomOf="@+id/projectsTitle" />
+
+    <TextView
+        android:id="@+id/completedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="7dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Completed"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/circleCompleted"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab4" />
+
+    <ImageView
+        android:id="@+id/roundedRectCollab8"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/roundedrect3_collab"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab5"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab5"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab5"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab5" />
+
+    <ImageView
+        android:id="@+id/collabFolderIcon"
+        android:layout_width="58dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab5"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab5"
+        app:srcCompat="@drawable/collab_folder_icon" />
+
+    <ImageView
+        android:id="@+id/collabAddIcon"
+        android:layout_width="21dp"
+        android:layout_height="18dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab4"
+        app:layout_constraintEnd_toStartOf="@+id/addNewTitle"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab4"
+        app:srcCompat="@drawable/collab_add_icon" />
+
+    <TextView
+        android:id="@+id/textFind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Find"
+        app:layout_constraintBottom_toTopOf="@+id/roundedRectCollab4"
+        app:layout_constraintEnd_toStartOf="@+id/collabSearchIcon" />
+
+    <TextView
+        android:id="@+id/textFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Filter"
+        app:layout_constraintBottom_toTopOf="@+id/roundedRectCollab4"
+        app:layout_constraintEnd_toStartOf="@+id/collabFilterIcon" />
+
+    <TextView
+        android:id="@+id/ProjectDesc1"
+        android:layout_width="286dp"
+        android:layout_height="40dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="This project focuses on exploring innovative solutions to optimize energy consumption and promote sustainability by analyzing renewable energy sources and strategies."
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab8"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab8"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab8"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab8" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
