@@ -19,10 +19,10 @@
         tools:layout_editor_absoluteY="469dp">
 
         <TextView
-            android:id="@+id/card1Title"
+            android:id="@+id/TitleProgressCard1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Article"
+            android:text="Name of Material"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -93,6 +93,14 @@
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card4Title" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 Days Ago"
+            tools:layout_editor_absoluteX="25dp"
+            tools:layout_editor_absoluteY="87dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -127,6 +135,14 @@
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card3Title" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 Day Ago"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="87dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -183,7 +199,7 @@
         tools:layout_editor_absoluteY="163dp">
 
         <TextView
-            android:id="@+id/card1Title"
+            android:id="@+id/TitleProgressCard2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Article"
@@ -202,7 +218,7 @@
             android:textColor="#555555"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card1Title" />
+            app:layout_constraintTop_toBottomOf="@id/TitleProgressCard2" />
 
         <TextView
             android:id="@+id/textView2"
@@ -225,7 +241,7 @@
         tools:layout_editor_absoluteY="96dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/progressCard1"
+        android:id="@+id/progressCard2"
         android:layout_width="308dp"
         android:layout_height="80dp"
         android:background="@drawable/module_progress_card"
@@ -236,7 +252,7 @@
         tools:layout_editor_absoluteY="574dp">
 
         <TextView
-            android:id="@+id/card1Title"
+            android:id="@+id/TitleProgressCard2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Article"
