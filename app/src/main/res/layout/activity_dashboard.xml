@@ -1,28 +1,263 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".DashboardActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dashboard Activity"
-        android:textSize="24sp"
+    <!-- Header Bar -->
+    <View
+        android:id="@+id/headerBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#4C6A4A"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Bottom Navigation Bar -->
+    <TextView
+        android:id="@+id/TVDashboardActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DASHBOARD ACTIVITY"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/headerBar"
+        app:layout_constraintBottom_toBottomOf="@id/headerBar" />
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:id="@+id/scrollableContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/headerBar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Recently Activity Title -->
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recently Activity"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Activity Card 1 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/activityCard1"
+                android:layout_width="126dp"
+                android:layout_height="122dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/recently_activity_card"
+                android:padding="8dp"
+                app:layout_constraintTop_toBottomOf="@id/textView"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/card1Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Article"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/card1Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Learning Name"
+                    android:textColor="#555555"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/card1Title" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="1 Hour Ago"
+                    app:layout_constraintTop_toBottomOf="@id/card1Subtitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Activity Card 2 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/activityCard2"
+                android:layout_width="126dp"
+                android:layout_height="122dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/recently_activity_card"
+                android:padding="8dp"
+                app:layout_constraintTop_toTopOf="@id/activityCard1"
+                app:layout_constraintStart_toEndOf="@id/activityCard1">
+
+                <TextView
+                    android:id="@+id/card2Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Video"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/card2Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Learning Name"
+                    android:textColor="#555555"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/card2Title" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="2 Hours Ago"
+                    app:layout_constraintTop_toBottomOf="@id/card2Subtitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Activity Card 3 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/activityCard3"
+                android:layout_width="126dp"
+                android:layout_height="122dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/recently_activity_card"
+                android:padding="8dp"
+                app:layout_constraintTop_toBottomOf="@id/activityCard1"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/card3Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quiz"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/card3Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Learning Name"
+                    android:textColor="#555555"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/card3Title" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="3 Hours Ago"
+                    app:layout_constraintTop_toBottomOf="@id/card3Subtitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Activity Card 4 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/activityCard4"
+                android:layout_width="126dp"
+                android:layout_height="122dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/recently_activity_card"
+                android:padding="8dp"
+                app:layout_constraintTop_toTopOf="@id/activityCard3"
+                app:layout_constraintStart_toEndOf="@id/activityCard3">
+
+                <TextView
+                    android:id="@+id/card4Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Assignment"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/card4Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Learning Name"
+                    android:textColor="#555555"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/card4Title" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="4 Hours Ago"
+                    app:layout_constraintTop_toBottomOf="@id/card4Subtitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Progress Card 1 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/progressCard1"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/module_progress_card"
+                android:padding="8dp"
+                app:layout_constraintTop_toBottomOf="@id/activityCard4"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/TitleProgressCard1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name of Material"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Progress Card 2 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/progressCard2"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="150dp"
+                android:background="@drawable/module_progress_card"
+                android:padding="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/progressCard1">
+
+                <TextView
+                    android:id="@+id/TitleProgressCard2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Another Material"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
+        style="@style/CustomBottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primaryColor"
         app:itemIconSize="50dp"
+        app:itemIconTint="@color/custom_icon_tint"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_navigation_menu"
-        style="@style/CustomBottomNavigationView"
-        app:itemIconTint="@color/custom_icon_tint"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

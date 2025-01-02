@@ -1,17 +1,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/CollaborationActivityTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Collaboration Activity"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Collaboration"
         android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -25,4 +29,107 @@
         style="@style/CustomBottomNavigationView"
         app:itemIconTint="@color/custom_icon_tint"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/collabFirstPageIcon"
+        android:layout_width="225dp"
+        android:layout_height="199dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginEnd="92dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/collab_firstpage_icon" />
+
+    <ImageView
+        android:id="@+id/roundedRectCollab1"
+        android:layout_width="300dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/roundedrect1_collab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/collabFirstPageIcon" />
+
+    <ImageView
+        android:id="@+id/roundedRectCollab2"
+        android:layout_width="300dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/roundedrect1_collab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab1" />
+
+    <ImageView
+        android:id="@+id/roundedRectCollab3"
+        android:layout_width="300dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/roundedrect1_collab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab2" />
+
+    <ImageView
+        android:id="@+id/arrowIconCollab1"
+        android:layout_width="30dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab1"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab1"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab1"
+        app:srcCompat="@drawable/collab_arrow_icon" />
+
+    <ImageView
+        android:id="@+id/arrowIconCollab2"
+        android:layout_width="30dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab2"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab2"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab2"
+        app:srcCompat="@drawable/collab_arrow_icon" />
+
+    <ImageView
+        android:id="@+id/arrowIconCollab3"
+        android:layout_width="30dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab3"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab3"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab3"
+        app:srcCompat="@drawable/collab_arrow_icon" />
+
+    <TextView
+        android:id="@+id/WorkOnProjectsChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inria_sans"
+        android:text="Work on Projects"
+        android:textSize="18dp"
+        tools:layout_editor_absoluteX="89dp"
+        tools:layout_editor_absoluteY="346dp" />
+
+    <TextView
+        android:id="@+id/DiscussionForumChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inria_sans"
+        android:text="Discussion Forum"
+        android:textSize="18dp"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="454dp" />
+
+    <TextView
+        android:id="@+id/OurPartnersChoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inria_sans"
+        android:text="Our Partners"
+        android:textSize="18dp"
+        tools:layout_editor_absoluteX="91dp"
+        tools:layout_editor_absoluteY="567dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
