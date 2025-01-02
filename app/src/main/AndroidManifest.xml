@@ -35,6 +35,9 @@
         <!-- AdminActivity -->
         <activity android:name=".AdminActivity" />
 
+        <activity android:name=".NewsActivity" />
+
+
     </application>
 
 </manifest>
