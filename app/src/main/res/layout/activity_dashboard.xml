@@ -178,10 +178,12 @@
                 android:id="@+id/progressCard2"
                 android:layout_width="308dp"
                 android:layout_height="80dp"
+                android:layout_marginTop="28dp"
                 android:background="@drawable/module_progress_card"
                 android:padding="8dp"
-                tools:layout_editor_absoluteX="50dp"
-                tools:layout_editor_absoluteY="540dp">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressCard1">
 
                 <TextView
                     android:id="@+id/TitleProgressCard2"
@@ -264,10 +266,12 @@
                 android:id="@+id/progressCard1"
                 android:layout_width="307dp"
                 android:layout_height="80dp"
+                android:layout_marginTop="28dp"
                 android:background="@drawable/module_progress_card"
                 android:padding="8dp"
-                tools:layout_editor_absoluteX="35dp"
-                tools:layout_editor_absoluteY="413dp">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TVModuleProgress">
 
                 <TextView
                     android:id="@+id/TitleProgressCard1"
@@ -278,6 +282,7 @@
                     android:textSize="16sp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
