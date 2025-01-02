@@ -19,6 +19,7 @@ Pull the latest changes from the `main` branch before starting any work (**VERY 
    git pull origin main
    ```
 
+---
 -**Setting up the Toolbar in your activities**
 In the activity's Java file, you need to use the setupToolbar method provided by the BaseActivity. Follow these steps:
 
