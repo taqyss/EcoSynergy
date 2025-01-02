@@ -19,6 +19,42 @@ Pull the latest changes from the `main` branch before starting any work (**VERY 
    git pull origin main
    ```
 
+-**Setting up the Toolbar in your activities**
+In the activity's Java file, you need to use the setupToolbar method provided by the BaseActivity. Follow these steps:
+
+1. **Extend the** BaseActivity: Your activity must extend ```BaseActivity```. 
+
+```java
+public class YourActivityName extends BaseActivity {
+```
+
+2. **Set Up the Toolbar**: Call ```setupToolbar``` in the ```onCreate``` method of your activity after setting the content view. Pass true to enable the back button or false if you don't need it.
+
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_your_layout);
+
+    // Set up the toolbar with back button enabled
+    setupToolbar(true);
+
+   //Set a custom title, or leave it blank if there's no need for a title
+        getSupportActionBar().setTitle("Activity Title");
+
+  // Set up bottom navigation
+  setupBottomNavigation();
+}
+```
+
+3. **Add the toolbar to your layout XML file**: To use the universal toolbar in your activity, include the following ```Toolbar``` element in your layout XML file:
+```xml
+<!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent" />
+```
 ---
 
 ### **1. Repository Setup**
