@@ -20,7 +20,8 @@ Pull the latest changes from the `main` branch before starting any work (**VERY 
    ```
 
 ---
--**Setting up the Toolbar in your activities**
+**Setting up the Toolbar in your activities**
+
 In the activity's Java file, you need to use the setupToolbar method provided by the BaseActivity. Follow these steps:
 
 1. **Extend the** BaseActivity: Your activity must extend ```BaseActivity```. 
