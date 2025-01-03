@@ -5,16 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/WorkOnProjectsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/inria_sans_bold"
-        android:text="Work on Projects"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+<!--    <TextView-->
+<!--        android:id="@+id/WorkOnProjectsTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        android:fontFamily="@font/inria_sans_bold"-->
+<!--        android:text="Work on Projects"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Bottom Navigation Bar -->
@@ -34,11 +40,11 @@
         android:id="@+id/roundedRectCollab4"
         android:layout_width="330dp"
         android:layout_height="35dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/roundedrect2_collab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/WorkOnProjectsTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/ProjectsTitle" />
 
     <ImageView
         android:id="@+id/roundedRectCollab5"
@@ -55,12 +61,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="42dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="75dp"
         android:fontFamily="@font/inria_sans_bold"
         android:text="Projects"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/WorkOnProjectsTitle" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/projectsTitle"
