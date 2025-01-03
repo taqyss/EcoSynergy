@@ -14,7 +14,6 @@ public class CollabDiscussActivity extends BaseActivity {
 
         //Set a custom title, or leave it blank if there's no need for a title
         getSupportActionBar().setTitle("Discussion Forum");
-
         // Set up bottom navigation
         setupBottomNavigation();
     }
