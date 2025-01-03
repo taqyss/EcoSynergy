@@ -19,32 +19,33 @@
         android:id="@+id/newsList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <TextView
             android:id="@+id/newsItem1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient_background"
-            android:text="EcoSynergy 1.0 Beta is Now Live!\nSee What’s New\nJanuary 1, 2025"
             android:padding="16dp"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
+            android:text="EcoSynergy 1.0 Beta is Now Live!\nSee What’s New\nJanuary 1, 2025"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/newsItem2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:background="@drawable/gradient_background"
-            android:text="Want to Contribute as an Admin?\nHere’s How to Sign Up\nDecember 26, 2024"
             android:padding="16dp"
-            android:textSize="18sp"
+            android:text="Want to Contribute as an Admin?\nHere’s How to Sign Up\nDecember 26, 2024"
             android:textColor="@android:color/black"
-            android:layout_marginTop="8dp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
