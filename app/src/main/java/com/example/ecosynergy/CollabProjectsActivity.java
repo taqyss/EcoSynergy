@@ -7,8 +7,16 @@ public class CollabProjectsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collab_projects);
-        setupBottomNavigation(); // Setup the bottom navigation bar
+        setContentView(R.layout.activity_collab_projects1);
+
+        // Set up the toolbar with back button enabled
+        setupToolbar(true);
+
+        //Set a custom title, or leave it blank if there's no need for a title
+        getSupportActionBar().setTitle("Work on Projects");
+
+        // Set up bottom navigation
+        setupBottomNavigation();
     }
 
     @Override
