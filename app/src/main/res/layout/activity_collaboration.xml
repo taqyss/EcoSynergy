@@ -112,30 +112,39 @@
         android:id="@+id/WorkOnProjectsChoice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="92dp"
         android:fontFamily="@font/inria_sans"
         android:text="Work on Projects"
         android:textSize="18dp"
-        tools:layout_editor_absoluteX="89dp"
-        tools:layout_editor_absoluteY="346dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab1"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab1"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab1"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab1" />
 
     <TextView
         android:id="@+id/DiscussionForumChoice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="92dp"
         android:fontFamily="@font/inria_sans"
         android:text="Discussion Forum"
         android:textSize="18dp"
-        tools:layout_editor_absoluteX="91dp"
-        tools:layout_editor_absoluteY="454dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab2"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab2"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab2"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab2" />
 
     <TextView
         android:id="@+id/OurPartnersChoice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="129dp"
         android:fontFamily="@font/inria_sans"
         android:text="Our Partners"
         android:textSize="18dp"
-        tools:layout_editor_absoluteX="91dp"
-        tools:layout_editor_absoluteY="567dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab3"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab3"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab3"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
