@@ -29,6 +29,12 @@
         <!-- CollaborationActivity -->
         <activity android:name=".CollaborationActivity" />
 
+        <!-- Additional collaboration-related activities -->
+        <activity android:name=".CollabProjectsActivity" />
+        <activity android:name=".CollabDiscussActivity" />
+        <activity android:name=".CollabPartnersActivity" />
+        <activity android:name=".CollabProjectsAddActivity" />
+
         <!-- DashboardActivity -->
         <activity android:name=".DashboardActivity" />
 

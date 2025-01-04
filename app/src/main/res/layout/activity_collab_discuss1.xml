@@ -84,6 +84,8 @@
         android:layout_height="170dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/userIcon4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CreateGroupText"
         app:srcCompat="@drawable/collab_usergroup_icon" />
@@ -94,6 +96,8 @@
         android:layout_height="170dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="89dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/userIcon3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userIcon1"
         app:srcCompat="@drawable/collab_usergroup_icon" />
@@ -211,7 +215,7 @@
         android:id="@+id/userProjectTitle3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/inria_sans"
         android:text="Not in any project yet"

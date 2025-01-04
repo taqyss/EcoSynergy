@@ -2,18 +2,16 @@ package com.example.ecosynergy;
 
 import android.os.Bundle;
 
-public class CollabPartnersActivity extends BaseActivity {
+public class CollabProjectsAddActivity extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collab_partners);
+        setContentView(R.layout.activity_collab_project2);
 
         // Set up the toolbar with back button enabled
         setupToolbar(true);
-
-        //Set a custom title, or leave it blank if there's no need for a title
-        getSupportActionBar().setTitle("Discussion Forum");
+        getSupportActionBar().setTitle("Work On Projects");
 
         // Set up bottom navigation
         setupBottomNavigation();
