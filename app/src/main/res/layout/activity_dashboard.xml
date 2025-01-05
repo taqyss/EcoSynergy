@@ -71,27 +71,47 @@
                     android:id="@+id/card2Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Video"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Discussion"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/card2Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="1dp"
                     android:text="Learning Name"
                     android:textColor="#555555"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/card2Title" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageButton6" />
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="1dp"
                     android:text="2 Hours Ago"
-                    app:layout_constraintTop_toBottomOf="@id/card2Subtitle" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card2Subtitle" />
+
+                <ImageButton
+                    android:id="@+id/imageButton6"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="3dp"
+                    android:padding="0dp"
+                    android:scaleType="centerInside"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card2Title"
+                    app:srcCompat="@drawable/collab_icon" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -110,27 +130,46 @@
                     android:id="@+id/card3Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Quiz"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Group Project"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/card3Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="2dp"
                     android:text="Learning Name"
                     android:textColor="#555555"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/card3Title" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageButton8" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="1dp"
                     android:text="3 Hours Ago"
-                    app:layout_constraintTop_toBottomOf="@id/card3Subtitle" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card3Subtitle" />
+
+                <ImageButton
+                    android:id="@+id/imageButton8"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="0dp"
+                    android:scaleType="centerInside"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card3Title"
+                    app:srcCompat="@drawable/collab_icon" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Progress Card 2 -->
@@ -151,27 +190,48 @@
                     android:id="@+id/card4Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Assignment"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Module"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/card4Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="2dp"
                     android:text="Learning Name"
                     android:textColor="#555555"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/card4Title" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageButton5" />
 
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="1dp"
                     android:text="4 Hours Ago"
-                    app:layout_constraintTop_toBottomOf="@id/card4Subtitle" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card4Subtitle" />
+
+                <ImageButton
+                    android:id="@+id/imageButton5"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="2dp"
+                    android:padding="0dp"
+                    android:scaleType="centerInside"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card4Title"
+                    app:srcCompat="@drawable/learning_icon" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -189,9 +249,24 @@
                     android:id="@+id/TitleProgressCard2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Another Material"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:rotation="180"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/icons8_back_arrow_30" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -225,27 +300,46 @@
                     android:id="@+id/card1Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
                     android:text="Article"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/card1Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:text="Learning Name"
                     android:textColor="#555555"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/card1Title" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageButton4" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="1dp"
                     android:text="1 Hour Ago"
-                    app:layout_constraintTop_toBottomOf="@id/card1Subtitle" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card1Subtitle" />
+
+                <ImageButton
+                    android:id="@+id/imageButton4"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="3dp"
+                    android:padding="0dp"
+                    android:scaleType="centerInside"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card1Title"
+                    app:srcCompat="@drawable/learning_icon" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -277,11 +371,38 @@
                     android:id="@+id/TitleProgressCard1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Name of Material"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:rotation="180"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/icons8_back_arrow_30" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageButton
+                android:id="@+id/BTNCertificate"
+                android:layout_width="317dp"
+                android:layout_height="108dp"
+                android:layout_marginTop="28dp"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/progressCard2"
+                app:srcCompat="@drawable/badge_and_certification" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
