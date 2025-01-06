@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rating2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#893F3F"
+    android:foregroundTint="#804747">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="676dp"
+            android:background="@color/primaryColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/bottom_navigation_menu"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="655dp"></com.google.android.material.bottomnavigation.BottomNavigationView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/module_"
+        android:layout_width="174dp"
+        android:layout_height="68dp"
+        android:layout_marginBottom="140dp"
+        android:background="#B5DA8D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/button_"
+        android:layout_width="115dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:background="#B6DC8E"
+        android:text="Edit Module"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:iconTint="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_view"
+        app:strokeColor="#9B5656" />
+
+    <View
+        android:id="@+id/content_view"
+        android:layout_width="413dp"
+        android:layout_height="86dp"
+        android:background="#46644B"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/content_management"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="52dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Content Management"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@+id/content_view"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="41dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back" />
+
+    <Button
+        android:id="@+id/button_1"
+        android:layout_width="121dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="32dp"
+        android:background="#B6DC8E"
+        android:text="Delete Module"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:iconTint="#FFFFFF"
+        app:layout_constraintEnd_toStartOf="@+id/button_2"
+        app:layout_constraintStart_toEndOf="@+id/button_"
+        app:layout_constraintTop_toBottomOf="@+id/content_view"
+        app:strokeColor="#9B5656" />
+
+    <Button
+        android:id="@+id/button_2"
+        android:layout_width="119dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:background="#45634A"
+        android:text="Create Module"
+        android:textAlignment="center"
+        android:textColor="#E9E4E4"
+        android:textSize="16sp"
+        app:iconTint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_view"
+        app:strokeColor="#9B5656" />
+
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="380dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="424dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="284dp"
+        android:layout_marginBottom="11dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Search Module"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/search"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/module"
+        android:layout_width="151dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="244dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="My Modules"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="175dp"
+        android:layout_height="169dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/module"
+        app:srcCompat="@drawable/windenergy" />
+
+    <TextView
+        android:id="@+id/module1_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="92dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Wind Energy"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/module_"
+        app:layout_constraintTop_toTopOf="@+id/module_" />
+
+    <View
+        android:id="@+id/module_1"
+        android:layout_width="172dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="140dp"
+        android:background="#B5DA8D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/module_" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="143dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="28dp"
+        android:max="100"
+        android:progress="100"
+        android:progressTint="#45634A"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/module_" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="173dp"
+        android:layout_height="167dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        android:adjustViewBounds="false"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/module"
+        app:srcCompat="@drawable/solar" />
+
+    <TextView
+        android:id="@+id/solarenergy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="84dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Solar Energy"
+        app:layout_constraintEnd_toEndOf="@+id/module_1"
+        app:layout_constraintTop_toTopOf="@+id/module_1" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="158dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="8dp"
+        android:max="100"
+        android:progress="75"
+        android:progressTint="#446249"
+        app:layout_constraintEnd_toEndOf="@+id/module_1"
+        app:layout_constraintTop_toTopOf="@+id/module_1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
