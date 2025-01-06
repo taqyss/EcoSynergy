@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        style="@style/CustomBottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        app:itemIconSize="50dp"
+        app:itemIconTint="@color/custom_icon_tint"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
+
+    <ImageView
+        android:id="@+id/collabGroupIcon2"
+        android:layout_width="25dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab23"
+        app:srcCompat="@drawable/collab_group_icon" />
+
+    <ImageView
+        android:id="@+id/roundedRectCollab23"
+        android:layout_width="330dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/roundedrect3_collab" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="31dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab23"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab23"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab23"
+        app:srcCompat="@drawable/collab_search_icon" />
+
+    <TextView
+        android:id="@+id/SearchUserText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inria_sans"
+        android:text="Search for users"
+        android:textColor="#89a385"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab23"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab23"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab23"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab23" />
+
+    <TextView
+        android:id="@+id/CreateGroupText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="9dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Create Group"
+        android:textColor="#89a385"
+        app:layout_constraintStart_toEndOf="@+id/collabGroupIcon2"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab23" />
+
+    <ImageView
+        android:id="@+id/userIcon1"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/userIcon4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateGroupText"
+        app:srcCompat="@drawable/collab_usergroup_icon" />
+
+    <ImageView
+        android:id="@+id/userIcon2"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="89dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/userIcon3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon1"
+        app:srcCompat="@drawable/collab_usergroup_icon" />
+
+    <ImageView
+        android:id="@+id/userIcon3"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="89dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon4"
+        app:srcCompat="@drawable/collab_usergroup_icon" />
+
+    <ImageView
+        android:id="@+id/userIcon4"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CreateGroupText"
+        app:srcCompat="@drawable/collab_usergroup_icon" />
+
+    <TextView
+        android:id="@+id/user1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Taqy Salman"
+        android:textColor="#4a654d"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon1"
+        tools:layout_editor_absoluteX="65dp" />
+
+    <TextView
+        android:id="@+id/user2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Nadya Demita"
+        android:textColor="#4a654d"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon4"
+        tools:layout_editor_absoluteX="238dp" />
+
+    <ImageView
+        android:id="@+id/messageIcon1"
+        android:layout_width="31dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/user1"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon1"
+        app:srcCompat="@drawable/collab_message_icon" />
+
+    <ImageView
+        android:id="@+id/messageIcon2"
+        android:layout_width="31dp"
+        android:layout_height="19dp"
+
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/user2"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon4"
+        app:srcCompat="@drawable/collab_message_icon" />
+
+    <TextView
+        android:id="@+id/userProjectTitle1"
+        android:layout_width="100dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="70dp"
+        android:fontFamily="@font/inria_sans"
+        android:gravity="center"
+        android:text="Effective Energy Research"
+        android:textColor="#89a385"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user1" />
+
+    <TextView
+        android:id="@+id/userProjectTitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Not in any project yet"
+        android:textColor="#89a385"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user2" />
+
+    <TextView
+        android:id="@+id/user3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Siti Sa'adah"
+        android:textColor="#4a654d"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon2" />
+
+    <ImageView
+        android:id="@+id/messageIcon3"
+        android:layout_width="31dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/user3"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon2"
+        app:srcCompat="@drawable/collab_message_icon" />
+
+    <TextView
+        android:id="@+id/userProjectTitle3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Not in any project yet"
+        android:textColor="#89a385"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user3" />
+
+    <TextView
+        android:id="@+id/user4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Nur Atiqah"
+        android:textColor="#4a654d"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon3"
+        tools:layout_editor_absoluteX="260dp" />
+
+    <ImageView
+        android:id="@+id/messageIcon4"
+        android:layout_width="31dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toEndOf="@+id/user4"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon3"
+        app:srcCompat="@drawable/collab_message_icon" />
+
+    <TextView
+        android:id="@+id/userProjectTitle4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="40dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Not in any project yet"
+        android:textColor="#89a385"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

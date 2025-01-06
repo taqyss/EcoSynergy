@@ -33,7 +33,6 @@
         <activity android:name=".DashboardActivity" />
 
         <!-- AdminActivity -->
-<<<<<<< Updated upstream
         <activity android:name=".AdminActivity" />
         <meta-data
             android:name="preloaded_fonts"
@@ -41,9 +40,6 @@
 
         <activity android:name=".NewsActivity" />
 
-=======
-        <activity android:name=".AdminActivity" android:exported="true" />
->>>>>>> Stashed changes
 
     </application>
 
