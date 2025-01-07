@@ -1,33 +1,17 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_dashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DashboardActivity">
 
-    <!-- Header Bar -->
-    <View
-        android:id="@+id/headerBar"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="#4C6A4A"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/TVDashboardActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DASHBOARD ACTIVITY"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/headerBar"
-        app:layout_constraintBottom_toBottomOf="@id/headerBar" />
 
     <!-- Scrollable Content -->
     <ScrollView
@@ -35,8 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/headerBar"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -282,10 +266,11 @@
                     android:id="@+id/textView14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="2dp"
                     android:text="0%"
-                    app:layout_constraintTop_toBottomOf="@id/TitleProgressCard2"
-                    tools:layout_editor_absoluteX="193dp" />
+                    app:layout_constraintStart_toEndOf="@+id/progressBar2"
+                    app:layout_constraintTop_toBottomOf="@id/TitleProgressCard2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -457,6 +442,6 @@
         app:itemIconSize="50dp"
         app:itemIconTint="@color/custom_icon_tint"
         app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/bottom_navigation_menu"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

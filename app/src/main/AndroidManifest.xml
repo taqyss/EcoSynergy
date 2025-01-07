@@ -47,6 +47,9 @@
         <!-- DashboardActivity -->
         <activity android:name=".DashboardActivity" />
 
+        <!-- DashboardCertificateActivity -->
+        <activity android:name=".DashboardCertificateActivity" />
+
         <!-- AdminActivity -->
         <activity android:name=".AdminActivity" />
         <meta-data
