@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "430283474047",
+    "project_id": "ecosynergy-d56cc",
+    "storage_bucket": "ecosynergy-d56cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430283474047:android:493eea4aa766ec2516eb4a",
+        "android_client_info": {
+          "package_name": "com.example.ecosynergy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOSLXQllpDTg5YAQ90MdExCSREx9B2MDc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
