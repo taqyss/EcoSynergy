@@ -268,6 +268,25 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/icons8_back_arrow_30" />
 
+                <ProgressBar
+                    android:id="@+id/progressBar2"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TitleProgressCard2" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="0%"
+                    app:layout_constraintTop_toBottomOf="@id/TitleProgressCard2"
+                    tools:layout_editor_absoluteX="193dp" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -389,6 +408,27 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/icons8_back_arrow_30" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:progressTint="#E4E6D9"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TitleProgressCard1" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:text="0%"
+                    app:layout_constraintStart_toEndOf="@+id/progressBar"
+                    app:layout_constraintTop_toBottomOf="@+id/TitleProgressCard1" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
