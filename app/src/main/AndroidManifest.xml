@@ -42,6 +42,7 @@
         <activity android:name=".CollabDiscussActivity" />
         <activity android:name=".CollabPartnersActivity" />
         <activity android:name=".CollabProjectsAddActivity" />
+        <activity android:name=".CollabProjectsDescActivity" />
 
         <!-- DashboardActivity -->
         <activity android:name=".DashboardActivity" />

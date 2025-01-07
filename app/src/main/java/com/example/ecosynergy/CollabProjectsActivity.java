@@ -11,7 +11,7 @@ public class CollabProjectsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collab_projects1);
+        setContentView(R.layout.activity_collab_project1);
 
         // Set up the toolbar with back button enabled
         setupToolbar(true);
@@ -35,6 +35,21 @@ public class CollabProjectsActivity extends BaseActivity {
         // Attach the listener to both views
         collabAddIcon.setOnClickListener(navigateToAddProjects);
         addNewTitle.setOnClickListener(navigateToAddProjects);
+
+        ImageView roundedRectCollab4 = findViewById(R.id.roundedRectCollab4);
+        ImageView roundedRectCollab5 = findViewById(R.id.roundedRectCollab5);
+        TextView projectsTitle1 = findViewById(R.id.projectsTitle1);
+
+        View.OnClickListener navigateToDescProjects = view -> {
+            Intent intent = new Intent(CollabProjectsActivity.this, CollabProjectsDescActivity.class);
+            startActivity(intent);
+        };
+
+        roundedRectCollab4.setOnClickListener(navigateToDescProjects);
+        roundedRectCollab5.setOnClickListener(navigateToDescProjects);
+        projectsTitle1.setOnClickListener(navigateToDescProjects);
+
+
     }
 
     @Override

@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/inria_sans"
-        android:text="Search for users"
+        android:text="Search for users/groups"
         android:textColor="#89a385"
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab23"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab23"
@@ -82,9 +82,9 @@
         android:id="@+id/userIcon1"
         android:layout_width="170dp"
         android:layout_height="170dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toStartOf="@+id/userIcon4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CreateGroupText"
@@ -96,7 +96,7 @@
         android:layout_height="170dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="89dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintEnd_toStartOf="@+id/userIcon3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userIcon1"
@@ -126,23 +126,25 @@
         android:id="@+id/user1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/inria_sans_bold"
         android:text="Taqy Salman"
         android:textColor="#4a654d"
-        app:layout_constraintTop_toBottomOf="@+id/userIcon1"
-        tools:layout_editor_absoluteX="65dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon1" />
 
     <TextView
         android:id="@+id/user2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="80dp"
         android:fontFamily="@font/inria_sans_bold"
         android:text="Nadya Demita"
         android:textColor="#4a654d"
-        app:layout_constraintTop_toBottomOf="@+id/userIcon4"
-        tools:layout_editor_absoluteX="238dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon4" />
 
     <ImageView
         android:id="@+id/messageIcon1"
@@ -167,9 +169,10 @@
 
     <TextView
         android:id="@+id/userProjectTitle1"
-        android:layout_width="100dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="70dp"
+        android:layout_width="130dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/inria_sans"
         android:gravity="center"
         android:text="Effective Energy Research"
@@ -193,7 +196,7 @@
         android:id="@+id/user3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/inria_sans_bold"
         android:text="Siti Sa'adah"
@@ -215,7 +218,7 @@
         android:id="@+id/userProjectTitle3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/inria_sans"
         android:text="Not in any project yet"
@@ -228,11 +231,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="80dp"
         android:fontFamily="@font/inria_sans_bold"
         android:text="Nur Atiqah"
         android:textColor="#4a654d"
-        app:layout_constraintTop_toBottomOf="@+id/userIcon3"
-        tools:layout_editor_absoluteX="260dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userIcon3" />
 
     <ImageView
         android:id="@+id/messageIcon4"
