@@ -91,9 +91,13 @@
         android:id="@+id/imageView8"
         android:layout_width="170dp"
         android:layout_height="100dp"
-        app:srcCompat="@drawable/roundedrect3_collab"
-        tools:layout_editor_absoluteX="15dp"
-        tools:layout_editor_absoluteY="553dp" />
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="21dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/course_text"
+        app:srcCompat="@drawable/roundedrect3_collab" />
 
     <TextView
         android:id="@+id/rate_2"
@@ -110,19 +114,23 @@
         android:id="@+id/rating_completion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="112dp"
         android:fontFamily="@font/inria_sans_bold"
         android:text="75%"
         android:textSize="34sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="598dp" />
+        app:layout_constraintEnd_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
     <ImageView
         android:id="@+id/imageView9"
         android:layout_width="157dp"
         android:layout_height="99dp"
-        app:srcCompat="@drawable/roundedrect3_collab"
-        tools:layout_editor_absoluteX="206dp"
-        tools:layout_editor_absoluteY="553dp" />
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="14dp"
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/course_text"
+        app:srcCompat="@drawable/roundedrect3_collab" />
 
     <TextView
         android:id="@+id/rating_completion2"
