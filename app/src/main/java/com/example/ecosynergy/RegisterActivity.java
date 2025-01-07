@@ -2,42 +2,41 @@ package com.example.ecosynergy;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisterActivity";
     private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
-        // Get references to UI elements
+        EditText usernameInput = findViewById(R.id.usernameInput);
         EditText emailInput = findViewById(R.id.emailInput);
         EditText passwordInput = findViewById(R.id.passwordInput);
         Button registerButton = findViewById(R.id.registerButton);
+        Button loginButton = findViewById(R.id.loginButton);
 
-        // Set up the register button click listener
+        // Register Button
         registerButton.setOnClickListener(view -> {
+            String username = usernameInput.getText().toString().trim();
             String email = emailInput.getText().toString().trim();
             String password = passwordInput.getText().toString().trim();
 
-            // Validate inputs
-            if (email.isEmpty() || password.isEmpty()) {
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -47,42 +46,60 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            // Register the user with Firebase
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Registration successful
-                            Log.i(TAG, "User registered successfully");
-                            Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
+            registerUser(username, email, password);
+        });
 
-                            // Redirect to LoginActivity or another screen
-                            Intent intent = new Intent(this, LoginActivity.class);
-                            startActivity(intent);
-                            finish(); // Close this activity
-                        } else {
-                            // Handle registration failure
-                            Log.e(TAG, "Registration failed: " + task.getException());
-                            handleRegistrationError(task.getException());
-                        }
-                    });
+        // Login Button
+        loginButton.setOnClickListener(view -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Close registration activity to avoid stack issues
         });
     }
 
-    /**
-     * Handles Firebase registration errors and provides user-friendly messages.
-     *
-     * @param exception The exception returned by Firebase.
-     */
-    private void handleRegistrationError(Exception exception) {
-        if (exception instanceof FirebaseAuthWeakPasswordException) {
-            Toast.makeText(this, "Weak password: Password must be at least 6 characters", Toast.LENGTH_LONG).show();
-        } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
-            Toast.makeText(this, "Invalid email format", Toast.LENGTH_LONG).show();
-        } else if (exception instanceof FirebaseAuthUserCollisionException) {
-            Toast.makeText(this, "An account with this email already exists", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Registration failed: " + exception.getMessage(), Toast.LENGTH_LONG).show();
+    private void registerUser(String username, String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            String userId = user.getUid();
+                            User newUser = new User(username, email);
+
+                            databaseReference.child(userId).setValue(newUser)
+                                    .addOnCompleteListener(saveTask -> {
+                                        if (saveTask.isSuccessful()) {
+                                            Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
+                                            navigateToLogin();
+                                        } else {
+                                            Toast.makeText(this, "Failed to save user data: " + saveTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    } else {
+                        Toast.makeText(this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish(); // Close registration activity
+    }
+
+    // User model class
+    public static class User {
+        public String username;
+        public String email;
+
+        public User() {
+            // Default constructor required for calls to DataSnapshot.getValue(User.class)
+        }
+
+        public User(String username, String email) {
+            this.username = username;
+            this.email = email;
         }
     }
 }
-

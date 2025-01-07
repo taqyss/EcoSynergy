@@ -2,44 +2,75 @@ package com.example.ecosynergy;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends BaseActivity {
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Set the dynamic welcome message
+        // Initialize Firebase Auth and Database
+        mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+
+        // Get the welcome message TextView
         TextView homeMessage = findViewById(R.id.home_message);
-        homeMessage.setText("Welcome back, John"); // Placeholder for user login integration
 
-        // Setup buttons
-        LinearLayout newsSection = findViewById(R.id.newsSection);
-        newsSection.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+        // Fetch the current logged-in user
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+
+            // Fetch the username from Realtime Database
+            databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String username = snapshot.child("username").getValue(String.class);
+
+                        if (username != null) {
+                            // Display the username in the welcome message
+                            homeMessage.setText("Welcome back, " + username + "!");
+                        } else {
+                            homeMessage.setText("Welcome back!");
+                        }
+                    } else {
+                        homeMessage.setText("Welcome back!");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle database error
+                    Toast.makeText(MainActivity.this, "Failed to load username", Toast.LENGTH_SHORT).show();
+                    Log.e("MainActivity", "Error: " + error.getMessage());
+                }
+            });
+        } else {
+            // If no user is logged in, redirect to LoginActivity
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
-        });
-
-
-        LinearLayout continueSection = findViewById(R.id.continueSection);
-
-        // Navigate to News & Announcements
-        newsSection.setOnClickListener(v -> {
-            // Placeholder for NewsActivity (to be created later)
-            Intent intent = new Intent(MainActivity.this, NewsActivity.class);
-            startActivity(intent);
-        });
-
-        // Navigate to Learning Activity
-        continueSection.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, LearningActivity.class);
-            startActivity(intent);
-        });
+            finish();
+        }
 
         // Setup bottom navigation
         setupBottomNavigation();
