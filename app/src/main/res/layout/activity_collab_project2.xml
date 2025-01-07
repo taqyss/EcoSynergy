@@ -26,29 +26,49 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
 <!--    <TextView-->
-<!--        android:id="@+id/WorkOnProjectsTitle"-->
+<!--        android:id="@+id/projectTitleEdit"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="12dp"-->
+<!--        android:layout_marginStart="28dp"-->
+<!--        android:layout_marginTop="80dp"-->
 <!--        android:fontFamily="@font/inria_sans_bold"-->
-<!--        android:text="Work on Projects"-->
-<!--        android:textSize="24sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:text="Project Title"-->
+<!--        android:textColor="#4a654d"-->
+<!--        android:textSize="20sp"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/projectTitleEdit"
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="80dp"
-        android:fontFamily="@font/inria_sans_bold"
-        android:text="Project Title"
-        android:textColor="#4a654d"
-        android:textSize="20sp"
+        android:layout_marginEnd="8dp"
+        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/collabOptionIcon"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- EditText inside the HorizontalScrollView -->
+        <EditText
+            android:id="@+id/projectTitleEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inria_sans_bold"
+            android:hint="Project Title"
+            android:textColor="#4a654d"
+            android:textColorHint="#c0cdb3"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:ellipsize="end" />
+    </HorizontalScrollView>
 
     <TextView
         android:id="@+id/textView7"
@@ -59,7 +79,7 @@
         android:fontFamily="@font/inria_sans"
         android:text="Collaborator"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/projectTitleEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
     <TextView
         android:id="@+id/CategoryTitle"
@@ -106,7 +126,7 @@
         app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab20" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/collabOptionIcon"
         android:layout_width="39dp"
         android:layout_height="13dp"
         android:layout_marginTop="80dp"
@@ -176,7 +196,6 @@
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab10"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
         app:srcCompat="@drawable/roundedrect1_collab" />
-
     <TextView
         android:id="@+id/RenewableEnergy"
         android:layout_width="wrap_content"
@@ -321,6 +340,37 @@
         app:layout_constraintTop_toBottomOf="@+id/textView9"
         app:srcCompat="@drawable/roundedrect1_collab" />
 
+    <!-- ScrollView for Typing Space -->
+    <ScrollView
+        android:id="@+id/scrollViewDescription"
+        android:layout_width="335dp"
+        android:layout_height="104dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab18">
+
+        <!-- EditText for the Description -->
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="start|top"
+            android:hint="Enter project description..."
+            android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false"
+            android:textColor="#4a654d"
+            android:textColorHint="#A9A9A9"
+            android:textSize="14sp" />
+    </ScrollView>
+
     <ImageView
         android:id="@+id/roundedRectCollab18"
         android:layout_width="25dp"
@@ -351,10 +401,43 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10"
         app:srcCompat="@drawable/roundedrect1_collab" />
 
-    <RadioGroup
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollViewLink"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginEnd="5dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab20"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab20"
+        app:layout_constraintStart_toEndOf="@+id/linkIcon"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab20">
+
+        <!-- EditText inside the HorizontalScrollView -->
+        <EditText
+            android:id="@+id/linkEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/inria_sans"
+            android:hint="Link"
+            android:imeOptions="actionDone"
+            android:inputType="textUri"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="#4a654d"
+            android:textColorHint="#A9A9A9"
+            android:textSize="14sp" />
+    </HorizontalScrollView>
+
+    <RadioGroup
+        android:layout_width="351dp"
+        android:layout_height="32dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="572dp">
 
         <!-- Adjust text size -->
 
@@ -467,7 +550,7 @@
         app:layout_constraintTop_toTopOf="@+id/roundedRectCollab9" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/collabSearcUserIcon"
         android:layout_width="52dp"
         android:layout_height="46dp"
         android:layout_marginStart="10dp"
