@@ -25,6 +25,7 @@ public class CollabProjectsActivity extends BaseActivity {
         // Find the views
         ImageView collabAddIcon = findViewById(R.id.collabAddIcon);
         TextView addNewTitle = findViewById(R.id.addNewTitle);
+        ImageView roundedRectCollab4 = findViewById(R.id.roundedRectCollab4);
 
         // Set click listeners to navigate to "Add Projects" activity
         View.OnClickListener navigateToAddProjects = view -> {
@@ -35,8 +36,9 @@ public class CollabProjectsActivity extends BaseActivity {
         // Attach the listener to both views
         collabAddIcon.setOnClickListener(navigateToAddProjects);
         addNewTitle.setOnClickListener(navigateToAddProjects);
+        roundedRectCollab4.setOnClickListener(navigateToAddProjects);
 
-        ImageView roundedRectCollab4 = findViewById(R.id.roundedRectCollab4);
+        ImageView roundedRectCollab8 = findViewById(R.id.roundedRectCollab8);
         ImageView roundedRectCollab5 = findViewById(R.id.roundedRectCollab5);
         TextView projectsTitle1 = findViewById(R.id.projectsTitle1);
 
@@ -45,11 +47,9 @@ public class CollabProjectsActivity extends BaseActivity {
             startActivity(intent);
         };
 
-        roundedRectCollab4.setOnClickListener(navigateToDescProjects);
+        roundedRectCollab8.setOnClickListener(navigateToDescProjects);
         roundedRectCollab5.setOnClickListener(navigateToDescProjects);
         projectsTitle1.setOnClickListener(navigateToDescProjects);
-
-
     }
 
     @Override
