@@ -150,7 +150,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab9"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
         app:srcCompat="@drawable/collab_circle1" />
@@ -164,6 +164,26 @@
         app:layout_constraintStart_toStartOf="@+id/collabCircle1"
         app:layout_constraintTop_toTopOf="@+id/collabCircle1"
         app:srcCompat="@drawable/collab_plus_icon" />
+
+    <ImageView
+        android:id="@+id/collabCircle2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toEndOf="@+id/roundedRectCollab9"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:srcCompat="@drawable/collab_circle1" />
+
+    <ImageView
+        android:id="@+id/minusIcon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/collabCircle2"
+        app:layout_constraintEnd_toEndOf="@+id/collabCircle2"
+        app:layout_constraintStart_toStartOf="@+id/collabCircle2"
+        app:layout_constraintTop_toTopOf="@+id/collabCircle2"
+        app:srcCompat="@drawable/collab_minus_icon" />
 
     <ImageView
         android:id="@+id/roundedRectCollab10"
@@ -538,7 +558,7 @@
 
     <TextView
         android:id="@+id/totalCollaborators"
-        android:layout_width="21dp"
+        android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:gravity="center"
         android:text="0"
@@ -553,7 +573,7 @@
         android:id="@+id/collabSearcUserIcon"
         android:layout_width="52dp"
         android:layout_height="46dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/collabCircle1"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
