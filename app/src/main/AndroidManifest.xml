@@ -41,6 +41,10 @@
 
         <activity android:name=".NewsActivity" />
 
+        <activity android:name=".ContentManagementActivity" />
+
+        <activity android:name=".AnalyticDashboardActivity" />
+
 
     </application>
 

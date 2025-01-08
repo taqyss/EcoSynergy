@@ -5,18 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Toolbar
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navig"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="676dp"
+        android:layout_width="435dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="672dp"
         android:background="@color/primaryColor"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/bottom_navigation_menu">
@@ -34,10 +29,10 @@
 
     <ImageView
         android:id="@+id/iv_profile"
-        android:layout_width="69dp"
-        android:layout_height="65dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/usericon" />
@@ -46,7 +41,7 @@
         android:id="@+id/Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="188dp"
         android:fontFamily="@font/inria_sans"
         android:text="Gianna John"
@@ -116,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="136dp"
+        android:layout_marginBottom="156dp"
         android:fontFamily="@font/inria_sans"
         android:text="Recent Activity"
         android:textSize="24sp"
@@ -128,19 +123,24 @@
         android:id="@+id/imageView6"
         android:layout_width="189dp"
         android:layout_height="159dp"
-        app:srcCompat="@drawable/img_1"
-        tools:layout_editor_absoluteX="14dp"
-        tools:layout_editor_absoluteY="314dp" />
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/useractivity"
+        app:srcCompat="@drawable/img_1" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="183dp"
         android:layout_height="159dp"
-        app:srcCompat="@drawable/img"
-        tools:layout_editor_absoluteX="212dp"
-        tools:layout_editor_absoluteY="314dp" />
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/useractivity"
+        app:srcCompat="@drawable/img" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="410dp"
         android:layout_height="72dp"
         android:layout_marginTop="9dp"
@@ -184,9 +184,14 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="414dp"
-        android:layout_height="133dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="541dp" />
+        android:id="@+id/recent_activity_list"
+        android:layout_width="376dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="436dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

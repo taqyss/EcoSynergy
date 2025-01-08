@@ -106,7 +106,7 @@
         app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab20" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/back_button"
         android:layout_width="39dp"
         android:layout_height="13dp"
         android:layout_marginTop="80dp"
