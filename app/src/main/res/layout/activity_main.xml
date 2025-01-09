@@ -34,14 +34,88 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="You Have a 5 Day Streak!"
-            android:textSize="18sp" />
+            android:text="You Have a 1 Day Streak!"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
 
-        <ImageView
-            android:layout_width="79dp"
-            android:layout_height="47dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/leaf" />
+        <!-- Leaf Icons -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/leaf1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/leaf"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/leaf2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/leaf"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/leaf1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/leaf3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/leaf"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/leaf2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/leaf4"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/leaf"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/leaf3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/leaf5"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/leaf"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/leaf4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/leaf6"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/leaf"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/leaf5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/leaf7"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/leaf"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/leaf6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
     <!-- Continue Section -->
@@ -93,9 +167,6 @@
             android:textSize="40sp"
             android:textStyle="bold" />
     </LinearLayout>
-
-
-
 
     <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
