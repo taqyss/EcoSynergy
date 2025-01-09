@@ -32,15 +32,6 @@ public class DashboardActivity extends BaseActivity {
             }
         });
 
-        ImageButton btnAdminMode = findViewById(R.id.BTNAdminMode);
-        btnAdminMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to AdminModeActivity
-                Intent intent = new Intent(DashboardActivity.this, AdminModeActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
