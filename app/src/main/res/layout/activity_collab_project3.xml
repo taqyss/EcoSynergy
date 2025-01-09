@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        app:itemIconSize="50dp"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_navigation_menu"
+        style="@style/CustomBottomNavigationView"
+        app:itemIconTint="@color/custom_icon_tint"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/ProjectTitleProject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="80dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Effective Energy Research"
+        android:textColor="#4a654d"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TotalGroupMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="User101, User102 (2/4)"
+        android:textColor="#89A385"
+        app:layout_constraintStart_toEndOf="@+id/collabGroupIcon"
+        app:layout_constraintTop_toBottomOf="@+id/ProjectTitleProject" />
+
+    <TextView
+        android:id="@+id/inProgressStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="In progress"
+        android:textColor="#89A385"
+        app:layout_constraintStart_toEndOf="@+id/circleInProgress3"
+        app:layout_constraintTop_toBottomOf="@+id/TotalGroupMember" />
+
+    <ImageView
+        android:id="@+id/circleInProgress3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/collabGroupIcon"
+        app:srcCompat="@drawable/collab_circle_inprogress" />
+
+    <ImageView
+        android:id="@+id/roundedRectCollab22"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inProgressStatus"
+        app:srcCompat="@drawable/roundedrect3_collab" />
+
+    <ImageView
+        android:id="@+id/collabGroupIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ProjectTitleProject"
+        app:srcCompat="@drawable/collab_group_icon" />
+
+    <ImageView
+        android:id="@+id/collabProjectImage"
+        android:layout_width="211dp"
+        android:layout_height="215dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab22"
+        app:srcCompat="@drawable/collab_projectimage" />
+
+    <TextView
+        android:id="@+id/groupProjectDesc"
+        android:layout_width="324dp"
+        android:layout_height="99dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="This project focuses on exploring innovative solutions to optimize energy consumption and promote sustainability by analyzing renewable energy sources and strategies."
+        android:textColor="#89A385"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab22"
+        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab22"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab22" />
+
+    <ImageView
+        android:id="@+id/joinButton"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/roundedrect2_collab" />
+
+    <TextView
+        android:id="@+id/joinText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inria_sans"
+        android:text="Join"
+        android:textColor="#EDEEE8"
+        app:layout_constraintBottom_toBottomOf="@+id/joinButton"
+        app:layout_constraintEnd_toEndOf="@+id/joinButton"
+        app:layout_constraintStart_toStartOf="@+id/joinButton"
+        app:layout_constraintTop_toTopOf="@+id/joinButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
