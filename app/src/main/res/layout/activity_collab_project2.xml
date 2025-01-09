@@ -193,7 +193,10 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/EnergyAccess"
@@ -205,7 +208,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab10"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab10"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab10"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab10" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab10"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab11"
@@ -215,7 +222,10 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab10"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
     <TextView
         android:id="@+id/RenewableEnergy"
         android:layout_width="wrap_content"
@@ -226,7 +236,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab11"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab11"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab11"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab11" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab11"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab12"
@@ -236,7 +250,10 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab11"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/SustainableAndSocial"
@@ -248,7 +265,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab12"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab12"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab12"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab12" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab12"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab13"
@@ -258,7 +279,10 @@
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/CleanEnergyTechnology"
@@ -270,18 +294,24 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab13"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab13"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab13"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab13" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab13"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab14"
         android:layout_width="100dp"
         android:layout_height="20dp"
         android:layout_marginStart="5dp"
-
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab13"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/PolicyAndEconomics"
@@ -293,18 +323,24 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab14"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab14"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab14"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab14" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab14"
+        android:clickable="true"
+        android:padding="6dp"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab15"
         android:layout_width="82dp"
         android:layout_height="20dp"
         android:layout_marginStart="5dp"
-
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab14"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/EnergyEfficiency"
@@ -316,7 +352,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab15"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab15"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab15"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab15" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab15"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab16"
@@ -326,7 +366,10 @@
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab15"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/Other"
@@ -338,7 +381,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab16"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab16"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab16"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab16" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab16"
+        android:clickable="true"
+        android:padding="6dp"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab17"
@@ -452,55 +499,59 @@
             android:textSize="14sp" />
     </HorizontalScrollView>
 
+
     <RadioGroup
-        android:layout_width="351dp"
-        android:layout_height="32dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="572dp">
+        android:id="@+id/radio_group_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
 
-        <!-- Adjust text size -->
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11">
 
+        <RadioButton
+            android:id="@+id/radio_option_1"
+            android:layout_width="106dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="10dp"
+            android:buttonTint="#89A385"
+            android:text="Not started"
+            android:textColor="#89A385"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <RadioButton
+            android:id="@+id/radio_option_2"
+            android:layout_width="105dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:buttonTint="#89A385"
+            android:text="In progress"
+            android:textColor="#89A385"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/radio_option_1"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <RadioButton
+            android:id="@+id/radio_option_3"
+            android:layout_width="125dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:buttonTint="#89A385"
+            android:text="Completed"
+            android:textColor="#89A385"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/radio_option_2"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
     </RadioGroup>
 
-    <RadioButton
-        android:id="@+id/radio_option_1"
-        android:layout_width="106dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="10dp"
-        android:buttonTint="#89A385"
-        android:text="Not started"
-        android:textColor="#89A385"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-    <RadioButton
-        android:id="@+id/radio_option_2"
-        android:layout_width="105dp"
-        android:layout_height="23dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:buttonTint="#89A385"
-        android:text="In progress"
-        android:textColor="#89A385"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/radio_option_1"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-    <RadioButton
-        android:id="@+id/radio_option_3"
-        android:layout_width="125dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:buttonTint="#89A385"
-        android:text="Completed"
-        android:textColor="#89A385"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/radio_option_2"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <ImageView
         android:id="@+id/publishButton"
@@ -509,7 +560,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radio_option_2"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group_status"
         app:srcCompat="@drawable/roundedrect2_collab" />
 
     <TextView
