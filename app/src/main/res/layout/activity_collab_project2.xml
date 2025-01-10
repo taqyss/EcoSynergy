@@ -26,29 +26,49 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
 <!--    <TextView-->
-<!--        android:id="@+id/WorkOnProjectsTitle"-->
+<!--        android:id="@+id/projectTitleEdit"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="12dp"-->
+<!--        android:layout_marginStart="28dp"-->
+<!--        android:layout_marginTop="80dp"-->
 <!--        android:fontFamily="@font/inria_sans_bold"-->
-<!--        android:text="Work on Projects"-->
-<!--        android:textSize="24sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:text="Project Title"-->
+<!--        android:textColor="#4a654d"-->
+<!--        android:textSize="20sp"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/projectTitleEdit"
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="80dp"
-        android:fontFamily="@font/inria_sans_bold"
-        android:text="Project Title"
-        android:textColor="#4a654d"
-        android:textSize="20sp"
+        android:layout_marginEnd="8dp"
+        android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/collabOptionIcon"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- EditText inside the HorizontalScrollView -->
+        <EditText
+            android:id="@+id/projectTitleEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inria_sans_bold"
+            android:hint="Project Title"
+            android:textColor="#4a654d"
+            android:textColorHint="#c0cdb3"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:ellipsize="end" />
+    </HorizontalScrollView>
 
     <TextView
         android:id="@+id/textView7"
@@ -59,7 +79,7 @@
         android:fontFamily="@font/inria_sans"
         android:text="Collaborator"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/projectTitleEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
     <TextView
         android:id="@+id/CategoryTitle"
@@ -106,7 +126,7 @@
         app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab20" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/collabOptionIcon"
         android:layout_width="39dp"
         android:layout_height="13dp"
         android:layout_marginTop="80dp"
@@ -130,7 +150,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab9"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
         app:srcCompat="@drawable/collab_circle1" />
@@ -146,6 +166,26 @@
         app:srcCompat="@drawable/collab_plus_icon" />
 
     <ImageView
+        android:id="@+id/collabCircle2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toEndOf="@+id/roundedRectCollab9"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:srcCompat="@drawable/collab_circle1" />
+
+    <ImageView
+        android:id="@+id/minusIcon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/collabCircle2"
+        app:layout_constraintEnd_toEndOf="@+id/collabCircle2"
+        app:layout_constraintStart_toStartOf="@+id/collabCircle2"
+        app:layout_constraintTop_toTopOf="@+id/collabCircle2"
+        app:srcCompat="@drawable/collab_minus_icon" />
+
+    <ImageView
         android:id="@+id/roundedRectCollab10"
         android:layout_width="68dp"
         android:layout_height="20dp"
@@ -153,7 +193,10 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/EnergyAccess"
@@ -165,7 +208,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab10"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab10"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab10"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab10" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab10"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab11"
@@ -175,8 +222,10 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab10"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
-
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
     <TextView
         android:id="@+id/RenewableEnergy"
         android:layout_width="wrap_content"
@@ -187,7 +236,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab11"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab11"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab11"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab11" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab11"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab12"
@@ -197,7 +250,10 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab11"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/SustainableAndSocial"
@@ -209,7 +265,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab12"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab12"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab12"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab12" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab12"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab13"
@@ -219,7 +279,10 @@
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/CleanEnergyTechnology"
@@ -231,18 +294,24 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab13"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab13"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab13"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab13" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab13"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab14"
         android:layout_width="100dp"
         android:layout_height="20dp"
         android:layout_marginStart="5dp"
-
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab13"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/PolicyAndEconomics"
@@ -254,18 +323,24 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab14"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab14"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab14"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab14" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab14"
+        android:clickable="true"
+        android:padding="6dp"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab15"
         android:layout_width="82dp"
         android:layout_height="20dp"
         android:layout_marginStart="5dp"
-
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab14"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/EnergyEfficiency"
@@ -277,7 +352,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab15"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab15"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab15"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab15" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab15"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="6dp"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab16"
@@ -287,7 +366,10 @@
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toEndOf="@+id/roundedRectCollab15"
         app:layout_constraintTop_toBottomOf="@+id/CategoryTitle"
-        app:srcCompat="@drawable/roundedrect1_collab" />
+        app:srcCompat="@drawable/roundedrect1_collab"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <TextView
         android:id="@+id/Other"
@@ -299,7 +381,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab16"
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab16"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab16"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab16" />
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab16"
+        android:clickable="true"
+        android:padding="6dp"
+        android:focusable="true"
+        android:background="@drawable/image_selector"/>
 
     <ImageView
         android:id="@+id/roundedRectCollab17"
@@ -320,6 +406,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9"
         app:srcCompat="@drawable/roundedrect1_collab" />
+
+    <!-- ScrollView for Typing Space -->
+    <ScrollView
+        android:id="@+id/scrollViewDescription"
+        android:layout_width="335dp"
+        android:layout_height="104dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab18">
+
+        <!-- EditText for the Description -->
+        <EditText
+            android:id="@+id/editTextDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="start|top"
+            android:hint="Enter project description..."
+            android:inputType="textMultiLine"
+            android:maxLines="5"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:scrollHorizontally="false"
+            android:textColor="#4a654d"
+            android:textColorHint="#A9A9A9"
+            android:textSize="14sp" />
+    </ScrollView>
 
     <ImageView
         android:id="@+id/roundedRectCollab18"
@@ -351,53 +468,90 @@
         app:layout_constraintTop_toBottomOf="@+id/textView10"
         app:srcCompat="@drawable/roundedrect1_collab" />
 
-    <RadioGroup
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollViewLink"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginEnd="5dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab20"
+        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab20"
+        app:layout_constraintStart_toEndOf="@+id/linkIcon"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab20">
 
-        <!-- Adjust text size -->
+        <!-- EditText inside the HorizontalScrollView -->
+        <EditText
+            android:id="@+id/linkEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/inria_sans"
+            android:hint="Link"
+            android:imeOptions="actionDone"
+            android:inputType="textUri"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="#4a654d"
+            android:textColorHint="#A9A9A9"
+            android:textSize="14sp" />
+    </HorizontalScrollView>
 
+
+    <RadioGroup
+        android:id="@+id/radio_group_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+        <RadioButton
+            android:id="@+id/radio_option_1"
+            android:layout_width="106dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="10dp"
+            android:buttonTint="#89A385"
+            android:text="Not started"
+            android:textColor="#89A385"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <RadioButton
+            android:id="@+id/radio_option_2"
+            android:layout_width="105dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:buttonTint="#89A385"
+            android:text="In progress"
+            android:textColor="#89A385"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/radio_option_1"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <RadioButton
+            android:id="@+id/radio_option_3"
+            android:layout_width="125dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:buttonTint="#89A385"
+            android:text="Completed"
+            android:textColor="#89A385"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/radio_option_2"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
     </RadioGroup>
 
-    <RadioButton
-        android:id="@+id/radio_option_1"
-        android:layout_width="106dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="10dp"
-        android:buttonTint="#89A385"
-        android:text="Not started"
-        android:textColor="#89A385"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-    <RadioButton
-        android:id="@+id/radio_option_2"
-        android:layout_width="105dp"
-        android:layout_height="23dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:buttonTint="#89A385"
-        android:text="In progress"
-        android:textColor="#89A385"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/radio_option_1"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-    <RadioButton
-        android:id="@+id/radio_option_3"
-        android:layout_width="125dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:buttonTint="#89A385"
-        android:text="Completed"
-        android:textColor="#89A385"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/radio_option_2"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <ImageView
         android:id="@+id/publishButton"
@@ -406,7 +560,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radio_option_2"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group_status"
         app:srcCompat="@drawable/roundedrect2_collab" />
 
     <TextView
@@ -455,7 +609,7 @@
 
     <TextView
         android:id="@+id/totalCollaborators"
-        android:layout_width="21dp"
+        android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:gravity="center"
         android:text="0"
@@ -467,10 +621,10 @@
         app:layout_constraintTop_toTopOf="@+id/roundedRectCollab9" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/collabSearcUserIcon"
         android:layout_width="52dp"
         android:layout_height="46dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/collabCircle1"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
