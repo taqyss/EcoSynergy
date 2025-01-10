@@ -47,17 +47,17 @@ public class AdminActivity extends BaseActivity {
         });
 
 
-
-
         RecyclerView recyclerView = findViewById(R.id.recent_activity_list);
 
         List<ActivityItem> activities = new ArrayList<>();
         activities.add(new ActivityItem("User XYZ", "Created new module", "3h ago"));
         activities.add(new ActivityItem("User ABC", "Updated content", "2h ago"));
+        activities.add(new ActivityItem("User DEF", "Deleted old module", "1h ago"));
 
         ActivityListAdapter adapter = new ActivityListAdapter(activities);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         setupToolbar(true);
         getSupportActionBar();
