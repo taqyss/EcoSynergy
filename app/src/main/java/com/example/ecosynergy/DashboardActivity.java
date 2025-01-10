@@ -8,16 +8,16 @@ import android.widget.TextView;
 import android.widget.ProgressBar;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
-/*import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.*;*/  //FIREBASE NOT DETECTED
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.*; //FIREBASE NOT DETECTED
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class DashboardActivity extends BaseActivity {
 
-    /*private FirebaseDatabase database;
+    private FirebaseDatabase database;
     private DatabaseReference activitiesRef;
-    private DatabaseReference progressRef;*/ // FIREBASE NOT DETECTED
+    private DatabaseReference progressRef; // FIREBASE NOT DETECTED
     private String userId;
 
     // UI Elements for Activity Cards
@@ -44,7 +44,7 @@ public class DashboardActivity extends BaseActivity {
         setupBottomNavigation();
 
         // Initialize Firebase
-        /*initializeFirebase();*/ // FIREBASE NOT DETECTED
+        initializeFirebase(); // FIREBASE NOT DETECTED
 
         // Initialize UI elements
         initializeUIElements();
@@ -56,16 +56,16 @@ public class DashboardActivity extends BaseActivity {
         /*setupAdminButton();*/  //ADMIN NOT EXIST YET
 
         // Load data from Firebase
-        /*loadRecentActivities();
-        loadModuleProgress();*/ //FIREBASE NOT DETECTED
+        loadRecentActivities();
+        loadModuleProgress(); //FIREBASE NOT DETECTED
     }
 
-    /*private void initializeFirebase() {
+    private void initializeFirebase() {
         database = FirebaseDatabase.getInstance();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         activitiesRef = database.getReference("users").child(userId).child("recent_activities");
         progressRef = database.getReference("users").child(userId).child("module_progress");
-    }*/ // FIREBASE NOT DETECTED
+    } // FIREBASE NOT DETECTED
 
     private void initializeUIElements() {
         // Initialize activity cards arrays
@@ -150,14 +150,14 @@ public class DashboardActivity extends BaseActivity {
         });
     }*/
 
-    /*private void loadRecentActivities() {  //FIREBASE not detected
+    private void loadRecentActivities() {  //FIREBASE not detected
         activitiesRef.orderByChild("timestamp").limitToLast(4)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         int index = 0;
                         for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
-                            RecentActivity activity = activitySnapshot.getValue(RecentActivity.class);
+                            DashboardRecentActivity activity = activitySnapshot.getValue(DashboardRecentActivity.class);
                             if (activity != null && index < activityCards.length) {
                                 updateActivityCard(index, activity);
                                 index++;
@@ -170,7 +170,7 @@ public class DashboardActivity extends BaseActivity {
                         // Handle error
                     }
                 });
-    }*/
+    }
 
     private void updateActivityCard(int index, DashboardRecentActivity activity) {
         activityCards[index].setVisibility(View.VISIBLE);
@@ -199,14 +199,14 @@ public class DashboardActivity extends BaseActivity {
         }
     }
 
-    /*private void loadModuleProgress() {  //FIREBASE not detected
+    private void loadModuleProgress() {  //FIREBASE not detected
         progressRef.orderByChild("timestamp").limitToLast(2)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         int index = 0;
                         for (DataSnapshot progressSnapshot : snapshot.getChildren()) {
-                            ModuleProgress progress = progressSnapshot.getValue(ModuleProgress.class);
+                            DashboardModuleProgress progress = progressSnapshot.getValue(DashboardModuleProgress.class);
                             if (progress != null && index < progressCards.length) {
                                 updateProgressCard(index, progress);
                                 index++;
@@ -219,7 +219,7 @@ public class DashboardActivity extends BaseActivity {
                         // Handle error
                     }
                 });
-    }*/
+    }
 
     private void updateProgressCard(int index, DashboardModuleProgress progress) {
         progressCards[index].setVisibility(View.VISIBLE);
@@ -235,7 +235,7 @@ public class DashboardActivity extends BaseActivity {
         Intent intent;
         switch (activity.getActivityType().toLowerCase()) {
             case "discussion":
-                intent = new Intent(this, CollabProjectsDescActivity.class);
+                intent = new Intent(this, CollabDiscussActivity.class);
                 break;
             case "group_project":
                 intent = new Intent(this, CollabProjectsActivity.class);
