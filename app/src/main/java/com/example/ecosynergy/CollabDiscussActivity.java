@@ -1,6 +1,8 @@
 package com.example.ecosynergy;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 public class CollabDiscussActivity extends BaseActivity {
 
@@ -9,17 +11,24 @@ public class CollabDiscussActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collab_discuss1);
 
-        // Set up the toolbar with back button enabled
+        // Set up the toolbar with a back button
         setupToolbar(true);
-
-        //Set a custom title, or leave it blank if there's no need for a title
         getSupportActionBar().setTitle("Discussion Forum");
+
         // Set up bottom navigation
         setupBottomNavigation();
+
+        // Setup Create Group Button
+        Button createGroupButton = findViewById(R.id.CreateGroupButton);
+        createGroupButton.setOnClickListener(view -> {
+            Intent intent = new Intent(CollabDiscussActivity.this, ChatActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
     protected int getCurrentActivityId() {
-        return R.id.nav_collaboration; // This is the ID of the "Collaboration" menu item
+        return R.id.nav_collaboration; // ID of the collaboration navigation item
     }
 }
+

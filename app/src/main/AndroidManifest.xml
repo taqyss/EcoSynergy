@@ -63,6 +63,9 @@
         <!-- NewsDetailsActivity -->
         <activity android:name=".NewsDetailsActivity" />
 
+        <activity android:name=".ChatActivity" />
+
+
         <!-- Firebase Configuration -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
