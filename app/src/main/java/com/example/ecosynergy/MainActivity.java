@@ -1,9 +1,11 @@
 package com.example.ecosynergy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,74 +41,95 @@ public class MainActivity extends BaseActivity {
         TextView homeMessage = findViewById(R.id.home_message);
         TextView streakText = findViewById(R.id.streakText);
 
+        // News Section Navigation
+        LinearLayout newsSection = findViewById(R.id.newsSection);
+        newsSection.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+            startActivity(intent);
+        });
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
 
-            databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        String username = snapshot.child("username").getValue(String.class);
-                        homeMessage.setText("Welcome back, " + username + "!");
-
-                        // Handle streak logic
-                        updateStreak(userId, streakText);
-                    } else {
-                        homeMessage.setText("Welcome back!");
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(MainActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
-                    Log.e("MainActivity", "Error: " + error.getMessage());
-                }
-            });
+            // Fetch data from Firebase and update the UI
+            fetchUserData(userId, homeMessage, streakText);
         }
     }
 
-    private void updateStreak(String userId, TextView streakText) {
+    private void fetchUserData(String userId, TextView homeMessage, TextView streakText) {
         databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                int streak = 1;
-
                 if (snapshot.exists()) {
-                    String lastLogin = snapshot.child("lastLogin").getValue(String.class);
+                    String username = snapshot.child("username").getValue(String.class);
+                    homeMessage.setText("Welcome back, " + username + "!");
 
-                    try {
-                        Date lastLoginDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(lastLogin);
-                        Date todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(today);
+                    // Handle streak logic
+                    String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                    if (snapshot.child("lastLogin").exists()) {
+                        String lastLogin = snapshot.child("lastLogin").getValue(String.class);
 
-                        Calendar calLast = Calendar.getInstance();
-                        Calendar calToday = Calendar.getInstance();
-
-                        calLast.setTime(lastLoginDate);
-                        calToday.setTime(todayDate);
-
-                        calLast.add(Calendar.DAY_OF_YEAR, 1);
-                        if (calLast.get(Calendar.DAY_OF_YEAR) == calToday.get(Calendar.DAY_OF_YEAR)) {
-                            streak = snapshot.child("streak").exists() ? snapshot.child("streak").getValue(Integer.class) + 1 : 1;
+                        if (!today.equals(lastLogin)) {
+                            // If today is different from lastLogin, calculate streak
+                            updateStreak(userId, snapshot, today, streakText);
+                        } else {
+                            // If today is the same, just update the UI
+                            int streak = snapshot.child("streak").getValue(Integer.class);
+                            streakText.setText("You Have a " + streak + " Day Streak!");
+                            updateLeafIcons(streak);
                         }
-                    } catch (Exception e) {
-                        Log.e("MainActivity", "Error parsing dates");
+                    } else {
+                        // No lastLogin exists, initialize streak
+                        initializeStreak(userId, today, streakText);
                     }
+                } else {
+                    homeMessage.setText("Welcome back!");
                 }
-
-                databaseReference.child(userId).child("lastLogin").setValue(today);
-                databaseReference.child(userId).child("streak").setValue(streak);
-                streakText.setText("You Have a " + streak + " Day Streak!");
-                updateLeafIcons(streak);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Failed to update streak", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
                 Log.e("MainActivity", "Error: " + error.getMessage());
             }
         });
+    }
+
+    private void updateStreak(String userId, DataSnapshot snapshot, String today, TextView streakText) {
+        int streak = 1; // Default streak value
+        try {
+            String lastLogin = snapshot.child("lastLogin").getValue(String.class);
+            Date lastLoginDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(lastLogin);
+            Date todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(today);
+
+            Calendar calLast = Calendar.getInstance();
+            Calendar calToday = Calendar.getInstance();
+
+            calLast.setTime(lastLoginDate);
+            calToday.setTime(todayDate);
+
+            calLast.add(Calendar.DAY_OF_YEAR, 1); // Check for consecutive login
+            if (calLast.get(Calendar.DAY_OF_YEAR) == calToday.get(Calendar.DAY_OF_YEAR) &&
+                    calLast.get(Calendar.YEAR) == calToday.get(Calendar.YEAR)) {
+                streak = snapshot.child("streak").exists() ? snapshot.child("streak").getValue(Integer.class) + 1 : 1;
+            }
+        } catch (Exception e) {
+            Log.e("MainActivity", "Error parsing dates: " + e.getMessage());
+        }
+
+        // Update Firebase and UI
+        databaseReference.child(userId).child("lastLogin").setValue(today);
+        databaseReference.child(userId).child("streak").setValue(streak);
+        streakText.setText("You Have a " + streak + " Day Streak!");
+        updateLeafIcons(streak);
+    }
+
+    private void initializeStreak(String userId, String today, TextView streakText) {
+        databaseReference.child(userId).child("lastLogin").setValue(today);
+        databaseReference.child(userId).child("streak").setValue(1);
+        streakText.setText("You Have a 1 Day Streak!");
+        updateLeafIcons(1);
     }
 
     private void updateLeafIcons(int streak) {
@@ -131,4 +154,3 @@ public class MainActivity extends BaseActivity {
         }
     }
 }
-

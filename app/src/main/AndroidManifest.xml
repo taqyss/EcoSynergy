@@ -13,15 +13,23 @@
         android:theme="@style/Theme.EcoSynergy"
         tools:targetApi="31">
 
-        <!-- MainActivity -->
+        <!-- RegisterActivity -->
         <activity
-            android:name=".MainActivity"
+            android:name=".RegisterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- LoginActivity -->
+        <activity android:name=".LoginActivity" />
+
+        <!-- MainActivity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
 
         <!-- LearningActivity -->
         <activity android:name=".LearningActivity" />
@@ -34,9 +42,14 @@
         <activity android:name=".CollabDiscussActivity" />
         <activity android:name=".CollabPartnersActivity" />
         <activity android:name=".CollabProjectsAddActivity" />
+        <activity android:name=".CollabProjectsDescActivity" />
+        <activity android:name=".CollabSearchUserActivity"/>
 
         <!-- DashboardActivity -->
         <activity android:name=".DashboardActivity" />
+
+        <!-- DashboardCertificateActivity -->
+        <activity android:name=".DashboardCertificateActivity" />
 
         <!-- AdminActivity -->
         <activity android:name=".AdminActivity" />
@@ -44,8 +57,22 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <!-- NewsActivity -->
         <activity android:name=".NewsActivity" />
+
+        <!-- NewsDetailsActivity -->
         <activity android:name=".NewsDetailsActivity" />
+
+        <activity android:name=".ChatActivity" />
+
+
+        <!-- Firebase Configuration -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/primaryColor" />
 
     </application>
 
