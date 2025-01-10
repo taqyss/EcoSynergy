@@ -87,49 +87,15 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/certificateCard1"
-                android:layout_width="325dp"
-                android:layout_height="200dp"
+            <LinearLayout
+                android:id="@+id/certificateContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/certificate_card"
-                android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/badgeCard">
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="238dp"
-                    android:layout_height="169dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/certificate" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/certificateCard2"
-                android:layout_width="325dp"
-                android:layout_height="200dp"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/certificate_card"
-                android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/certificateCard1">
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="238dp"
-                    android:layout_height="169dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/certificate" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Certificates will be added here dynamically -->
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
