@@ -17,14 +17,14 @@
     <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
+        style="@style/CustomBottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primaryColor"
         app:itemIconSize="50dp"
-        app:labelVisibilityMode="unlabeled"
-        app:menu="@menu/bottom_navigation_menu"
-        style="@style/CustomBottomNavigationView"
         app:itemIconTint="@color/custom_icon_tint"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
