@@ -45,7 +45,7 @@
         app:srcCompat="@drawable/roundedrect3_collab" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/back_button"
         android:layout_width="31dp"
         android:layout_height="33dp"
         android:layout_marginStart="5dp"
