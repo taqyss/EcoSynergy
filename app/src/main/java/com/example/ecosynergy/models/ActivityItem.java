@@ -2,12 +2,15 @@ package com.example.ecosynergy.models;
 
 public class ActivityItem {
     String username;
-    String title;
+    String activity;
     String timestamp;
 
-    public ActivityItem(String username, String title, String timestamp) {
+    public ActivityItem() {
+    }
+
+    public ActivityItem(String username, String activity, String timestamp) {
         this.username = username;
-        this.title = title;
+        this.activity = activity;
         this.timestamp = timestamp;
     }
 
@@ -15,8 +18,8 @@ public class ActivityItem {
         return username;
     }
 
-    public String getTitle() {
-        return title;
+    public String getActivity() {
+        return activity;
     }
 
     public String getTimestamp() {

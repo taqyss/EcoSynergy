@@ -69,9 +69,12 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
             void onDelete(int position);
         }
 
-        public void updateList(List<Module> newList) {
-            moduleList.clear();
-            moduleList.addAll(newList);
+        public void updateList(List<Module> updatedList) {
+            this.moduleList = updatedList;
             notifyDataSetChanged();
         }
+
+    public List<Module> getModuleList() {
+        return moduleList;
+    }
 }
