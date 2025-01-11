@@ -13,10 +13,6 @@ public class MainAdapter extends BaseAdapter {
     private NavigationUtils.OnCategorySelectedListener listener;
     private final List<String> categoryList;
     // Constructor
-    public MainAdapter(List<String> items) {
-        this.categoryList = items;
-    }
-
     public MainAdapter(List<String> items, NavigationUtils.OnCategorySelectedListener listener) {
         this.categoryList = items;
         this.listener = listener;
@@ -57,13 +53,17 @@ public class MainAdapter extends BaseAdapter {
         }
 
         // Populate data for the current position
-        holder.titleTextView.setText(categoryList.get(position)); // Example: set text
-        // Optionally set an image resource
-        // holder.iconImageView.setImageResource(R.drawable.some_image);
+        holder.titleTextView.setText(categoryList.get(position));
+
+        // Set up the click listener
+        holder.titleTextView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onCategorySelected(categoryList.get(position));
+            }
+        });
 
         return convertView;
     }
-
     // ViewHolder class to cache references to views
     private static class ViewHolder {
         TextView titleTextView;

@@ -42,10 +42,17 @@ public class MainLearningFragmentsHandler extends Fragment {
         category = DummyData.getAllCategory();
 
         // Set up ListView and Adapter
-        listView = rootView.findViewById(R.id.main_list);
         adapter = new MainAdapter(category, selectedCategory -> {
-            Intent intent = NavigationUtils.createSubCategoryIntent(getContext(), selectedCategory, categoryType);
-            startActivity(intent);
+            // Check categoryType and perform different actions based on its value
+            if ("Basic".equals(categoryType) || "Intermediate".equals(categoryType) || "Advanced".equals(categoryType)) {
+                // Handle basic category type
+                Intent intent = NavigationUtils.createSubCategoryIntentModule(getContext(), selectedCategory, categoryType);
+                startActivity(intent);
+            } else {
+                // Default action for any other categoryType
+                Intent intent = NavigationUtils.createSubCategoryIntentResource(getContext(), selectedCategory, "default");
+                startActivity(intent);
+            }
         });
 
         // Attach adapter to ListView

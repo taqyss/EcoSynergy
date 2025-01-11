@@ -24,25 +24,25 @@ public class ResourcesFragment extends Fragment {
         tabLayout.setVisibility(View.VISIBLE);
 
         // Set up the first fragment initially
-        Fragment articlesFragment = MainLearningFragmentsHandler.newInstance("Basic");
+        Fragment articlesFragment = MainLearningFragmentsHandler.newInstance("Articles");
         replaceFragment(articlesFragment);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
+
             public void onTabSelected(TabLayout.Tab tab) {
+                Fragment fragment = null;
                 switch (tab.getPosition()) {
-                    case 0:
-                        replaceFragment(articlesFragment);
+                    case 0:  // Basic
+                        fragment = MainLearningFragmentsHandler.newInstance("Article");
                         break;
-                    case 1:
-                        Fragment reportsFragment = MainLearningFragmentsHandler.newInstance("Basic");
-                        replaceFragment(reportsFragment);
+                    case 1:  // Intermediate
+                        fragment = MainLearningFragmentsHandler.newInstance("Report");
                         break;
-                    case 2:
-                        Fragment toolkitsFragment = MainLearningFragmentsHandler.newInstance("Basic");
-                        replaceFragment(toolkitsFragment);
+                    case 2:  // Advanced
+                        fragment = MainLearningFragmentsHandler.newInstance("Toolkits");
                         break;
                 }
+                replaceFragment(fragment);
             }
 
             @Override

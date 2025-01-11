@@ -10,12 +10,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class SubCategoryAdapter extends BaseAdapter {
+public class SubCategoryModuleAdapter extends BaseAdapter {
 
     private final List<DataModule.Subcategory> subcategoryList; // List of subcategories
 
     // Constructor
-    public SubCategoryAdapter(List<DataModule.Subcategory> subcategories) {
+    public SubCategoryModuleAdapter(List<DataModule.Subcategory> subcategories) {
         this.subcategoryList = subcategories;
     }
 

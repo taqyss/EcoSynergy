@@ -30,19 +30,19 @@ public class ModulesFragment extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                Fragment fragment = null;
                 switch (tab.getPosition()) {
                     case 0:  // Basic
-                        replaceFragment(basicFragment);
+                        fragment = MainLearningFragmentsHandler.newInstance("Basic");
                         break;
                     case 1:  // Intermediate
-                        Fragment intermediateFragment = MainLearningFragmentsHandler.newInstance("Basic");
-                        replaceFragment(intermediateFragment);
+                        fragment = MainLearningFragmentsHandler.newInstance("Intermediate");
                         break;
                     case 2:  // Advanced
-                        Fragment advancedFragment = MainLearningFragmentsHandler.newInstance("Advanced");
-                        replaceFragment(advancedFragment);
+                        fragment = MainLearningFragmentsHandler.newInstance("Advanced");
                         break;
                 }
+                replaceFragment(fragment);
             }
 
             @Override
@@ -55,6 +55,7 @@ public class ModulesFragment extends Fragment {
                 // Optional: Handle tab reselection
             }
         });
+
 
         return rootView;
     }

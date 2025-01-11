@@ -32,7 +32,9 @@
             android:exported="true" />
 
         <!-- LearningActivity -->
-        <activity android:name=".LearningActivity" />
+        <activity android:name=".LearningActivity"/>
+        <activity android:name=".SubCategoryModuleActivity"/>
+        <activity android:name=".SubCategoryResourceActivity"/>
 
         <!-- CollaborationActivity -->
         <activity android:name=".CollaborationActivity" />
