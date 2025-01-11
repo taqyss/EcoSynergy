@@ -35,12 +35,22 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:inputType="textPassword"
         app:layout_constraintTop_toBottomOf="@id/emailInput"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:padding="12dp"
-        android:inputType="textPassword" />
+        android:padding="12dp" />
+
+    <!-- Register as Admin Checkbox -->
+    <CheckBox
+        android:id="@+id/adminCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register as Admin"
+        app:layout_constraintTop_toBottomOf="@id/passwordInput"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
 
     <!-- Register Button -->
     <Button
@@ -48,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
-        app:layout_constraintTop_toBottomOf="@id/passwordInput"
+        app:layout_constraintTop_toBottomOf="@id/adminCheckbox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp" />

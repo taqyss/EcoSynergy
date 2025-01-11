@@ -144,11 +144,35 @@ public class DashboardActivity extends BaseActivity {
 
     private void setupAdminButton() {
         ImageButton btnAdminMode = findViewById(R.id.BTNAdminMode);
+
+        // Hide button by default
+        btnAdminMode.setVisibility(View.GONE);
+
+        // Check user role in Firebase
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Boolean isAdmin = snapshot.child("isAdmin").getValue(Boolean.class);
+                    if (isAdmin != null && isAdmin) {
+                        btnAdminMode.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
+
         btnAdminMode.setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, AdminActivity.class); //adminMode still doesn't exist
+            Intent intent = new Intent(DashboardActivity.this, AdminActivity.class);
             startActivity(intent);
         });
     }
+
 
     private void loadRecentActivities() {  //FIREBASE not detected
         activitiesRef.orderByChild("timestamp").limitToLast(4)
