@@ -70,16 +70,15 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_module"
-            android:layout_width="357dp"
-            android:layout_height="260dp"
+            android:layout_width="376dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/module"
-            app:layout_constraintVertical_bias="0.521" />
+            app:layout_constraintTop_toBottomOf="@+id/module" />
 
         <TextView
             android:id="@+id/module"
@@ -100,6 +99,7 @@
             android:layout_height="54dp"
             android:layout_marginStart="17dp"
             android:layout_marginTop="13dp"
+            android:background="@drawable/search_box_background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_1" />
 
