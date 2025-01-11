@@ -74,19 +74,34 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void loadMessages() {
-        Query groupMessagesQuery = messagesRef.orderByChild("groupId").equalTo(groupId);
-        groupMessagesQuery.addValueEventListener(new ValueEventListener() {
+        messagesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 messageList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Message message = dataSnapshot.getValue(Message.class);
                     if (message != null) {
-                        messageList.add(message);
+                        // Fetch the username from the Users node
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(message.getSenderId());
+                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                                if (userSnapshot.exists()) {
+                                    String username = userSnapshot.child("username").getValue(String.class);
+                                    message.setSenderName(username != null ? username : message.getSenderName());
+                                }
+                                chatAdapter.notifyDataSetChanged();
+                                chatRecyclerView.scrollToPosition(messageList.size() - 1);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                // Handle error
+                            }
+                        });
                     }
+                    messageList.add(message);
                 }
-                chatAdapter.notifyDataSetChanged();
-                chatRecyclerView.scrollToPosition(messageList.size() - 1);
             }
 
             @Override
@@ -95,6 +110,7 @@ public class ChatActivity extends BaseActivity {
             }
         });
     }
+
 
     private void sendMessage() {
         String messageText = messageInput.getText().toString().trim();
