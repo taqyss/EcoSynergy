@@ -55,8 +55,9 @@ public class AdminActivity extends BaseActivity {
         activities.add(new ActivityItem("User DEF", "Deleted old module", "1h ago"));
 
         ActivityListAdapter adapter = new ActivityListAdapter(activities);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.notifyDataSetChanged();
 
         setupToolbar(true);
