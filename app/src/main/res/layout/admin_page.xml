@@ -169,17 +169,16 @@
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navig"
+        android:id="@+id/bottom_navigation"
+        style="@style/CustomBottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primaryColor"
+        app:itemIconSize="50dp"
+        app:itemIconTint="@color/custom_icon_tint"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_navigation_menu" >
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        app:menu="@menu/bottom_navigation_menu" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recent_activity_list"
