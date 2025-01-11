@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -109,18 +111,50 @@ public class ContentManagementActivity extends BaseActivity {
         builder.setView(dialogView);
 
         EditText etModuleName = dialogView.findViewById(R.id.etModuleName);
+        ProgressBar progressBar = dialogView.findViewById(R.id.progressBar);
+        SeekBar seekBar = dialogView.findViewById(R.id.seekBar);
+
         etModuleName.setText(moduleList.get(0).getName());
+        int currentProgress = module.getProgress();
+        progressBar.setProgress(currentProgress);
+        seekBar.setProgress(currentProgress);
+
         Button btnSave = dialogView.findViewById(R.id.btnSave);
+
+        // Update ProgressBar as SeekBar is changed
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressBar.setProgress(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         AlertDialog dialog = builder.create();
 
         btnSave.setOnClickListener(view -> {
             String newModuleName = etModuleName.getText().toString();
+
             if (!newModuleName.isEmpty()) {
-                module.setName(newModuleName);
-                adapter.notifyDataSetChanged();
-                Toast.makeText(this, "Module Edited: " + newModuleName, Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+
+                    int newProgress = seekBar.getProgress();
+
+                    module.setName(newModuleName);
+                    module.setProgress(newProgress);
+
+
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(this, "Module Edited: " + newModuleName + " with progress " + newProgress , Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
             } else {
                 Toast.makeText(this, "Please enter a module name", Toast.LENGTH_SHORT).show();
             }
