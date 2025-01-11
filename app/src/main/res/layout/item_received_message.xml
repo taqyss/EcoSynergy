@@ -2,20 +2,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="8dp">
 
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/user"
-        android:layout_marginEnd="8dp" />
-
     <TextView
+        android:id="@+id/senderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_received_message"
-        android:padding="12dp"
-        android:text="Received Message"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/primaryColor"
+        android:textSize="12sp"
+        android:text="Sender Name" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/user"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/messageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_received_message"
+            android:padding="12dp"
+            android:text="Received Message"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
 </LinearLayout>
