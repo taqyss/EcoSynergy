@@ -30,16 +30,15 @@ public class RegisterActivity extends AppCompatActivity {
         EditText usernameInput = findViewById(R.id.usernameInput);
         EditText emailInput = findViewById(R.id.emailInput);
         EditText passwordInput = findViewById(R.id.passwordInput);
-        CheckBox adminCheckbox = findViewById(R.id.adminCheckbox);
+        CheckBox adminCheckBox = findViewById(R.id.adminCheckbox);
         Button registerButton = findViewById(R.id.registerButton);
         Button loginButton = findViewById(R.id.loginButton);
 
-        // Register Button
         registerButton.setOnClickListener(view -> {
             String username = usernameInput.getText().toString().trim();
             String email = emailInput.getText().toString().trim();
             String password = passwordInput.getText().toString().trim();
-            boolean isAdmin = adminCheckbox.isChecked();
+            boolean isAdmin = adminCheckBox.isChecked();
 
             if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
@@ -54,11 +53,10 @@ public class RegisterActivity extends AppCompatActivity {
             registerUser(username, email, password, isAdmin);
         });
 
-        // Login Button
         loginButton.setOnClickListener(view -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
-            finish(); // Close registration activity to avoid stack issues
+            finish();
         });
     }
 
@@ -69,8 +67,9 @@ public class RegisterActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
                             String userId = user.getUid();
-                            User newUser = new User(username, email, isAdmin);
+                            long timestamp = System.currentTimeMillis();
 
+                            User newUser = new User(username, email, isAdmin, timestamp);
                             databaseReference.child(userId).setValue(newUser)
                                     .addOnCompleteListener(saveTask -> {
                                         if (saveTask.isSuccessful()) {
@@ -90,23 +89,24 @@ public class RegisterActivity extends AppCompatActivity {
     private void navigateToLogin() {
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
-        finish(); // Close registration activity
+        finish();
     }
 
-    // User model class
     public static class User {
         public String username;
         public String email;
         public boolean isAdmin;
+        public long registrationTimestamp;
 
         public User() {
-            // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
 
-        public User(String username, String email, boolean isAdmin) {
+        public User(String username, String email, boolean isAdmin, long registrationTimestamp) {
             this.username = username;
             this.email = email;
             this.isAdmin = isAdmin;
+            this.registrationTimestamp = registrationTimestamp;
         }
     }
 }
+
