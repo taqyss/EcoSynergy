@@ -30,6 +30,7 @@ public class ContentManagementActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_management);
+        setupBottomNavigation();
 
         //Initalize mock data
         moduleList = new ArrayList<>();

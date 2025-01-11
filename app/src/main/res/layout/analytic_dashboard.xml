@@ -9,13 +9,12 @@
         android:id="@+id/profile3_view"
         android:layout_width="413dp"
         android:layout_height="86dp"
-        android:layout_marginBottom="652dp"
         android:background="#46644B"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/back_button"
         android:layout_width="44dp"
         android:layout_height="43dp"
         android:layout_marginTop="24dp"
@@ -42,8 +41,8 @@
         android:id="@+id/useractivity_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="28dp"
         android:fontFamily="@font/inria_sans"
         android:text="User Activity"
         android:textSize="28sp"
@@ -66,20 +65,17 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="661dp"
-        android:layout_marginTop="676dp"
         android:background="@color/primaryColor"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/bottom_navigation_menu"></com.google.android.material.bottomnavigation.BottomNavigationView>
 
     <TextView
         android:id="@+id/course_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="56dp"
         android:fontFamily="@font/inria_sans"
         android:text="Course Completion Rates"
         android:textSize="28sp"
@@ -103,19 +99,21 @@
         android:id="@+id/rate_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/inria_sans"
         android:text="Overall Completion"
         android:textColor="#959393"
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="562dp" />
+        app:layout_constraintStart_toStartOf="@+id/imageView8"
+        app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
     <TextView
         android:id="@+id/rating_completion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="112dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="108dp"
         android:fontFamily="@font/inria_sans_bold"
         android:text="75%"
         android:textSize="34sp"
@@ -133,24 +131,28 @@
         app:srcCompat="@drawable/roundedrect3_collab" />
 
     <TextView
+        android:id="@+id/module_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="Wind energy"
+        android:textColor="#959393"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/imageView9"
+        app:layout_constraintTop_toTopOf="@+id/imageView9" />
+
+    <TextView
         android:id="@+id/rating_completion2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="31dp"
         android:fontFamily="@font/inria_sans_bold"
         android:text="95%"
         android:textSize="34sp"
-        tools:layout_editor_absoluteX="215dp"
-        tools:layout_editor_absoluteY="598dp" />
-
-    <TextView
-        android:id="@+id/rate_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/inria_sans"
-        android:text="Wind Energy"
-        android:textColor="#959393"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="215dp"
-        tools:layout_editor_absoluteY="562dp" />
+        app:layout_constraintStart_toStartOf="@+id/imageView9"
+        app:layout_constraintTop_toTopOf="@+id/imageView9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
