@@ -47,7 +47,8 @@ public class AdminActivity extends BaseActivity {
         findViewById(R.id.button_dashboard).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Stay on the main page (this activity)
+                Intent intent = new Intent(AdminActivity.this , DashboardActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -96,22 +97,20 @@ public class AdminActivity extends BaseActivity {
 
         if(currentUser != null) {
             String userId = currentUser.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         String username = dataSnapshot.child("username").getValue(String.class);
-                        String email = dataSnapshot.child("email").getValue(String.class);
-                        String lastLogin = dataSnapshot.child("lastLogin").getValue(String.class);
-                        String streak = dataSnapshot.child("streak").getValue(String.class);
+                        String role = dataSnapshot.child("role").getValue(String.class);
 
                         // Set username
-                        nameTextView.setText(username != null ? username: "Admin !");
+                        nameTextView.setText(username != null ? username: "Admin");
 
                         // Set email
-                        roleTextView.setText(email != null ? email: "admin@gmail.com");
+                        roleTextView.setText(role != null ? role: "Administrator");
 
                         profileImageView.setImageResource(R.drawable.usericon);
                     }

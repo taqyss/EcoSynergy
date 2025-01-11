@@ -27,12 +27,14 @@
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="168dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="224dp"
         android:fontFamily="@font/inria_sans"
-        android:text="Gianna John"
+        android:gravity="start"
+        android:text="Username"
+        android:textAlignment="viewStart"
         android:textColor="#FFF9F9"
-        android:textSize="28sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +66,7 @@
         android:layout_width="79dp"
         android:layout_height="76dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="164dp"
+        android:layout_marginEnd="168dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Profile_view"
         app:srcCompat="@drawable/content" />
