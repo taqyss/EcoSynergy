@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/learningActivityNavigation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Top Tab Layout -->
+
+    <!-- Sub Tab Layout for Modules -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/top_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:background="@color/primaryColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorHeight="5dp"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="#80FFFFFF"
+        tools:layout_editor_absoluteX="0dp">
+
+        <!-- Tab Items for Top Navigation -->
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_todays_pick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today's Pick" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_modules"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modules" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_resources"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resources" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,8 @@
 package com.example.ecosynergy;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 
 public class CollabPartnersActivity extends BaseActivity {
 
@@ -22,5 +24,25 @@ public class CollabPartnersActivity extends BaseActivity {
     @Override
     protected int getCurrentActivityId() {
         return R.id.nav_collaboration; // This is the ID of the "Collaboration" menu item
+    }
+
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return null;
     }
 }
