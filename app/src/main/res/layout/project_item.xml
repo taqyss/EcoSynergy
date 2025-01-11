@@ -1,0 +1,122 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+    <!-- Background Rectangle -->
+    <ImageView
+        android:id="@+id/roundedRectCollab5"
+        android:layout_width="330dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/roundedrect1_collab"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Overlay Rectangle -->
+    <ImageView
+        android:id="@+id/roundedRectCollab8"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/roundedrect3_collab"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/roundedRectCollab5"
+        app:layout_constraintStart_toStartOf="@id/roundedRectCollab5"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab5" />
+
+    <!-- Project Icon -->
+    <ImageView
+        android:id="@+id/projectIcon"
+        android:layout_width="58dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/collab_folder_icon"
+        app:layout_constraintStart_toStartOf="@id/roundedRectCollab5"
+        app:layout_constraintTop_toTopOf="@id/roundedRectCollab5" />
+
+    <!-- Project Title -->
+    <TextView
+        android:id="@+id/projectTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/inria_sans_bold"
+        android:text="Effective Energy Research"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/projectIcon"
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab5" />
+
+    <!-- Project Status -->
+    <TextView
+        android:id="@+id/totalProjectMembers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="(2/4 members)"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/projectIcon"
+        app:layout_constraintTop_toBottomOf="@id/projectTitle" />
+
+    <!-- Status Icons Container -->
+    <LinearLayout
+        android:id="@+id/statusIconsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@id/totalProjectMembers"
+        app:layout_constraintTop_toTopOf="@id/totalProjectMembers"
+        app:layout_constraintBottom_toBottomOf="@id/totalProjectMembers">
+
+        <ImageView
+            android:id="@+id/circleNotStarted"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/collab_circle_notstarted"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/circleInProgress"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/collab_circle_inprogress"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/circleCompleted"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/collab_circle_completed"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- Project Description -->
+    <TextView
+        android:id="@+id/projectDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/inria_sans"
+        android:text="This project focuses on exploring innovative solutions..."
+        android:textSize="10sp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        app:layout_constraintTop_toTopOf="@id/roundedRectCollab8"
+        app:layout_constraintBottom_toBottomOf="@id/roundedRectCollab8"
+        app:layout_constraintStart_toStartOf="@id/roundedRectCollab8"
+        app:layout_constraintEnd_toEndOf="@id/roundedRectCollab8" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
