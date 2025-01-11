@@ -206,8 +206,16 @@ public class ContentManagementActivity extends BaseActivity {
         btnCreate.setOnClickListener(view -> {
             String moduleName = etModuleName.getText().toString();
             if (!moduleName.isEmpty()) {
-                moduleList.add(new Module(moduleName, 0));
+                Module newModule = new Module(moduleName, 0);
+                moduleList.add(newModule);
+                filteredModuleList.add(newModule);
+
                 adapter.notifyDataSetChanged();
+
+                // Clear the search query to show the full list
+                SearchView searchView = findViewById(R.id.search);
+                searchView.setQuery("", false);
+
                 Toast.makeText(this, "Module Created: " + moduleName, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {

@@ -104,6 +104,7 @@ public class AdminActivity extends BaseActivity {
                     if (dataSnapshot.exists()) {
                         String username = dataSnapshot.child("username").getValue(String.class);
                         String email = dataSnapshot.child("email").getValue(String.class);
+                        String role = dataSnapshot.child("role").getValue(String.class);
                         String lastLogin = dataSnapshot.child("lastLogin").getValue(String.class);
                         String streak = dataSnapshot.child("streak").getValue(String.class);
 
