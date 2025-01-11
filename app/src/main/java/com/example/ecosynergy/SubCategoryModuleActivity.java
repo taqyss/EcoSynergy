@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +54,9 @@ public class SubCategoryModuleActivity extends BaseActivity implements Navigatio
 
                 // Example: Navigate to another activity
                 Intent detailIntent = new Intent(SubCategoryModuleActivity.this, ModulesContentActivity.class);
-                detailIntent.putExtra("SUBCATEGORY_TITLE", subcategory.getTitle());
-                detailIntent.putExtra("SUBCATEGORY_DESCRIPTION", subcategory.getDescription());
+                detailIntent.putExtra("Category", categoryName);
+                detailIntent.putExtra("subcategory", subcategory.getTitle());  // Add this line for category
+                detailIntent.putExtra("subcategoryId", subcategory.getId());  // Add this line for subcategory ID
                 startActivity(detailIntent);
             });
 

@@ -77,6 +77,27 @@ public class DataResource {
         }
     }
 
+    public List<DataResource.Subcategory> getUpNextSubcategories(int currentSubcategoryId) {
+        List<DataResource.Subcategory> upNext = new ArrayList<>();
+        int currentIndex = -1;
+
+        // Find the current subcategory index
+        for (int i = 0; i < subcategories.size(); i++) {
+            if (subcategories.get(i).getId() == currentSubcategoryId) {
+                currentIndex = i;
+                break;
+            }
+        }
+
+        // Add the current subcategory and the next two (if available)
+        if (currentIndex != -1) {
+            for (int i = currentIndex + 1; i <= currentIndex + 2 && i < subcategories.size(); i++) {
+                upNext.add(subcategories.get(i));
+            }
+        }
+        return upNext;
+    }
+
     public static List<DataResource> getDataResourcesForCategory(String categoryName) {
         List<DataResource> dataResources = new ArrayList<>();
 
