@@ -2,6 +2,7 @@ package com.example.ecosynergy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,17 +41,19 @@ public class MainLearningFragmentsHandler extends Fragment {
 
         // Fetch the category data
         category = DummyData.getAllCategory();
+        listView = rootView.findViewById(R.id.main_list);
 
         // Set up ListView and Adapter
         adapter = new MainAdapter(category, selectedCategory -> {
             // Check categoryType and perform different actions based on its value
             if ("Basic".equals(categoryType) || "Intermediate".equals(categoryType) || "Advanced".equals(categoryType)) {
-                // Handle basic category type
+                // Handle the valid category types
                 Intent intent = NavigationUtils.createSubCategoryIntentModule(getContext(), selectedCategory, categoryType);
                 startActivity(intent);
             } else {
-                // Default action for any other categoryType
-                Intent intent = NavigationUtils.createSubCategoryIntentResource(getContext(), selectedCategory, "default");
+                // Log or handle an unexpected category type
+                Log.w("MainLearningFragmentsHandler", "Unknown category type: " + categoryType);
+                Intent intent = NavigationUtils.createSubCategoryIntentResource(getContext(), selectedCategory, categoryType);
                 startActivity(intent);
             }
         });

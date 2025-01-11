@@ -5,13 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- ListView to host subcategory items -->
-    <ListView
-        android:id="@+id/subcategory_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"
-        android:padding="8dp" />
+        android:orientation="vertical">
+        <!-- Toolbar -->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+        <!-- ListView to host subcategory items -->
+        <ListView
+            android:id="@+id/subcategory_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        app:itemIconSize="50dp"
+        app:itemIconTint="@color/custom_icon_tint"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,7 +35,7 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
             // Inflating the appropriate layout for subcategories
             convertView = inflater.inflate(R.layout.item_subcategory_resource, parent, false);
             holder.titleTextView = convertView.findViewById(R.id.articleTitle);
-            holder.iconImageView = convertView.findViewById(R.id.ic_video);
+            holder.iconImageView = convertView.findViewById(R.id.ic_article);
 
             convertView.setTag(holder);
         } else {

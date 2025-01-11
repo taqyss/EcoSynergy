@@ -2,6 +2,7 @@ package com.example.ecosynergy;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -20,5 +21,25 @@ public class AnalyticDashboardActivity extends BaseActivity{
                 onBackPressed();
             }
         });
+    }
+
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return null;
     }
 }
