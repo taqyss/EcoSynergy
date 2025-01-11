@@ -83,6 +83,9 @@ public class AdminActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter.notifyDataSetChanged();
 
+        // Fetch recent activity data from firebase
+        loadRecentActivities(adapter);
+
         setupToolbar(true);
         getSupportActionBar();
         setupBottomNavigation();
@@ -121,6 +124,33 @@ public class AdminActivity extends BaseActivity {
             });
 
         }
+    }
+
+    private void loadRecentActivities(ActivityListAdapter adapter) {
+        DatabaseReference activityRef = FirebaseDatabase.getInstance().getReference("activities");
+
+        activityRef.orderByChild("timestamp").limitToLast(10) // Fetch the last 10 activities
+            .addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    List<ActivityItem> activities = new ArrayList<>();
+                    for (DataSnapshot activitySnapshot : dataSnapshot.getChildren()) {
+                        ActivityItem activity = activitySnapshot.getValue(ActivityItem.class);
+                        if (activity != null) {
+                            activities.add(activity);
+                        }
+                        // Update the adapter with the new list of activities
+                        adapter.updateActivities(activities);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("FirebaseError", "Error fetching activities", error.toException());
+
+                }
+            });
     }
 
 }

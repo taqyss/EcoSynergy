@@ -101,7 +101,10 @@ public class ContentManagementActivity extends BaseActivity {
                 showCreateModuleDialog();
             }
         });
-        }
+
+        recyclerView.scrollToPosition(0); // Scroll to top after filter
+
+    }
 
     private void showEditModuleDialog(Module module) {
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -216,18 +219,21 @@ public class ContentManagementActivity extends BaseActivity {
     }
 
     private void filterModules(String query) {
-        filteredModuleList.clear();
+        List<Module> filteredList = new ArrayList<>();
 
-        if (query.isEmpty()) {
-            filteredModuleList.addAll(moduleList); //Show all items if query is empty
-        } else {
+        if (!query.isEmpty()) {
             for (Module module : moduleList) {
+                // Check if the module name matches the query (you can improve this condition)
                 if (module.getName().toLowerCase().contains(query.toLowerCase())) {
-                    filteredModuleList.add(module);
+                    filteredList.add(module);
                 }
             }
-        }
+            }
+        else {
+                filteredList = new ArrayList<>(moduleList);
+            }
 
-        // Notify the adapter about the dataset change
+            // Notify the adapter about the dataset change
+            adapter.updateList(filteredList);
+        }
     }
-}

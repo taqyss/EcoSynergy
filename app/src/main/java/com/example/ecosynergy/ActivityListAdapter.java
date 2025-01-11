@@ -20,6 +20,12 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
         this.activityList = activityList;
     }
 
+    public void updateActivities(List<ActivityItem> activities) {
+        this.activityList = activities;
+        notifyDataSetChanged();
+    }
+
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView username, title , timestamp;
 
@@ -43,7 +49,7 @@ public class ActivityListAdapter extends RecyclerView.Adapter<ActivityListAdapte
     public void onBindViewHolder(@NonNull ActivityListAdapter.ViewHolder holder, int position) {
         ActivityItem activityItem = activityList.get(position);
         holder.username.setText(activityItem.getUsername());
-        holder.title.setText(activityItem.getTitle());
+        holder.title.setText(activityItem.getActivity());
         holder.timestamp.setText(activityItem.getTimestamp());
 
     }
