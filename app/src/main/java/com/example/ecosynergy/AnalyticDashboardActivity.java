@@ -1,7 +1,8 @@
 package com.example.ecosynergy;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
@@ -12,63 +13,74 @@ import com.google.firebase.database.ValueEventListener;
 
 public class AnalyticDashboardActivity extends BaseActivity {
 
-    private static final String TAG = "AnalyticDashboard";
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // Provide an implementation based on your app's needs
+        return null; // Placeholder
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.analytic_dashboard);
 
-        // Get references to TextView elements
-        TextView registrationCount = findViewById(R.id.registration_count);
-        TextView loginCount = findViewById(R.id.login_count);
-
-        // Reference to the Firebase database
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("UserActivity");
 
-        // Calculate the timestamp for one week ago
         long oneWeekAgo = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000);
 
-        // Retrieve data from Firebase
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int registrationsThisWeek = 0;
                 int loginsThisWeek = 0;
 
-                // Loop through each user in the database
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    try {
-                        // Check registration timestamp
-                        Long registrationTimestamp = userSnapshot.child("registration").getValue(Long.class);
-                        if (registrationTimestamp != null && registrationTimestamp >= oneWeekAgo) {
-                            registrationsThisWeek++;
-                        }
+                    Long registrationTimestamp = userSnapshot.child("registration").getValue(Long.class);
+                    if (registrationTimestamp != null && registrationTimestamp >= oneWeekAgo) {
+                        registrationsThisWeek++;
+                    }
 
-                        // Check login timestamps
-                        DataSnapshot loginsSnapshot = userSnapshot.child("logins");
-                        if (loginsSnapshot.exists()) {
-                            for (DataSnapshot loginSnapshot : loginsSnapshot.getChildren()) {
-                                Long loginTimestamp = loginSnapshot.getValue(Long.class);
-                                if (loginTimestamp != null && loginTimestamp >= oneWeekAgo) {
-                                    loginsThisWeek++;
-                                }
+                    DataSnapshot loginsSnapshot = userSnapshot.child("logins");
+                    if (loginsSnapshot.exists()) {
+                        for (DataSnapshot loginSnapshot : loginsSnapshot.getChildren()) {
+                            Long loginTimestamp = loginSnapshot.getValue(Long.class);
+                            if (loginTimestamp != null && loginTimestamp >= oneWeekAgo) {
+                                loginsThisWeek++;
                             }
                         }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error processing user data: " + e.getMessage());
                     }
                 }
 
-                // Update the UI with the retrieved counts
-                registrationCount.setText("Registrations: " + registrationsThisWeek);
-                loginCount.setText("Logins: " + loginsThisWeek);
+                updateDashboardUI(registrationsThisWeek, loginsThisWeek);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Database error: " + error.getMessage());
+                // Handle error
             }
         });
+    }
+
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    private void updateDashboardUI(int registrations, int logins) {
+        TextView registrationCount = findViewById(R.id.registration_count);
+        TextView loginCount = findViewById(R.id.login_count);
+
+        registrationCount.setText("Registrations: " + registrations);
+        loginCount.setText("Logins: " + logins);
     }
 }
