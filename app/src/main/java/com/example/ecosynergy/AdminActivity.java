@@ -110,7 +110,7 @@ public class AdminActivity extends BaseActivity {
                         nameTextView.setText(username != null ? username: "Admin");
 
                         // Set email
-                        roleTextView.setText(role != null ? role: "Administrator");
+                        roleTextView.setText(role != null ? role: "Admin");
 
                         profileImageView.setImageResource(R.drawable.usericon);
                     }
