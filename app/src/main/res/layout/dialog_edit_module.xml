@@ -20,6 +20,25 @@
         android:hint="Enter new module name"
         android:inputType="text" />
 
+    <!-- Horizontal ProgressBar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="0"
+        android:max="100"
+        android:indeterminate="false"
+        android:visibility="gone" /> <!-- Invisible by default -->
+
+    <!-- SeekBar for user to update progress -->
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0" />
+
     <Button
         android:id="@+id/btnSave"
         android:layout_width="match_parent"
