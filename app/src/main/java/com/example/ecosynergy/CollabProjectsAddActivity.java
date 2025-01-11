@@ -2,6 +2,7 @@ package com.example.ecosynergy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -115,6 +116,11 @@ public class CollabProjectsAddActivity extends BaseActivity{
             String link = ((EditText) findViewById(R.id.linkEditText)).getText().toString();
             String status = ((RadioButton) findViewById(((RadioGroup) findViewById(R.id.radio_group_status)).getCheckedRadioButtonId())).getText().toString();
 
+            if (!isValidUrl(link)) {
+                Toast.makeText(this, "Please enter a valid URL for collaboration!", Toast.LENGTH_SHORT).show();
+                return; // Exit the method if the link is invalid
+            }
+
             // Create a new Project object
             Project project = new Project(projectTitle, category, collaboratorAmount, description, link, status);
 
@@ -143,6 +149,10 @@ public class CollabProjectsAddActivity extends BaseActivity{
         ((RadioGroup) findViewById(R.id.radio_group_status)).clearCheck();
         selectedImageView.setSelected(false);
         selectedTextView.setSelected(false);
+    }
+
+    private boolean isValidUrl(String url) {
+        return Patterns.WEB_URL.matcher(url).matches();
     }
 
 
@@ -202,7 +212,6 @@ public class CollabProjectsAddActivity extends BaseActivity{
         setupOptionClickListener(optionImage7, optionText7);
 
     }
-
 
     @Override
     protected int getCurrentActivityId() {

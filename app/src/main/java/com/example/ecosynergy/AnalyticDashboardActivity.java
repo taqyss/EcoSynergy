@@ -2,7 +2,7 @@ package com.example.ecosynergy;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
@@ -11,25 +11,14 @@ public class AnalyticDashboardActivity extends BaseActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.analytic_dashboard);
-    }
 
-    @Override
-    public int getCount() {
-        return 0;
-    }
+        ImageView backButton = findViewById(R.id.back_button);
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

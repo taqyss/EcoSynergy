@@ -7,6 +7,10 @@ public class Project {
     private String description;
     private String link;
     private String status;
+    private long timestamp;
+
+    private String userId;    // Add this field
+    private String userName;  // Add this field
 
     // Constructor (required for Firebase)
     public Project() {}
@@ -19,6 +23,7 @@ public class Project {
         this.description = description;
         this.link = link;
         this.status = status;
+        this.timestamp = System.currentTimeMillis();
     }
 
     // Getters and Setters (optional but useful)
@@ -39,4 +44,9 @@ public class Project {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
 }

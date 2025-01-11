@@ -71,15 +71,17 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
         private TextView messageText;
+        private TextView senderName;
 
         ReceivedMessageViewHolder(View itemView) {
             super(itemView);
             messageText = itemView.findViewById(R.id.messageText);
+            senderName = itemView.findViewById(R.id.senderName); // Ensure this exists in XML
         }
 
         void bind(Message message) {
             messageText.setText(message.getText());
+            senderName.setText(message.getSenderName());
         }
     }
 }
-

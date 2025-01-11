@@ -26,7 +26,7 @@ public class CollaborationActivity extends BaseActivity {
         });
 
         findViewById(R.id.arrowIconCollab2).setOnClickListener(v -> {
-            Intent intent = new Intent(CollaborationActivity.this, CollabDiscussActivity.class);
+            Intent intent = new Intent(CollaborationActivity.this, ChatActivity.class);
             startActivity(intent);
         });
 
