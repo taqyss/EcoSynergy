@@ -61,7 +61,7 @@ public class DummyData {
         }
     }
 
-    public static String getContentForSubCategory(String subCategory) {
+    public static String getContentForSubCategoryBasic(String subCategory) {
         switch (subCategory) {
             case "What is Solar Energy?":
                 return "This section explains solar energy basics and its importance.";

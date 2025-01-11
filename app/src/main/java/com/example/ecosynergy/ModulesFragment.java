@@ -24,20 +24,23 @@ public class ModulesFragment extends Fragment {
         tabLayout.setVisibility(View.VISIBLE);
 
         // Set up the first fragment initially
-        replaceFragment(new BasicFragment());
+        Fragment basicFragment = MainLearningFragmentsHandler.newInstance("Basic");
+        replaceFragment(basicFragment);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:  // Basic
-                        replaceFragment(new BasicFragment());
+                        replaceFragment(basicFragment);
                         break;
                     case 1:  // Intermediate
-                        replaceFragment(new IntermediateFragment());
+                        Fragment intermediateFragment = MainLearningFragmentsHandler.newInstance("Basic");
+                        replaceFragment(intermediateFragment);
                         break;
                     case 2:  // Advanced
-                        replaceFragment(new AdvancedFragment());
+                        Fragment advancedFragment = MainLearningFragmentsHandler.newInstance("Advanced");
+                        replaceFragment(advancedFragment);
                         break;
                 }
             }

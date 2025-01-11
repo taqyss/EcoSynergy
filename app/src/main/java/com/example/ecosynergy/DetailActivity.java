@@ -17,6 +17,6 @@ public class DetailActivity extends AppCompatActivity {
         TextView description = findViewById(R.id.detail_description);
 
         title.setText(subCategory); // Set the title dynamically
-        description.setText(DummyData.getContentForSubCategory(subCategory)); // Fetch and display relevant content
+        description.setText(DummyData.getContentForSubCategoryBasic(subCategory)); // Fetch and display relevant content
     }
 }
