@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,47 +26,38 @@ public class SubCategoryModuleActivity extends BaseActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_subcategory);
 
-        // Get the category name and hierarchy from the intent
         Intent intent = getIntent();
         String categoryName = intent.getStringExtra("CATEGORY_NAME");
         String hierarchy = intent.getStringExtra("HIERARCHY");
 
-        // Initialize currentCategory and currentLevel
         if (categoryName != null && hierarchy != null) {
             currentCategory = categoryName;
             currentLevel = hierarchy;
 
-            // Set up the toolbar with back button enabled
             setupToolbar(true);
-
-            // Set toolbar title to the category name
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(categoryName);
             }
 
-            // Set up bottom navigation
             setupBottomNavigation();
 
-            // Log category name to ensure it's correct
-            Log.d("SubCategoryActivity", "Category selected: " + categoryName);
-
-            // Initialize data modules for the selected category
             List<DataModule> dataModules = getDataModulesForCategory(categoryName);
-
-            // Log number of data modules
-            Log.d("SubCategoryActivity", "Data modules for category: " + dataModules.size());
-
-            // Filter subcategories based on the level
             currentSubcategories = filterSubcategoriesByLevel(dataModules, hierarchy);
 
-            // Log filtered subcategories count
-            Log.d("SubCategoryActivity", "Filtered subcategories: " + currentSubcategories.size());
-
-            // Initialize ListView and adapter
+            // Initialize the adapter with click listener
             ListView listView = findViewById(R.id.subcategory_list);
-            subCategoryModuleAdapter = new SubCategoryModuleAdapter(currentSubcategories);
-            subCategoryModuleAdapter.notifyDataSetChanged();
-            listView.setAdapter(subCategoryModuleAdapter);  // Set adapter after filtering data
+            subCategoryModuleAdapter = new SubCategoryModuleAdapter(currentSubcategories, subcategory -> {
+                // Handle subcategory click
+                Log.d("SubCategoryActivity", "Clicked Subcategory: " + subcategory.getTitle());
+
+                // Example: Navigate to another activity
+                Intent detailIntent = new Intent(SubCategoryModuleActivity.this, ModulesContentActivity.class);
+                detailIntent.putExtra("SUBCATEGORY_TITLE", subcategory.getTitle());
+                detailIntent.putExtra("SUBCATEGORY_DESCRIPTION", subcategory.getDescription());
+                startActivity(detailIntent);
+            });
+
+            listView.setAdapter(subCategoryModuleAdapter);
         } else {
             Log.e("SubCategoryActivity", "Invalid category or hierarchy data");
         }

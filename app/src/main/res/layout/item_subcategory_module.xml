@@ -70,6 +70,8 @@
                 android:id="@+id/ic_discussion"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:contentDescription="Discussion Icon"
                 android:src="@drawable/ic_discussion"
                 app:tint="@color/lightGreen" />
@@ -79,6 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Discussion"
+                android:clickable="true"
+                android:focusable="true"
                 android:textColor="@color/primaryColor"
                 android:textSize="14sp" />
         </LinearLayout>

@@ -13,25 +13,24 @@ import java.util.List;
 public class SubCategoryModuleAdapter extends BaseAdapter {
 
     private final List<DataModule.Subcategory> subcategoryList; // List of subcategories
+    private final OnSubcategoryClickListener listener; // Listener for click events
 
     // Constructor
-    public SubCategoryModuleAdapter(List<DataModule.Subcategory> subcategories) {
+    public SubCategoryModuleAdapter(List<DataModule.Subcategory> subcategories, OnSubcategoryClickListener listener) {
         this.subcategoryList = subcategories;
+        this.listener = listener;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         DataModule.Subcategory currentSubcategory = subcategoryList.get(position);
-        Log.d("SubCategoryActivity", "Subcategory: " + currentSubcategory.getTitle() + ", " + currentSubcategory.getDescription());
-
-        System.out.printf(currentSubcategory.toString());
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             holder = new ViewHolder();
 
-            // Inflating the appropriate layout for subcategories
+            // Inflate the layout
             convertView = inflater.inflate(R.layout.item_subcategory_module, parent, false);
             holder.titleTextView = convertView.findViewById(R.id.subcategory_title);
             holder.descriptionTextView = convertView.findViewById(R.id.description);
@@ -42,12 +41,12 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        // Set the title and description from the subcategory object
+        // Bind data to views
         holder.titleTextView.setText(currentSubcategory.getTitle());
         holder.descriptionTextView.setText(currentSubcategory.getDescription());
 
-        Log.d("SubCategoryAdapter", "Subcategory: " + currentSubcategory.getTitle());
-
+        // Set click listener on the root view
+        convertView.setOnClickListener(v -> listener.onSubcategoryClick(currentSubcategory));
 
         return convertView;
     }
@@ -72,5 +71,9 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-}
 
+    // Interface for click events
+    public interface OnSubcategoryClickListener {
+        void onSubcategoryClick(DataModule.Subcategory subcategory);
+    }
+}
