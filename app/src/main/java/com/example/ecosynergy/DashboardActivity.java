@@ -53,7 +53,7 @@ public class DashboardActivity extends BaseActivity {
         setupCertificateButton();
 
         // Set up admin mode button click listener
-        /*setupAdminButton();*/  //ADMIN NOT EXIST YET
+        setupAdminButton(); //ADMIN NOT EXIST YET
 
         // Load data from Firebase
         loadRecentActivities();
@@ -142,13 +142,13 @@ public class DashboardActivity extends BaseActivity {
         });
     }
 
-    /*private void setupAdminButton() {
+    private void setupAdminButton() {
         ImageButton btnAdminMode = findViewById(R.id.BTNAdminMode);
         btnAdminMode.setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, AdminModeActivity.class); //adminMode still doesn't exist
+            Intent intent = new Intent(DashboardActivity.this, AdminActivity.class); //adminMode still doesn't exist
             startActivity(intent);
         });
-    }*/
+    }
 
     private void loadRecentActivities() {  //FIREBASE not detected
         activitiesRef.orderByChild("timestamp").limitToLast(4)
