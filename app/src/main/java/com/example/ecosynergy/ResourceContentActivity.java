@@ -16,22 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModulesContentActivity extends BaseActivity {
+public class ResourceContentActivity extends BaseActivity {
 
     // Declare Views
-    private ImageButton favoriteButton, downloadButton, transcriptButton;
+    private ImageButton favoriteButton, shareButton, textToSpeechButton;
     private TextView detailTitle, detailDescription, discussionTextView;
     private RecyclerView upNextRecyclerView;
-    private ImageView videoContainer;
 
     // Declare data structure for "Up Next" subcategories
-    private List<DataModule.Subcategory> upNextList;
-    private ModulesUpNextAdapter upNextAdapter;
+    private List<DataResource.Subcategory> upNextList;
+    private ResourcesUpNextAdapter upNextAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subcategory_content_modules);
+        setContentView(R.layout.subcategory_content_articles);
 
         // Initialize Views
         initializeViews();
@@ -41,25 +40,25 @@ public class ModulesContentActivity extends BaseActivity {
         String currentCategory = getIntent().getStringExtra("Category");
         String subcategory = getIntent().getStringExtra("subcategory");
 
-        Log.d("ModulesContentActivity", "currentSubcategoryId: " + currentSubcategoryId);
-        Log.d("ModulesContentActivity", "currentCategory: " + currentCategory);
-        Log.d("ModulesContentActivity", "subcategory: " + subcategory);
+        Log.d("ResourceContentActivity", "currentSubcategoryId: " + currentSubcategoryId);
+        Log.d("ResourceContentActivity", "currentCategory: " + currentCategory);
+        Log.d("ResourceContentActivity", "subcategory: " + subcategory);
 
         // Validate Subcategory ID
         if (currentSubcategoryId == -1) {
-            Log.e("ModulesContentActivity", "Invalid subcategory ID.");
+            Log.e("ResourceContentActivity", "Invalid subcategory ID.");
             return;
         }
 
         // Fetch Subcategory data
-        DataModule.Subcategory currentSubcategory = DataModule.getSubcategoryById(currentSubcategoryId, currentCategory);
-        Log.d("ModulesContentActivity", "Current Subcategory: " + currentSubcategory);
+        DataResource.Subcategory currentSubcategory = DataResource.getSubcategoryById(currentSubcategoryId, currentCategory);
+        Log.d("ResourceContentActivity", "Current Subcategory: " + currentSubcategory);
 
         if (currentSubcategory != null) {
             // Populate Subcategory Content
             populateSubcategoryContent(currentSubcategory);
         } else {
-            Log.e("ModulesContentActivity", "Subcategory not found.");
+            Log.e("ResourceContentActivity", "Subcategory not found.");
         }
 
         // Set up Toolbar
@@ -82,18 +81,15 @@ public class ModulesContentActivity extends BaseActivity {
         upNextRecyclerView = findViewById(R.id.RecylcleViewUpNext);
         detailTitle = findViewById(R.id.detail_title);
         detailDescription = findViewById(R.id.detail_description);
-        videoContainer = findViewById(R.id.videoContainer);
         favoriteButton = findViewById(R.id.favorite_button);
-        downloadButton = findViewById(R.id.download_button);
-        transcriptButton = findViewById(R.id.transcript_button);
+        shareButton = findViewById(R.id.share_button);
+        textToSpeechButton = findViewById(R.id.tts_button);
     }
 
     // Populate Subcategory Content
-    private void populateSubcategoryContent(DataModule.Subcategory currentSubcategory) {
-        detailTitle.setText(currentSubcategory.getVideoTitle());
-        detailDescription.setText(currentSubcategory.getVideoDescription());
-        // Optionally, load video thumbnail using Glide
-        // Glide.with(this).load(currentSubcategory.getVideoThumbnailUrl()).into(videoContainer);
+    private void populateSubcategoryContent(DataResource.Subcategory currentSubcategory) {
+        detailTitle.setText(currentSubcategory.getArticleTitle());
+        detailDescription.setText(currentSubcategory.getArticleContent());
     }
 
     // Set Button Click Listeners
@@ -102,23 +98,23 @@ public class ModulesContentActivity extends BaseActivity {
             Toast.makeText(this, "Favorite button clicked!", Toast.LENGTH_SHORT).show();
         });
 
-        downloadButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Download button clicked!", Toast.LENGTH_SHORT).show();
+        shareButton.setOnClickListener(view -> {
+            Toast.makeText(this, "Share button clicked!", Toast.LENGTH_SHORT).show();
         });
 
-        transcriptButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Transcript button clicked!", Toast.LENGTH_SHORT).show();
+        textToSpeechButton.setOnClickListener(view -> {
+            Toast.makeText(this, "Text-to-Speech button clicked!", Toast.LENGTH_SHORT).show();
         });
     }
 
     // Setup "Up Next" section
-    private void setupUpNextSection(String currentCategory, DataModule.Subcategory currentSubcategory) {
+    private void setupUpNextSection(String currentCategory, DataResource.Subcategory currentSubcategory) {
         upNextList = new ArrayList<>();
-        List<DataModule.Subcategory> allSubcategories = DataModule.getSubcategoriesForCategory(currentCategory);
+        List<DataResource.Subcategory> allSubcategories = DataResource.getSubcategoriesForCategory(currentCategory);
 
         // Add subcategories following the current one
         boolean foundCurrent = false;
-        for (DataModule.Subcategory subcategory : allSubcategories) {
+        for (DataResource.Subcategory subcategory : allSubcategories) {
             if (foundCurrent) {
                 upNextList.add(subcategory);
             }
@@ -132,19 +128,19 @@ public class ModulesContentActivity extends BaseActivity {
         upNextRecyclerView.setLayoutManager(layoutManager);
 
         // Set up RecyclerView with the adapter
-        upNextAdapter = new ModulesUpNextAdapter(upNextList);
+        upNextAdapter = new ResourcesUpNextAdapter(upNextList);
         upNextAdapter.setOnSubcategoryClickListener(subcategory -> {
             TextView discussionTextView = findViewById(R.id.DiscussionUpNext);
             if (discussionTextView != null) {
                 discussionTextView.setOnClickListener(v -> {
-                    DiscussionActivity.openDiscussionActivity(ModulesContentActivity.this, currentCategory, subcategory.getTitle());
+                    DiscussionActivity.openDiscussionActivity(ResourceContentActivity.this, currentCategory, subcategory.getArticleTitle());
                 });
             }
 
             // Handle subcategory click, navigate to another activity
-            Intent intent = new Intent(ModulesContentActivity.this, ModulesContentActivity.class);
+            Intent intent = new Intent(ResourceContentActivity.this, ResourceContentActivity.class);
             intent.putExtra("subcategoryId", subcategory.getId());
-            intent.putExtra("subcategory", subcategory.getTitle());
+            intent.putExtra("subcategory", subcategory.getArticleTitle());
             intent.putExtra("Category", currentCategory); // Pass the category again
             startActivity(intent);
         });

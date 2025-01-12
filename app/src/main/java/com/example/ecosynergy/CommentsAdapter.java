@@ -21,7 +21,6 @@ import java.util.List;
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentViewHolder> {
 
     private List<Comment> comments;
-
     public CommentsAdapter(List<Comment> comments) {
         this.comments = comments;
     }

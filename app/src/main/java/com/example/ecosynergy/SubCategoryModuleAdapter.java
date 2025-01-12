@@ -12,13 +12,14 @@ import java.util.List;
 
 public class SubCategoryModuleAdapter extends BaseAdapter {
 
+    private String category; // Category name
     private final List<DataModule.Subcategory> subcategoryList; // List of subcategories
     private final OnSubcategoryClickListener listener; // Listener for click events
-
     // Constructor
-    public SubCategoryModuleAdapter(List<DataModule.Subcategory> subcategories, OnSubcategoryClickListener listener) {
+    public SubCategoryModuleAdapter(String category, List<DataModule.Subcategory> subcategories, OnSubcategoryClickListener listener) {
         this.subcategoryList = subcategories;
         this.listener = listener;
+        this.category = category;
     }
 
     @Override
@@ -35,6 +36,7 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
             holder.titleTextView = convertView.findViewById(R.id.subcategory_title);
             holder.descriptionTextView = convertView.findViewById(R.id.description);
             holder.iconImageView = convertView.findViewById(R.id.ic_video);
+            holder.discussionTextView = convertView.findViewById(R.id.DiscussionUpNext);
 
             convertView.setTag(holder);
         } else {
@@ -45,8 +47,20 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
         holder.titleTextView.setText(currentSubcategory.getTitle());
         holder.descriptionTextView.setText(currentSubcategory.getDescription());
 
+
         // Set click listener on the root view
         convertView.setOnClickListener(v -> listener.onSubcategoryClick(currentSubcategory));
+
+        // Set click listener on the Discussion TextView
+        holder.discussionTextView.setOnClickListener(v -> {
+            // Open DiscussionActivity
+            DiscussionActivity.openDiscussionActivity(
+                    parent.getContext(),
+                    category,
+                    currentSubcategory.getTitle()
+            );
+        });
+
 
         return convertView;
     }
@@ -55,6 +69,7 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
         TextView titleTextView;
         TextView descriptionTextView;
         ImageView iconImageView;
+        TextView discussionTextView;
     }
 
     @Override
