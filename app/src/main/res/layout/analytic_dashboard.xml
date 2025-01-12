@@ -67,7 +67,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/useractivity_2" />
 
+
     <!-- Logins Count -->
+
+    <TextView
+        android:id="@+id/tv_active_users"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_background"
+        android:fontFamily="@font/inria_sans"
+        android:padding="8dp"
+        android:text="Active Users (Last 7 Days): 0"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/registration_count"
+        app:layout_constraintTop_toBottomOf="@+id/useractivity_2" />
+
     <TextView
         android:id="@+id/login_count"
         android:layout_width="wrap_content"
@@ -83,12 +101,15 @@
         app:layout_constraintTop_toBottomOf="@+id/registration_count" />
 
     <!-- Course Completion Rates -->
+
+    <!-- Overall Completion Rate Card -->
+
     <TextView
         android:id="@+id/course_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="68dp"
         android:fontFamily="@font/inria_sans"
         android:text="Course Completion Rates"
         android:textSize="22sp"
@@ -96,13 +117,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_count" />
 
-    <!-- Overall Completion Rate Card -->
     <ImageView
         android:id="@+id/imageView8"
         android:layout_width="170dp"
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/roundedrect3_collab"
         app:layout_constraintEnd_toStartOf="@+id/imageView9"
