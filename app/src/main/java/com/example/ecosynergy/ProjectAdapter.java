@@ -70,6 +70,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
             intent.putExtra("project_description", project.getDescription());
             intent.putExtra("project_status", project.getStatus());
             intent.putExtra("project_collaborators", project.getCollaboratorAmount());
+            intent.putExtra("project_link", project.getLink()); // Add this line
             context.startActivity(intent);
         });
     }
