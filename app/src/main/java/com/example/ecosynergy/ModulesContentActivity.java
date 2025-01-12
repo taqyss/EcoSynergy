@@ -1,7 +1,17 @@
 package com.example.ecosynergy;
 
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +31,7 @@ import java.util.List;
 public class ModulesContentActivity extends BaseActivity {
 
     // Declare Views
+    private static final int REQUEST_CODE_PERMISSION = 1236767; // code permission - storage
     private ImageButton favoriteButton, downloadButton, transcriptButton;
     private TextView detailTitle, detailDescription, discussionTextView;
     private RecyclerView upNextRecyclerView;
@@ -27,6 +40,8 @@ public class ModulesContentActivity extends BaseActivity {
     // Declare data structure for "Up Next" subcategories
     private List<DataModule.Subcategory> upNextList;
     private ModulesUpNextAdapter upNextAdapter;
+
+    private DownloadManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +77,11 @@ public class ModulesContentActivity extends BaseActivity {
             Log.e("ModulesContentActivity", "Subcategory not found.");
         }
 
-        // Set up Toolbar
+        // Set up Toolbar and Bottom Navigation
         setupToolbar(true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(subcategory);
         }
-
         setupBottomNavigation();
 
         // Set Button Click Listeners
@@ -98,16 +112,47 @@ public class ModulesContentActivity extends BaseActivity {
 
     // Set Button Click Listeners
     private void setButtonListeners() {
+        final boolean[] isFavorite = {false}; // Track the state
+
         favoriteButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Favorite button clicked!", Toast.LENGTH_SHORT).show();
+            if (isFavorite[0]) {
+                favoriteButton.setImageResource(R.drawable.ic_favourite);
+                Toast.makeText(this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
+            } else {
+                favoriteButton.setImageResource(R.drawable.ic_favourite_full);
+                Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT).show();
+            }
+            isFavorite[0] = !isFavorite[0]; // Toggle state
         });
 
         downloadButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Download button clicked!", Toast.LENGTH_SHORT).show();
+            int currentId = getIntent().getIntExtra("subcategoryId", -1);
+            String videoUrl = DataModule.getURLBasedOnID(currentId);
+            if ("URL is not available".equals(videoUrl)) {
+                Toast.makeText(this, "Video URL is not available", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String fileName = "video.mp4"; // Name of the file to save
+            downloadVideo(videoUrl, fileName);
         });
 
         transcriptButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Transcript button clicked!", Toast.LENGTH_SHORT).show();
+            int currentId = getIntent().getIntExtra("subcategoryId", -1);
+            String videoUrl = DataModule.getURLBasedOnID(currentId);
+
+            // Check if the URL is valid
+            if (videoUrl != null && !videoUrl.isEmpty()) {
+                // Display a toast indicating the YouTube video is opening
+                Toast.makeText(this, "Opening YouTube...", Toast.LENGTH_SHORT).show();
+
+                // Create an Intent to open the YouTube video
+                Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
+                youtubeIntent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://com.google.android.youtube")); // Force to open YouTube app if installed
+                startActivity(youtubeIntent); // Launch YouTube or a web browser
+            } else {
+                // Display a toast indicating the link is corrupt
+                Toast.makeText(this, "Link is unavailable", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -134,14 +179,7 @@ public class ModulesContentActivity extends BaseActivity {
         // Set up RecyclerView with the adapter
         upNextAdapter = new ModulesUpNextAdapter(upNextList);
         upNextAdapter.setOnSubcategoryClickListener(subcategory -> {
-            TextView discussionTextView = findViewById(R.id.DiscussionUpNext);
-            if (discussionTextView != null) {
-                discussionTextView.setOnClickListener(v -> {
-                    DiscussionActivity.openDiscussionActivity(ModulesContentActivity.this, currentCategory, subcategory.getTitle());
-                });
-            }
-
-            // Handle subcategory click, navigate to another activity
+            // Handle subcategory click
             Intent intent = new Intent(ModulesContentActivity.this, ModulesContentActivity.class);
             intent.putExtra("subcategoryId", subcategory.getId());
             intent.putExtra("subcategory", subcategory.getTitle());
@@ -153,7 +191,33 @@ public class ModulesContentActivity extends BaseActivity {
         upNextAdapter.notifyDataSetChanged();
     }
 
-    // Additional methods for Adapter implementation (if needed)
+    // Download Video Method
+    private void downloadVideo(String url, String fileName) {
+        // Create a DownloadManager.Request for the video URL
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setTitle("Downloading Video");
+        request.setDescription("Please wait while the video is being downloaded.");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        // Set the destination path within the Movies directory on external storage
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, fileName);
+
+        // Get the system's DownloadManager service
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        if (downloadManager != null) {
+            try {
+                // Enqueue the download request
+                long downloadId = downloadManager.enqueue(request);
+                Log.d("Download", "Download started with ID: " + downloadId);
+                Toast.makeText(this, "Download started!", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Log.e("DownloadError", "Error during video download: " + e.getMessage());
+                Toast.makeText(this, "Failed to download video", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // Additional Adapter Methods (if needed)
     @Override
     public int getCount() {
         return 0;
