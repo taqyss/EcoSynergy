@@ -8,6 +8,7 @@ public class Project {
     private String link;
     private String status;
     private long timestamp;
+    private String title;
 
     private String userId;    // Add this field
     private String userName;  // Add this field
@@ -49,4 +50,12 @@ public class Project {
     public void setUserId(String userId) { this.userId = userId; }
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
+
+    public String getTitle() { // Add this getter for title
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
