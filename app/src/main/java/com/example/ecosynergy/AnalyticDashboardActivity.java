@@ -3,6 +3,7 @@ package com.example.ecosynergy;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +24,16 @@ public class AnalyticDashboardActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.analytic_dashboard);
+
+        ImageView backButton = findViewById(R.id.back_button);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
 
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("UserActivity");
 

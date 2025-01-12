@@ -13,11 +13,17 @@ import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecosynergy.models.Module;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +34,7 @@ public class ContentManagementActivity extends BaseActivity {
     private ModuleAdapter adapter;
     private List<Module> moduleList;
     private List<Module> filteredModuleList;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,11 +42,10 @@ public class ContentManagementActivity extends BaseActivity {
         setContentView(R.layout.content_management);
         setupBottomNavigation();
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("modules");
+
         //Initalize mock data
         moduleList = new ArrayList<>();
-        moduleList.add(new Module("Solar Energy", 100));
-        moduleList.add(new Module("Wind Energy", 75));
-        moduleList.add(new Module("Hydropower", 50));
 
         // Initialize buttons
         Button btnEditModule = findViewById(R.id.btn_editmodule);
@@ -105,6 +111,7 @@ public class ContentManagementActivity extends BaseActivity {
 
         recyclerView.scrollToPosition(0); // Scroll to top after filter
 
+        loadModulesFromDatabase();
     }
 
     @Override
@@ -127,6 +134,24 @@ public class ContentManagementActivity extends BaseActivity {
         return null;
     }
 
+    private void loadModulesFromDatabase() {
+        databaseReference.addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                moduleList.clear();
+                for (DataSnapshot moduleSnapshot : snapshot.getChildren()) {
+                    Module module = moduleSnapshot.getValue(Module.class);
+                    moduleList.add(module);
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ContentManagementActivity.this, "Failed to load modules", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void showEditModuleDialog(Module module) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View dialogView = inflater.inflate(R.layout.dialog_edit_module, null);
@@ -138,7 +163,7 @@ public class ContentManagementActivity extends BaseActivity {
         ProgressBar progressBar = dialogView.findViewById(R.id.progressBar);
         SeekBar seekBar = dialogView.findViewById(R.id.seekBar);
 
-        etModuleName.setText(moduleList.get(0).getName());
+        etModuleName.setText(module.getName());
         int currentProgress = module.getProgress();
         progressBar.setProgress(currentProgress);
         seekBar.setProgress(currentProgress);
