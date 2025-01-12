@@ -48,7 +48,7 @@
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/TVBadge">
 
                 <HorizontalScrollView
                     android:id="@+id/horizontalScrollView"
@@ -91,11 +91,39 @@
                 android:id="@+id/certificateContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical"
-                android:layout_marginTop="32dp"
-                app:layout_constraintTop_toBottomOf="@+id/badgeCard">
+                app:layout_constraintTop_toBottomOf="@id/TVCertificate"
+                tools:layout_editor_absoluteX="16dp">
                 <!-- Certificates will be added here dynamically -->
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/TVBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inria_sans_bold"
+                android:text="Badge"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.101"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="5dp" />
+
+            <TextView
+                android:id="@+id/TVCertificate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/inria_sans_bold"
+                android:text="Certificate"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.118"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/badgeCard" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
