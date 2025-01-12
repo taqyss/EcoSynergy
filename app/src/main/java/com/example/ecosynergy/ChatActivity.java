@@ -73,6 +73,8 @@ public class ChatActivity extends BaseActivity {
 
         // Send a message
         sendButton.setOnClickListener(v -> sendMessage());
+        // Log this activity as recent when the page is opened
+        logRecentActivity();
     }
 
     @Override
@@ -93,6 +95,43 @@ public class ChatActivity extends BaseActivity {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return null;
+    }
+
+
+    private void logRecentActivity() {
+        DatabaseReference recentActivitiesRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("recent_activities");
+
+        String activityType = "Discussion";
+        String activityTitle = "Forum";
+        long timestamp = System.currentTimeMillis();
+
+        Query query = recentActivitiesRef.orderByChild("activityType").equalTo(activityType);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                        activitySnapshot.getRef().child("timestamp").setValue(timestamp);
+                    }
+                } else {
+                    String activityId = recentActivitiesRef.push().getKey();
+                    DashboardRecentActivity recentActivity = new DashboardRecentActivity(
+                            activityId, activityType, activityTitle, timestamp, groupId
+                    );
+                    if (activityId != null) {
+                        recentActivitiesRef.child(activityId).setValue(recentActivity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
     }
 
     private void loadMessages() {
