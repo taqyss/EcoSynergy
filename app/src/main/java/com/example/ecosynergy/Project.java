@@ -1,5 +1,8 @@
 package com.example.ecosynergy;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Project {
     private String projectTitle;
     private String category;
@@ -12,6 +15,8 @@ public class Project {
 
     private String userId;    // Add this field
     private String userName;  // Add this field
+    private int currentMembers;
+    private Map<String, Boolean> joinedUsers;
 
     // Constructor (required for Firebase)
     public Project() {}
@@ -25,6 +30,8 @@ public class Project {
         this.link = link;
         this.status = status;
         this.timestamp = System.currentTimeMillis();
+        this.currentMembers = 1; // Start with 1 (the creator)
+        this.joinedUsers = new HashMap<>();
     }
 
     // Getters and Setters (optional but useful)
@@ -57,5 +64,21 @@ public class Project {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getCurrentMembers() {
+        return currentMembers;
+    }
+
+    public void setCurrentMembers(int currentMembers) {
+        this.currentMembers = currentMembers;
+    }
+
+    public Map<String, Boolean> getJoinedUsers() {
+        return joinedUsers;
+    }
+
+    public void setJoinedUsers(Map<String, Boolean> joinedUsers) {
+        this.joinedUsers = joinedUsers;
     }
 }
