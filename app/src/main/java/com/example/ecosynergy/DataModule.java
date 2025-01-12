@@ -126,6 +126,14 @@ public class DataModule {
             return videoTitle;
         }
 
+        public String getLevel() {
+            return level;
+        }
+
+        public void setLevel(String level) {
+            this.level = level;
+        }
+
         public void setVideoTitle(String videoTitle) {
             this.videoTitle = videoTitle;
         }
@@ -235,40 +243,44 @@ public class DataModule {
         }
         return upNext;
     }
-    
+
+    private static Map<Integer, Subcategory> subcategoryMap = new HashMap<>();
+
+    public static String getURLBasedOnID(int currentSubcategoryId) {
+        Subcategory subcategory = subcategoryMap.get(currentSubcategoryId);
+        return (subcategory != null) ? subcategory.getContentUrl() : "URL is not available";
+    }
+
     public static List<DataModule> getDataModulesForCategory(String categoryName) {
 
-        // Solar Energy
         if ("Solar Energy".equals(categoryName)) {
             List<Subcategory> basicSubcategories = new ArrayList<>();
-            basicSubcategories.add(new Subcategory(1, "Basic", "What is Solar Energy?", "Intro to solar energy", "url1", "Intro to Solar Energy", "Solar energy is a renewable resource. In this video, we will learn the basics of solar energy."));
+            basicSubcategories.add(new Subcategory(1, "Basic", "What is Solar Energy?", "Intro to solar energy", "https://youtu.be/yFwGpiCs3ss?si=qNHzXlJ4e6giqnRq", "Intro to Solar Energy", "Solar energy is a renewable resource. In this video, we will learn the basics of solar energy."));
 
             List<Subcategory> intermediateSubcategories = new ArrayList<>();
-            intermediateSubcategories.add(new Subcategory(2, "Intermediate", "Solar Energy Conversion", "How solar panels work", "url2", "Solar Energy Conversion", "This video explains the process of converting solar energy into usable electricity."));
+            intermediateSubcategories.add(new Subcategory(1, "Intermediate", "Solar Energy Conversion", "How solar panels work", "url2", "Solar Energy Conversion", "This video explains the process of converting solar energy into usable electricity."));
 
             List<Subcategory> advancedSubcategories = new ArrayList<>();
-            advancedSubcategories.add(new Subcategory(3, "Advanced", "Advanced Solar Technologies", "Exploring cutting-edge solar technology", "url3", "Advanced Solar", "In this video, we explore advanced solar technologies and their applications."));
+            advancedSubcategories.add(new Subcategory(1, "Advanced", "Advanced Solar Technologies", "Exploring cutting-edge solar technology", "url3", "Advanced Solar", "In this video, we explore advanced solar technologies and their applications."));
 
-            dataModules.add(new DataModule("Basic", "Solar Energy", basicSubcategories));
-            dataModules.add(new DataModule("Intermediate", "Solar Energy", intermediateSubcategories));
-            dataModules.add(new DataModule("Advanced", "Solar Energy", advancedSubcategories));
+            dataModules.add(new DataModule("Basic", "Solar Energy", assignIds(basicSubcategories)));
+            dataModules.add(new DataModule("Intermediate", "Solar Energy", assignIds(intermediateSubcategories)));
+            dataModules.add(new DataModule("Advanced", "Solar Energy", assignIds(advancedSubcategories)));
         }
-        // Wind Energy
-        else if ("Wind Energy".equals(categoryName)) {
+        if ("Wind Energy".equals(categoryName)) {
             List<Subcategory> basicSubcategories = new ArrayList<>();
-            basicSubcategories.add(new Subcategory(1, "Basic", "What is Wind Energy?", "Intro to wind energy", "url4", "Intro to Wind Energy", "Wind energy is harnessed using turbines. Learn the basics of wind energy in this video."));
+            basicSubcategories.add(new Subcategory(0, "Basic", "What is Wind Energy?", "Intro to wind energy", "url4", "Intro to Wind Energy", "Wind energy is harnessed using turbines. Learn the basics of wind energy in this video."));
 
             List<Subcategory> intermediateSubcategories = new ArrayList<>();
-            intermediateSubcategories.add(new Subcategory(2, "Intermediate", "Wind Turbine Mechanics", "How wind turbines work", "url5", "Wind Turbine Mechanics", "In this video, we dive into the mechanics of wind turbines and their working principle."));
+            intermediateSubcategories.add(new Subcategory(0, "Intermediate", "Wind Turbine Mechanics", "How wind turbines work", "url5", "Wind Turbine Mechanics", "In this video, we dive into the mechanics of wind turbines and their working principle."));
 
             List<Subcategory> advancedSubcategories = new ArrayList<>();
-            advancedSubcategories.add(new Subcategory(3, "Advanced", "Wind Energy in Large-Scale Applications", "Harnessing wind for entire cities", "url6", "Large-Scale Wind Energy", "We explore how large-scale wind energy is used to power cities and industries."));
+            advancedSubcategories.add(new Subcategory(0, "Advanced", "Wind Energy in Large-Scale Applications", "Harnessing wind for entire cities", "url6", "Large-Scale Wind Energy", "We explore how large-scale wind energy is used to power cities and industries."));
 
-            dataModules.add(new DataModule("Basic", "Wind Energy", basicSubcategories));
-            dataModules.add(new DataModule("Intermediate", "Wind Energy", intermediateSubcategories));
-            dataModules.add(new DataModule("Advanced", "Wind Energy", advancedSubcategories));
+            dataModules.add(new DataModule("Basic", "Wind Energy", assignIds(basicSubcategories)));
+            dataModules.add(new DataModule("Intermediate", "Wind Energy", assignIds(intermediateSubcategories)));
+            dataModules.add(new DataModule("Advanced", "Wind Energy", assignIds(advancedSubcategories)));
         }
-        // Hydro Energy
         else if ("Hydro Energy".equals(categoryName)) {
             List<Subcategory> basicSubcategories = new ArrayList<>();
             basicSubcategories.add(new Subcategory(1, "Basic", "Introduction to Hydro Energy", "How hydroelectricity works", "url7", "Intro to Hydro Energy", "Learn how hydroelectric power plants convert water flow into electricity."));
@@ -279,9 +291,9 @@ public class DataModule {
             List<Subcategory> advancedSubcategories = new ArrayList<>();
             advancedSubcategories.add(new Subcategory(3, "Advanced", "Pumped Storage Hydroelectricity", "Understanding pumped storage", "url9", "Pumped Storage Hydroelectricity", "This video explores the advanced technique of pumped storage hydroelectricity, used to manage energy demand."));
 
-            dataModules.add(new DataModule("Basic", "Hydro Energy", basicSubcategories));
-            dataModules.add(new DataModule("Intermediate", "Hydro Energy", intermediateSubcategories));
-            dataModules.add(new DataModule("Advanced", "Hydro Energy", advancedSubcategories));
+            dataModules.add(new DataModule("Basic", "Hydro Energy", assignIds(basicSubcategories)));
+            dataModules.add(new DataModule("Intermediate", "Hydro Energy", assignIds(intermediateSubcategories)));
+            dataModules.add(new DataModule("Advanced", "Hydro Energy", assignIds(advancedSubcategories)));
         }
         // Geothermal Energy
         else if ("Geothermal Energy".equals(categoryName)) {
@@ -295,10 +307,18 @@ public class DataModule {
         else if ("Ocean Energy".equals(categoryName)) {
             // Add subcategories for Ocean Energy...
         }
-
+        // Add more categories below (e.g., Wind Energy, Hydro Energy, etc.)
         return dataModules;
     }
 
+    private static List<Subcategory> assignIds(List<Subcategory> subcategories) {
+        for (int i = 0; i < subcategories.size(); i++) {
+            Subcategory subcategory = subcategories.get(i);
+            subcategories.set(i, new Subcategory(i + 1, subcategory.getLevel(), subcategory.getTitle(), subcategory.getDescription(),
+                    subcategory.getContentUrl(), subcategory.getVideoTitle(), subcategory.getVideoDescription()));
+        }
+        return subcategories;
+    }
 
 }
 
