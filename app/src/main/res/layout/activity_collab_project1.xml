@@ -205,16 +205,4 @@
         app:layout_constraintBottom_toTopOf="@+id/roundedRectCollab4"
         app:layout_constraintEnd_toStartOf="@+id/collabFilterIcon" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/ProjectDesc1"-->
-<!--        android:layout_width="286dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:fontFamily="@font/inria_sans"-->
-<!--        android:text="This project focuses on exploring innovative solutions to optimize energy consumption and promote sustainability by analyzing renewable energy sources and strategies."-->
-<!--        android:textSize="10sp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab8"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab8"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab8"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab8" />-->
-
 </androidx.constraintlayout.widget.ConstraintLayout>
