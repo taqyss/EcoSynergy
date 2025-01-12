@@ -46,19 +46,28 @@ public class CollabProjectsDescActivity extends BaseActivity{
         descriptionTextView.setText(projectDescription);
         statusTextView.setText(projectStatus);
 
+        // Update the circle based on status
+        if (projectStatus != null) {
+            switch (projectStatus.toLowerCase()) {
+                case "not started":
+                    statusCircle.setImageResource(R.drawable.collab_circle_notstarted);
+                    break;
+                case "in progress":
+                    statusCircle.setImageResource(R.drawable.collab_circle_inprogress);
+                    break;
+                case "completed":
+                    statusCircle.setImageResource(R.drawable.collab_circle_completed);
+                    break;
+                default:
+                    // Keep default image or set a default status
+                    statusCircle.setImageResource(R.drawable.collab_circle_notstarted);
+                    break;
+            }
+        }
+
         // Format members text (adjust as needed based on your data structure)
         String membersText = String.format("(1/%d)", collaborators + 1);
         membersTextView.setText(membersText);
-
-        // Set up join button click listener
-//        ImageView joinButton = findViewById(R.id.joinButton);
-//        TextView joinText = findViewById(R.id.joinText);
-
-//        View.OnClickListener joinClickListener = v -> {
-            // Implement join functionality here
-//            Toast.makeText(this, "Joining project...", Toast.LENGTH_SHORT).show();
-//            // Add your Firebase logic to join the project
-//        };
 
         String projectLink = getIntent().getStringExtra("project_link");
 
@@ -85,7 +94,6 @@ public class CollabProjectsDescActivity extends BaseActivity{
                 }
             }
         };
-
         joinButton.setOnClickListener(joinClickListener);
         joinText.setOnClickListener(joinClickListener);
     }
