@@ -22,7 +22,9 @@ import java.util.Date;
 public class AnalyticDashboardActivity extends BaseActivity {
 
     private DatabaseReference databaseReference;
+    private DatabaseReference modulesReference;
     private TextView activeUsersTextView;
+    private TextView overallCompletionTextView;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -37,10 +39,14 @@ public class AnalyticDashboardActivity extends BaseActivity {
 
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("UserActivity");
+        modulesReference = FirebaseDatabase.getInstance().getReference("modules");
 
         // Initialize TextView
         activeUsersTextView = findViewById(R.id.tv_active_users);
+        overallCompletionTextView = findViewById(R.id.rating_completion);
+
         fetchActiveUsersLast7Days();
+        calculateOverallCompletion();
 
         ImageView backButton = findViewById(R.id.back_button);
 
@@ -123,6 +129,51 @@ public class AnalyticDashboardActivity extends BaseActivity {
                     }
                 });
     }
+
+    private void calculateOverallCompletion() {
+        modulesReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                double totalProgress = 0;
+                int moduleCount = 0;
+
+                for (DataSnapshot moduleSnapshot : snapshot.getChildren()) {
+                    // Check if module has progress field
+                    if (moduleSnapshot.hasChild("progress")) {
+                        Double progress = moduleSnapshot.child("progress").getValue(Double.class);
+                        if(progress != null) {
+                            totalProgress += progress;
+                            moduleCount++;
+                        }
+                    }
+                }
+
+                // Calculate overall percentange
+                int overallPercentange = moduleCount > 0
+                        ? (int) Math.round(totalProgress / moduleCount)
+                        : 0;
+
+                // Update UI
+                updateCompletionUI(overallPercentange);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("AnalyticDashboard", "Failed to calculate module completion", error.toException());
+                Toast.makeText(AnalyticDashboardActivity.this,
+                        "Failed to load module completion data.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void updateCompletionUI(int percentage) {
+        runOnUiThread(() -> {
+            if (overallCompletionTextView != null) {
+                overallCompletionTextView.setText(percentage + "%");
+            }
+        });
+    }
+
 
     @Override
     public int getCount() {

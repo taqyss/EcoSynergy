@@ -36,6 +36,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
         Module module = moduleList.get(position);
         holder.tvModuleName.setText(module.getName());
         holder.progressBar.setProgress(module.getProgress());
+        holder.progressText.setText("Progress: " + module.getProgress() + "%");
 
        // Set up edit functionality
         holder.itemView.setOnClickListener(view -> listener.onEdit(module));
@@ -56,12 +57,14 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
         TextView tvModuleName;
         ProgressBar progressBar;
         Button btnDelete;
+        TextView progressText;
 
         public ModuleViewHolder(@NonNull View itemView) {
             super(itemView);
             tvModuleName = itemView.findViewById(R.id.tvModuleName);
             progressBar = itemView.findViewById(R.id.progressBar);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+            progressText = itemView.findViewById(R.id.progressText);
         }
     }
         public interface OnModuleClickListener {
