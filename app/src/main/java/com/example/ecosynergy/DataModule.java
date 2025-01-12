@@ -3,30 +3,22 @@ package com.example.ecosynergy;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataModule {
     private String level; // "Basic", "Intermediate", "Advanced"
     private String category; // "Solar", "Wind", "Ocean", etc.
     private List<Subcategory> subcategories; // Subcategories for 'upNext'
 
-    private List<Comment> comments;
     private static List<DataModule> dataModules = new ArrayList<>();
     // Constructor
     public DataModule(String level, String category, List<Subcategory> subcategories) {
         this.level = level;
         this.category = category;
         this.subcategories = subcategories;
-        this.comments = new ArrayList<>();
-    }
 
-    // Getters and setters
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
     }
 
     // Getters and Setters
@@ -69,6 +61,7 @@ public class DataModule {
     public static class Subcategory {
 
         private int id;
+        private List<Comment> comments;
         private String title;
         private String level;
         private String description;
@@ -86,6 +79,19 @@ public class DataModule {
             this.contentUrl = contentUrl;
             this.videoTitle = videoTitle;
             this.videoDescription = videoDescription;
+            this.comments = new ArrayList<>();
+        }
+
+        public List<Comment> getComments() {
+            return comments;
+        }
+
+        public void addComment(Comment comment) {
+            this.comments.add(comment);
+        }
+
+        public void setComments(List<Comment> comments) {
+            this.comments = comments;
         }
 
         public int getId() {
@@ -131,6 +137,34 @@ public class DataModule {
         public void setVideoDescription(String videoDescription) {
             this.videoDescription = videoDescription;
         }
+    }
+
+    private static Map<String, Map<String, List<Comment>>> commentsData = new HashMap<>();
+    // Fetch comments for a specific category and subcategory
+    public static List<Comment> getCommentsForSubcategory(String category, String subcategory) {
+        if (commentsData.containsKey(category)) {
+            Map<String, List<Comment>> subcategories = commentsData.get(category);
+            if (subcategories.containsKey(subcategory)) {
+                return subcategories.get(subcategory);
+            }
+        }
+        return new ArrayList<>();  // Return empty list if no comments found
+    }
+
+    // Add a comment to a subcategory
+    public static void addCommentToSubcategory(String category, String subcategory, Comment comment) {
+        commentsData.putIfAbsent(category, new HashMap<>());
+        Map<String, List<Comment>> subcategories = commentsData.get(category);
+        subcategories.putIfAbsent(subcategory, new ArrayList<>());
+        subcategories.get(subcategory).add(comment);
+    }
+
+    // Add multiple comments to a subcategory
+    public static void addCommentsForSubcategory(String category, String subcategory, List<Comment> comments) {
+        commentsData.putIfAbsent(category, new HashMap<>());
+        Map<String, List<Comment>> subcategories = commentsData.get(category);
+        subcategories.putIfAbsent(subcategory, new ArrayList<>());
+        subcategories.get(subcategory).addAll(comments);
     }
 
     public static List<Subcategory> getSubcategoriesForCategory(String category) {
@@ -181,8 +215,6 @@ public class DataModule {
         return null;  // Return null if no subcategory with the given ID is found
     }
 
-
-
     public List<Subcategory> getUpNextSubcategories(int currentSubcategoryId) {
         List<Subcategory> upNext = new ArrayList<>();
         int currentIndex = -1;
@@ -203,6 +235,7 @@ public class DataModule {
         }
         return upNext;
     }
+    
     public static List<DataModule> getDataModulesForCategory(String categoryName) {
 
         // Solar Energy

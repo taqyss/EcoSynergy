@@ -36,6 +36,9 @@
         <activity android:name=".SubCategoryModuleActivity"/>
         <activity android:name=".SubCategoryResourceActivity"/>
         <activity android:name=".ModulesContentActivity"/>
+        <activity android:name=".ResourceContentActivity"/>
+        <activity android:name=".DiscussionActivity"/>
+
 
         <!-- CollaborationActivity -->
         <activity android:name=".CollaborationActivity" />

@@ -1,5 +1,6 @@
 package com.example.ecosynergy;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,8 @@ public class MainAdapter extends BaseAdapter {
         // Set up the click listener
         holder.titleTextView.setOnClickListener(v -> {
             if (listener != null) {
+                Log.d("MainAdapter", "Listener used");
+                Log.d("MainAdapter", "Clicked category: " + categoryList.get(position));
                 listener.onCategorySelected(categoryList.get(position));
             }
         });
@@ -70,4 +73,3 @@ public class MainAdapter extends BaseAdapter {
     }
 
 }
-

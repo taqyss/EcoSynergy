@@ -12,11 +12,15 @@ import java.util.List;
 
 public class SubCategoryResourceAdapter extends BaseAdapter {
 
+    private String category; // Category name
     private final List<DataResource.Subcategory> subcategoryList; // List of subcategories
+    private final OnSubcategoryClickListener listener; // Listener for click events
 
     // Constructor
-    public SubCategoryResourceAdapter(List<DataResource.Subcategory> subcategories) {
+    public SubCategoryResourceAdapter(String category, List<DataResource.Subcategory> subcategories, OnSubcategoryClickListener listener) {
+        this.category = category;
         this.subcategoryList = subcategories;
+        this.listener = listener;
     }
 
     @Override
@@ -36,6 +40,7 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_subcategory_resource, parent, false);
             holder.titleTextView = convertView.findViewById(R.id.articleTitle);
             holder.iconImageView = convertView.findViewById(R.id.ic_article);
+            holder.discussionTextView = convertView.findViewById(R.id.DiscussionUpNext);
 
             convertView.setTag(holder);
         } else {
@@ -44,12 +49,24 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
 
         // Set the title, description, and icon for the subcategory
         holder.titleTextView.setText(currentSubcategory.getArticleTitle());
+        // Set click listener on the root view
+        convertView.setOnClickListener(v -> listener.onSubcategoryClick(currentSubcategory));
+        // Set click listener on the Discussion TextView
+        holder.discussionTextView.setOnClickListener(v -> {
+            // Open DiscussionActivity
+            DiscussionActivity.openDiscussionActivity(
+                    parent.getContext(),
+                    category,
+                    currentSubcategory.getArticleTitle()
+            );
+        });
         return convertView;
     }
 
     private static class ViewHolder {
         TextView titleTextView;
         ImageView iconImageView;
+        TextView discussionTextView;
     }
 
     @Override
@@ -65,5 +82,9 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public interface OnSubcategoryClickListener {
+        void onSubcategoryClick(DataResource.Subcategory subcategory);
     }
 }
