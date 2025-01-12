@@ -4,6 +4,11 @@ public class Module {
     private String name;
     private int progress;
 
+    // No-arugment constructor for Firebase
+    public Module() {
+
+    }
+
     // Constructor, getters, and setters
     public Module(String name, int progress) {
         this.name = name;
