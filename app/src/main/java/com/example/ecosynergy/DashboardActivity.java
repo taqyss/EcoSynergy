@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*; //FIREBASE NOT DETECTED
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 public class DashboardActivity extends BaseActivity {
 
@@ -34,6 +35,8 @@ public class DashboardActivity extends BaseActivity {
     private TextView[] progressTitles;
     private ProgressBar[] progressBars;
     private TextView[] progressPercentages;
+
+    private TextView noActivityMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +71,7 @@ public class DashboardActivity extends BaseActivity {
     private void initializeFirebase() {
         database = FirebaseDatabase.getInstance();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        activitiesRef = database.getReference("users").child(userId).child("recent_activities");
+        activitiesRef = database.getReference("Users").child(userId).child("recent_activities");
         progressRef = database.getReference("users").child(userId).child("module_progress");
     } // FIREBASE NOT DETECTED
 
@@ -130,13 +133,13 @@ public class DashboardActivity extends BaseActivity {
                 findViewById(R.id.textView14)
         };
 
-        // Initially hide all cards
+        noActivityMessage = findViewById(R.id.noActivityMessage);
+
+        // Hide all activity cards initially
         for (View card : activityCards) {
             card.setVisibility(View.GONE);
         }
-        for (View card : progressCards) {
-            card.setVisibility(View.GONE);
-        }
+        noActivityMessage.setVisibility(View.GONE);
     }
 
     private void setupCertificateButton() {
@@ -187,17 +190,66 @@ public class DashboardActivity extends BaseActivity {
     }
 
 
-    private void loadRecentActivities() {  //FIREBASE not detected
+    /*private void saveRecentActivity(String type, String title) {
+        String activityId = activitiesRef.push().getKey();
+        long timestamp = System.currentTimeMillis();
+
+        DashboardRecentActivity activity = new DashboardRecentActivity(
+                activityId,
+                type,
+                title,
+                timestamp,
+                null
+        );
+
+        if (activityId != null) {
+            activitiesRef.child(activityId).setValue(activity);
+        }
+    }*/
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadRecentActivities(); // Reload recent activities when the dashboard resumes
+    }
+
+    private void loadRecentActivities() {
         activitiesRef.orderByChild("timestamp").limitToLast(4)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        int index = 0;
-                        for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
-                            DashboardRecentActivity activity = activitySnapshot.getValue(DashboardRecentActivity.class);
-                            if (activity != null && index < activityCards.length) {
-                                updateActivityCard(index, activity);
-                                index++;
+                        if (snapshot.exists() && snapshot.getChildrenCount() > 0) {
+                            noActivityMessage.setVisibility(View.GONE);
+                            int index = 0;
+
+                            List<DashboardRecentActivity> activities = new ArrayList<>();
+                            for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                                DashboardRecentActivity activity = activitySnapshot.getValue(DashboardRecentActivity.class);
+                                if (activity != null) {
+                                    activities.add(activity);
+                                }
+                            }
+
+                            // Sort activities by timestamp in descending order
+                            activities.sort((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
+
+                            // Display the latest 4 activities
+                            for (DashboardRecentActivity activity : activities) {
+                                if (index < activityCards.length) {
+                                    updateActivityCard(index, activity);
+                                    index++;
+                                }
+                            }
+
+                            // Hide unused cards
+                            for (int i = index; i < activityCards.length; i++) {
+                                activityCards[i].setVisibility(View.GONE);
+                            }
+                        } else {
+                            noActivityMessage.setVisibility(View.VISIBLE);
+                            for (View card : activityCards) {
+                                card.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -215,12 +267,15 @@ public class DashboardActivity extends BaseActivity {
         cardSubtitles[index].setText(activity.getTitle());
         timeTexts[index].setText(getTimeAgo(activity.getTimestamp()));
 
-        // Set appropriate icon based on activity type
         int iconResource = getActivityIcon(activity.getActivityType());
         activityIcons[index].setImageResource(iconResource);
 
-        // Set click listener
-        activityCards[index].setOnClickListener(v -> navigateToActivity(activity));
+        // Set OnClickListener for the ImageButton
+        activityIcons[index].setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, ChatActivity.class);
+            intent.putExtra("referenceId", activity.getReferenceId());
+            startActivity(intent);
+        });
     }
 
     private int getActivityIcon(String activityType) {
@@ -272,7 +327,7 @@ public class DashboardActivity extends BaseActivity {
         Intent intent;
         switch (activity.getActivityType().toLowerCase()) {
             case "discussion":
-                intent = new Intent(this, CollabDiscussActivity.class);
+                intent = new Intent(this, ChatActivity.class);
                 break;
             case "group_project":
                 intent = new Intent(this, CollabProjectsActivity.class);
@@ -284,7 +339,11 @@ public class DashboardActivity extends BaseActivity {
             default:
                 return;
         }
-        intent.putExtra("contentId", activity.getReferenceId());
+        // Log this navigation as a recent activity
+        //saveRecentActivity(activity.getActivityType(), activity.getTitle());
+
+        // Start the activity
+        intent.putExtra("referenceId", activity.getReferenceId());
         startActivity(intent);
     }
 
@@ -298,15 +357,12 @@ public class DashboardActivity extends BaseActivity {
         long now = System.currentTimeMillis();
         long diff = now - timestamp;
 
-        long hours = TimeUnit.MILLISECONDS.toHours(diff);
-        if (hours < 1) {
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
-            return minutes + " Minutes Ago";
-        } else if (hours < 24) {
-            return hours + " Hours Ago";
+        if (diff < 60 * 60 * 1000) {
+            return TimeUnit.MILLISECONDS.toMinutes(diff) + " Minutes Ago";
+        } else if (diff < 24 * 60 * 60 * 1000) {
+            return TimeUnit.MILLISECONDS.toHours(diff) + " Hours Ago";
         } else {
-            long days = TimeUnit.MILLISECONDS.toDays(diff);
-            return days + " Days Ago";
+            return TimeUnit.MILLISECONDS.toDays(diff) + " Days Ago";
         }
     }
 
