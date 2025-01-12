@@ -61,7 +61,18 @@ public class SubCategoryResourceActivity extends BaseActivity implements Navigat
 
             // Initialize ListView and adapter
             ListView listView = findViewById(R.id.subcategory_list);
-            subCategoryResourceAdapter = new SubCategoryResourceAdapter(currentSubcategories);
+            subCategoryResourceAdapter = new SubCategoryResourceAdapter(currentCategory, currentSubcategories, subcategory -> {
+                // Handle subcategory click
+                Log.d("SubCategoryActivity", "Clicked Subcategory: " + subcategory.getArticleTitle());
+
+
+                // Example: Navigate to another activity
+                Intent detailIntent = new Intent(SubCategoryResourceActivity.this, ResourceContentActivity.class);
+                detailIntent.putExtra("Category", categoryName);
+                detailIntent.putExtra("subcategory", subcategory.getArticleTitle());  // Add this line for category
+                detailIntent.putExtra("subcategoryId", subcategory.getId());  // Add this line for subcategory ID
+                startActivity(detailIntent);
+            });
             subCategoryResourceAdapter.notifyDataSetChanged();
             listView.setAdapter(subCategoryResourceAdapter);  // Set adapter after filtering data
         } else {
@@ -99,6 +110,8 @@ public class SubCategoryResourceActivity extends BaseActivity implements Navigat
     }
 
     private void updateSubcategories(String categoryName, String level) {
+
+        Log.d("SubCategoryActivity", "Updating subcategories for category: " + categoryName);
         List<DataResource> dataResource = getDataResourcesForCategory(categoryName);
 
         // Filter the subcategories based on the selected level

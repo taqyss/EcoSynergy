@@ -1,7 +1,6 @@
 package com.example.ecosynergy;
 
 import static com.example.ecosynergy.DataModule.getDataModulesForCategory;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,47 +24,39 @@ public class SubCategoryModuleActivity extends BaseActivity implements Navigatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_subcategory);
 
-        // Get the category name and hierarchy from the intent
         Intent intent = getIntent();
         String categoryName = intent.getStringExtra("CATEGORY_NAME");
         String hierarchy = intent.getStringExtra("HIERARCHY");
 
-        // Initialize currentCategory and currentLevel
         if (categoryName != null && hierarchy != null) {
             currentCategory = categoryName;
             currentLevel = hierarchy;
 
-            // Set up the toolbar with back button enabled
             setupToolbar(true);
-
-            // Set toolbar title to the category name
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(categoryName);
             }
 
-            // Set up bottom navigation
             setupBottomNavigation();
 
-            // Log category name to ensure it's correct
-            Log.d("SubCategoryActivity", "Category selected: " + categoryName);
-
-            // Initialize data modules for the selected category
             List<DataModule> dataModules = getDataModulesForCategory(categoryName);
-
-            // Log number of data modules
-            Log.d("SubCategoryActivity", "Data modules for category: " + dataModules.size());
-
-            // Filter subcategories based on the level
             currentSubcategories = filterSubcategoriesByLevel(dataModules, hierarchy);
 
-            // Log filtered subcategories count
-            Log.d("SubCategoryActivity", "Filtered subcategories: " + currentSubcategories.size());
-
-            // Initialize ListView and adapter
+            // Initialize the adapter with click listener
             ListView listView = findViewById(R.id.subcategory_list);
-            subCategoryModuleAdapter = new SubCategoryModuleAdapter(currentSubcategories);
-            subCategoryModuleAdapter.notifyDataSetChanged();
-            listView.setAdapter(subCategoryModuleAdapter);  // Set adapter after filtering data
+            subCategoryModuleAdapter = new SubCategoryModuleAdapter(currentCategory, currentSubcategories, subcategory -> {
+                // Handle subcategory click
+                Log.d("SubCategoryActivity", "Clicked Subcategory: " + subcategory.getTitle());
+
+                // Example: Navigate to another activity
+                Intent detailIntent = new Intent(SubCategoryModuleActivity.this, ModulesContentActivity.class);
+                detailIntent.putExtra("Category", categoryName);
+                detailIntent.putExtra("subcategory", subcategory.getTitle());  // Add this line for category
+                detailIntent.putExtra("subcategoryId", subcategory.getId());  // Add this line for subcategory ID
+                startActivity(detailIntent);
+            });
+
+            listView.setAdapter(subCategoryModuleAdapter);
         } else {
             Log.e("SubCategoryActivity", "Invalid category or hierarchy data");
         }
@@ -81,36 +72,36 @@ public class SubCategoryModuleActivity extends BaseActivity implements Navigatio
     }
 
     private void updateSubcategories(String categoryName, String level) {
-        // Get updated data modules for the selected category
-        List<DataModule> dataModules = getDataModulesForCategory(categoryName);
+        Log.d("SubCategoryActivity", "Updating subcategories for category: " + categoryName);
+        List<DataModule> dataModule = getDataModulesForCategory(categoryName);
 
         // Filter the subcategories based on the selected level
-        List<DataModule.Subcategory> filteredSubcategories = filterSubcategoriesByLevel(dataModules, level);
+        List<DataModule.Subcategory> filteredSubcategories = filterSubcategoriesByLevel(dataModule, level);
 
-        // Update the adapter with the new subcategories
-        currentSubcategories.clear();
-        currentSubcategories.addAll(filteredSubcategories);
-        subCategoryModuleAdapter.notifyDataSetChanged();
+        // Only update if the data has changed
+        if (!filteredSubcategories.equals(currentSubcategories)) {
+            currentSubcategories.clear();
+            currentSubcategories.addAll(filteredSubcategories);
+            subCategoryModuleAdapter.notifyDataSetChanged();
+        }
 
         Log.d("SubCategoryActivity", "Subcategories updated: " + currentSubcategories.size());
     }
 
-    private List<DataModule.Subcategory> filterSubcategoriesByLevel(List<DataModule> dataModules, String level) {
+    private List<DataModule.Subcategory> filterSubcategoriesByLevel(List<DataModule> dataModule, String level) {
         List<DataModule.Subcategory> filteredList = new ArrayList<>();
 
-        // Iterate over data modules and filter subcategories based on the level
-        for (DataModule dataModule : dataModules) {
-            Log.d("SubCategoryActivity", "Checking level: " + dataModule.getLevel());
-            if (level.equals(dataModule.getLevel())) {
-                filteredList.addAll(dataModule.getSubcategories());
-                Log.d("SubCategoryActivity", "Added subcategories: " + dataModule.getSubcategories().size());
+        for (DataModule data : dataModule) {
+            Log.d("SubCategoryActivity", "Checking level: " + data.getLevel());
+            if (level.equals(data.getLevel())) {
+                filteredList.addAll(data.getSubcategories());
+                Log.d("SubCategoryActivity", "Added subcategories: " + data.getSubcategories().size());
             }
         }
 
         Log.d("SubCategoryActivity", "Filtered subcategories count: " + filteredList.size());
         return filteredList;
     }
-
     @Override
     public int getCount() {
         return 0;

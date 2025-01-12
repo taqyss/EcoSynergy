@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ProgressBar;
 import android.widget.ImageView;
@@ -45,7 +46,7 @@ public class DashboardActivity extends BaseActivity {
         setupBottomNavigation();
 
         // Initialize Firebase
-        initializeFirebase(); // FIREBASE NOT DETECTED
+        initializeFirebase();
 
         // Initialize UI elements
         initializeUIElements();
@@ -54,11 +55,14 @@ public class DashboardActivity extends BaseActivity {
         setupCertificateButton();
 
         // Set up admin mode button click listener
-        setupAdminButton(); //ADMIN NOT EXIST YET
+        setupAdminButton();
+
+        // Set up logout button click listener
+        setupLogoutButton();
 
         // Load data from Firebase
         loadRecentActivities();
-        loadModuleProgress(); //FIREBASE NOT DETECTED
+        loadModuleProgress();
     }
 
     private void initializeFirebase() {
@@ -139,6 +143,14 @@ public class DashboardActivity extends BaseActivity {
         ImageButton btnCertificate = findViewById(R.id.BTNCertificate);
         btnCertificate.setOnClickListener(v -> {
             Intent intent = new Intent(DashboardActivity.this, DashboardCertificateActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void setupLogoutButton() {
+        Button btnLogout = findViewById(R.id.BTNLogout);
+        btnLogout.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
     }
