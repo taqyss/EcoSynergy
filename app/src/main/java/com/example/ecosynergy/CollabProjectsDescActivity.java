@@ -1,6 +1,8 @@
 package com.example.ecosynergy;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,18 +51,45 @@ public class CollabProjectsDescActivity extends BaseActivity{
         membersTextView.setText(membersText);
 
         // Set up join button click listener
+//        ImageView joinButton = findViewById(R.id.joinButton);
+//        TextView joinText = findViewById(R.id.joinText);
+
+//        View.OnClickListener joinClickListener = v -> {
+            // Implement join functionality here
+//            Toast.makeText(this, "Joining project...", Toast.LENGTH_SHORT).show();
+//            // Add your Firebase logic to join the project
+//        };
+
+        String projectLink = getIntent().getStringExtra("project_link");
+
         ImageView joinButton = findViewById(R.id.joinButton);
         TextView joinText = findViewById(R.id.joinText);
 
-        View.OnClickListener joinClickListener = v -> {
-            // Implement join functionality here
-            Toast.makeText(this, "Joining project...", Toast.LENGTH_SHORT).show();
-            // Add your Firebase logic to join the project
+        View.OnClickListener joinClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (projectLink != null && !projectLink.isEmpty()) {
+                    try {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(projectLink));
+                        startActivity(browserIntent);
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(CollabProjectsDescActivity.this,
+                                "No browser app found", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(CollabProjectsDescActivity.this,
+                                "Invalid link format", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(CollabProjectsDescActivity.this,
+                            "No project link available", Toast.LENGTH_SHORT).show();
+                }
+            }
         };
 
         joinButton.setOnClickListener(joinClickListener);
         joinText.setOnClickListener(joinClickListener);
     }
+
 
     @Override
     protected int getCurrentActivityId() {
