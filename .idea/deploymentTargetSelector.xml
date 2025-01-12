@@ -2,7 +2,14 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
+<<<<<<< HEAD
       <SelectionState runConfigName="EcoSynergy">
+=======
+      <SelectionState runConfigName="app">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="AdminActivity">
+>>>>>>> f240c60b315a6de46f39daf2dccc9ca33da2e72b
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

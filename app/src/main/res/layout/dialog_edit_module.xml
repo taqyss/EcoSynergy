@@ -30,6 +30,14 @@
         android:indeterminate="false"
         android:visibility="gone" /> <!-- Invisible by default -->
 
+
+    <TextView
+        android:id="@+id/progressText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Progress: 0%"
+        android:layout_marginTop="8dp"/>
+
     <!-- SeekBar for user to update progress -->
 
     <SeekBar
