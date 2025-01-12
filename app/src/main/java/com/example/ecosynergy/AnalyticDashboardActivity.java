@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import com.example.ecosynergy.models.Module;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -94,6 +96,26 @@ public class AnalyticDashboardActivity extends BaseActivity {
             }
         });
     }
+    private int getCompletedModulesCount(DataSnapshot snapshot) {
+        int completedCount = 0;
+        for (DataSnapshot moduleSnapshot : snapshot.getChildren()) {
+            // Check if the module has a "progress" field
+            if (moduleSnapshot.hasChild("progress")) {
+                Double progress = moduleSnapshot.child("progress").getValue(Double.class);
+                if (progress != null && progress == 100) {
+                    completedCount++;
+                }
+            }
+        }
+        return completedCount;
+    }
+
+    private void updateCompletedModulesCount(DataSnapshot snapshot) {
+        int completedCount = getCompletedModulesCount(snapshot);
+        TextView completedModulesCountText = findViewById(R.id.completed_module);
+        completedModulesCountText.setText(String.valueOf(completedCount));
+    }
+
 
     private void fetchActiveUsersLast7Days() {
         long currentTime = System.currentTimeMillis();
@@ -155,6 +177,11 @@ public class AnalyticDashboardActivity extends BaseActivity {
 
                 // Update UI
                 updateCompletionUI(overallPercentange);
+
+
+                // Update UI for completed modules count
+                updateCompletedModulesCount(snapshot);
+
             }
 
             @Override
