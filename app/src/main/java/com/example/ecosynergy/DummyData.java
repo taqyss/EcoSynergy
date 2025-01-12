@@ -39,9 +39,8 @@ public class DummyData {
 
     public static List<String> getAllCategory() {
         List<String> modules = new ArrayList<>();
-
-        modules.add("Wind Energy");
         modules.add("Solar Energy");
+        modules.add("Wind Energy");
         modules.add("Hydro Energy");
         modules.add("Geothermal Energy");
         modules.add("Biomass and Bioenergy Energy");

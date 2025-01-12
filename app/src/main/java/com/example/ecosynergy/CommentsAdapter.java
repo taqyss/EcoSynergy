@@ -21,7 +21,6 @@ import java.util.List;
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentViewHolder> {
 
     private List<Comment> comments;
-
     public CommentsAdapter(List<Comment> comments) {
         this.comments = comments;
     }
@@ -39,7 +38,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         Comment comment = comments.get(position);
         holder.commentText.setText(comment.getCommentText());
         holder.commentTime.setText(comment.getTimestamp());
-        holder.voteCount.setText(String.valueOf(comment.getVoteCount()) + " votes");
+        holder.voteCount.setText(comment.getVoteCount() + " votes");
 
         holder.upvoteButton.setOnClickListener(v -> {
             comment.upvote();
