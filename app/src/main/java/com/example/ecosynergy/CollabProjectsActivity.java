@@ -48,7 +48,8 @@ public class CollabProjectsActivity extends BaseActivity {private RecyclerView p
         projectsRecyclerView = findViewById(R.id.recyclerViewProjects);
         projectsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         projectList = new ArrayList<>();
-        projectAdapter = new ProjectAdapter(projectList);
+//        projectAdapter = new ProjectAdapter(projectList);
+        projectAdapter = new ProjectAdapter(this, projectList);
         projectsRecyclerView.setAdapter(projectAdapter);
 
         // Set up the toolbar and navigation (your existing code)
