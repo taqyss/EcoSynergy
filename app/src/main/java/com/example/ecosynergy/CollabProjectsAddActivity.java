@@ -1,7 +1,11 @@
 package com.example.ecosynergy;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 // Firebase Authentication
+import androidx.annotation.Nullable;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 // Firebase Realtime Database
 import com.google.firebase.database.DataSnapshot;
@@ -22,13 +30,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class CollabProjectsAddActivity extends BaseActivity{
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
+    private StorageReference storageReference;
     private ImageView selectedImageView = null; // To track the currently selected ImageView
     private TextView selectedTextView = null; // To track the currently selected TextView
+    private Uri selectedFileUri = null;
+    private Uri selectedImageUri = null;
+    private TextView fileAttachmentStatus;
+    private TextView imageAttachmentStatus;
+    private static final int PICK_FILE_REQUEST = 1;
+    private static final int PICK_IMAGE_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +107,29 @@ public class CollabProjectsAddActivity extends BaseActivity{
 
         setupSelectableOptions();
 
+        // Initialize Firebase Storage
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+        // Initialize status TextViews
+        fileAttachmentStatus = findViewById(R.id.fileAttachmentStatus);
+        imageAttachmentStatus = findViewById(R.id.imageAttachmentStatus);
+
+        // Set up file upload button
+        ImageView fileIcon = findViewById(R.id.fileIcon);
+        fileIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            startActivityForResult(intent, PICK_FILE_REQUEST);
+        });
+
+        // Set up image upload button
+        ImageView galleryIcon = findViewById(R.id.galleryIcon);
+        galleryIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        });
+
         // Initialize Firebase Auth and Database Reference
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -123,6 +166,7 @@ public class CollabProjectsAddActivity extends BaseActivity{
 
             // Create a new Project object
             Project project = new Project(projectTitle, category, collaboratorAmount, description, link, status);
+            project.setCurrentMembers(1);
 
             // Save the project to Firebase
             databaseReference.child("Users").child(userId).child("Projects").child(projectId).setValue(project)
@@ -149,6 +193,14 @@ public class CollabProjectsAddActivity extends BaseActivity{
         ((RadioGroup) findViewById(R.id.radio_group_status)).clearCheck();
         selectedImageView.setSelected(false);
         selectedTextView.setSelected(false);
+        selectedFileUri = null;
+        selectedImageUri = null;
+        if (fileAttachmentStatus != null) {
+            fileAttachmentStatus.setVisibility(View.GONE);
+        }
+        if (imageAttachmentStatus != null) {
+            imageAttachmentStatus.setVisibility(View.GONE);
+        }
     }
 
     private boolean isValidUrl(String url) {
@@ -212,6 +264,49 @@ public class CollabProjectsAddActivity extends BaseActivity{
         setupOptionClickListener(optionImage7, optionText7);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == PICK_FILE_REQUEST) {
+                selectedFileUri = data.getData();
+                String fileName = getFileName(selectedFileUri);
+                fileAttachmentStatus.setText("File attached: " + fileName);
+                fileAttachmentStatus.setVisibility(View.VISIBLE);
+            } else if (requestCode == PICK_IMAGE_REQUEST) {
+                selectedImageUri = data.getData();
+                String imageName = getFileName(selectedImageUri);
+                imageAttachmentStatus.setText("Image attached: " + imageName);
+                imageAttachmentStatus.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+
 
     @Override
     protected int getCurrentActivityId() {

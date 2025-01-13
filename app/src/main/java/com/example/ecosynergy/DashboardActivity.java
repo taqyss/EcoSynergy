@@ -2,12 +2,14 @@ package com.example.ecosynergy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import com.google.firebase.auth.FirebaseAuth;
@@ -270,13 +272,15 @@ public class DashboardActivity extends BaseActivity {
         int iconResource = getActivityIcon(activity.getActivityType());
         activityIcons[index].setImageResource(iconResource);
 
-        // Set OnClickListener for the ImageButton
-        activityIcons[index].setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, ChatActivity.class);
-            intent.putExtra("referenceId", activity.getReferenceId());
-            startActivity(intent);
+        // Set click listener for activity card
+        activityCards[index].setOnClickListener(v -> {
+            Log.d("DashboardActivity", "Activity Card Clicked: " + activity.getActivityType());
+            navigateToActivity(activity);
         });
     }
+
+
+
 
     private int getActivityIcon(String activityType) {
         switch (activityType.toLowerCase()) {
@@ -324,28 +328,40 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void navigateToActivity(DashboardRecentActivity activity) {
+        Log.d("DashboardActivity", "Navigating to activity: " + activity.getActivityType());
+        Log.d("DashboardActivity", "Title: " + activity.getTitle() + ", ReferenceId: " + activity.getReferenceId());
+
         Intent intent;
-        switch (activity.getActivityType().toLowerCase()) {
+        String activityType = activity.getActivityType().toLowerCase();
+
+        if (activityType.startsWith("module")) {
+            intent = new Intent(this, ModulesContentActivity.class);
+
+            // Extract the module category from the activity type (e.g., "module - Solar Energy")
+            String moduleCategory = activity.getActivityType().substring(8); // Skip "module - "
+            intent.putExtra("subcategoryId", Integer.parseInt(activity.getReferenceId())); // Use Reference ID
+            intent.putExtra("Category", moduleCategory.trim()); // Module category
+            intent.putExtra("subcategory", activity.getTitle()); // Module title
+
+            Log.d("DashboardActivity", "Module Category: " + moduleCategory);
+            startActivity(intent);
+            return;
+        }
+
+        switch (activityType) {
             case "discussion":
                 intent = new Intent(this, ChatActivity.class);
                 break;
-            case "group_project":
-                intent = new Intent(this, CollabProjectsActivity.class);
-                break;
-            case "article":
-            case "module":
-                intent = new Intent(this, LearningActivity.class);
-                break;
             default:
+                Toast.makeText(this, "Unhandled activity type: " + activity.getActivityType(), Toast.LENGTH_SHORT).show();
                 return;
         }
-        // Log this navigation as a recent activity
-        //saveRecentActivity(activity.getActivityType(), activity.getTitle());
-
-        // Start the activity
-        intent.putExtra("referenceId", activity.getReferenceId());
         startActivity(intent);
     }
+
+
+
+
 
     private void navigateToModule(DashboardModuleProgress progress) {
         Intent intent = new Intent(this, LearningActivity.class);

@@ -6,7 +6,7 @@ public class DashboardRecentActivity {
     private String activityType;
     private String title;
     private long timestamp;
-    private String referenceId;
+    private String referenceId; // Store subcategoryId for modules
 
     // Required empty constructor for Firebase
     public DashboardRecentActivity() {}
@@ -23,6 +23,7 @@ public class DashboardRecentActivity {
     public String getActivityId() {
         return activityId;
     }
+
     public void setActivityId(String activityId) {
         this.activityId = activityId;
     }
@@ -30,6 +31,7 @@ public class DashboardRecentActivity {
     public String getActivityType() {
         return activityType;
     }
+
     public void setActivityType(String activityType) {
         this.activityType = activityType;
     }
