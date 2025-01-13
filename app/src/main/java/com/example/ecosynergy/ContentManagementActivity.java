@@ -49,8 +49,6 @@ public class ContentManagementActivity extends BaseActivity {
         moduleList = new ArrayList<>();
 
         // Initialize buttons
-        Button btnEditModule = findViewById(R.id.btn_editmodule);
-        Button btnDelete = findViewById(R.id.btn_delete);
         Button btnCreate = findViewById(R.id.btn_create);
 
         ImageView backButton = findViewById(R.id.back_button);
@@ -140,10 +138,15 @@ public class ContentManagementActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 moduleList.clear();
+                filteredModuleList.clear();
+
                 for (DataSnapshot moduleSnapshot : snapshot.getChildren()) {
                     Module module = moduleSnapshot.getValue(Module.class);
+                    if (module != null) {
                     moduleList.add(module);
+                    }
                 }
+                filteredModuleList.addAll(moduleList);
                 adapter.notifyDataSetChanged();
             }
             @Override
@@ -241,29 +244,36 @@ public class ContentManagementActivity extends BaseActivity {
         btnCancelDelete.setOnClickListener(view -> dialog.dismiss());
 
         btnConfirmDelete.setOnClickListener(view -> {
-            Module moduleToDelete = moduleList.get(position);
+            if (position >= 0 && position < moduleList.size()) {
+                Module moduleToDelete = moduleList.get(position);
 
-            // Remove from Firebase
-            String moduleId = moduleToDelete.getName();  // Get the name of the module to delete
-            if (moduleId != null) {
-                databaseReference.child(moduleId).removeValue()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                // Remove the module from the local list and notify the adapter
-                                moduleList.remove(position);
-                                filteredModuleList.remove(position);
-                                adapter.notifyDataSetChanged();
-                                Toast.makeText(ContentManagementActivity.this, "Module Deleted", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(ContentManagementActivity.this, "Failed to delete module", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                // Find the correct index in the main moduleList
+                int indexInModuleList = moduleList.indexOf(moduleToDelete);
+
+                // Remove from Firebase
+                String moduleId = moduleToDelete.getName();  // Get the name of the module to delete
+                if (moduleId != null) {
+                    databaseReference.child(moduleId).removeValue()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    // Remove the module from the local list and notify the adapter
+                                    if (indexInModuleList >= 0) {
+                                    moduleList.remove(position);
+                                    }
+                                    filteredModuleList.remove(position);
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(ContentManagementActivity.this, "Module Deleted", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ContentManagementActivity.this, "Failed to delete module", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Toast.makeText(ContentManagementActivity.this, "Module ID is null", Toast.LENGTH_SHORT).show();
+                }
+
             } else {
-                Toast.makeText(ContentManagementActivity.this, "Module ID is null", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Invalid position for deletion", Toast.LENGTH_SHORT).show();
             }
-
-            adapter.notifyDataSetChanged();
-            Toast.makeText(this, "Module Deleted", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
         dialog.show();
@@ -290,9 +300,10 @@ public class ContentManagementActivity extends BaseActivity {
                 moduleList.add(newModule);
                 filteredModuleList.add(newModule);
 
+
                 adapter.notifyDataSetChanged();
-                String moduleId = databaseReference.push().getKey();  // Generate a unique key for the new module
-                newModule.setName(moduleId);  // Set the generated ID in the module
+
+                String moduleId = moduleName.replaceAll("\\s+", "_");  // Replace spaces with underscores to avoid issues
                 databaseReference.child(moduleId).setValue(newModule)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
