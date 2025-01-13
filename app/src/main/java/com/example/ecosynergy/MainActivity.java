@@ -30,6 +30,10 @@ public class MainActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
+    private LinearLayout continueSection;
+    private TextView continueModuleTitle, continueModuleSubtitle, continueModuleTime;
+    private ImageView continueModuleIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,90 @@ public class MainActivity extends BaseActivity {
 
             // Fetch data from Firebase and update the UI
             fetchUserData(userId, homeMessage, streakText);
+
+            // Load the latest module for the continue section
+            loadLatestModule(userId);
+        }
+
+        // Initialize continueSection UI
+        continueSection = findViewById(R.id.continueSection);
+        continueModuleTitle = findViewById(R.id.continueModuleTitle);
+        continueModuleSubtitle = findViewById(R.id.continueModuleSubtitle);
+        continueModuleTime = findViewById(R.id.continueModuleTime);
+        continueModuleIcon = findViewById(R.id.continueModuleIcon);
+
+        // Handle continueSection click
+        continueSection.setOnClickListener(v -> {
+            String referenceId = (String) continueSection.getTag();
+            if (referenceId != null) {
+                navigateToModule(referenceId, continueModuleTitle.getText().toString(), continueModuleSubtitle.getText().toString());
+            } else {
+                Toast.makeText(MainActivity.this, "No recent module found", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadLatestModule(String userId) {
+        DatabaseReference recentActivitiesRef = databaseReference.child(userId).child("recent_activities");
+
+        recentActivitiesRef.orderByChild("timestamp").limitToLast(1)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                                String activityType = activitySnapshot.child("activityType").getValue(String.class);
+                                if (activityType != null && activityType.startsWith("module")) {
+                                    String moduleTitle = activitySnapshot.child("title").getValue(String.class);
+                                    String referenceId = activitySnapshot.child("referenceId").getValue(String.class);
+                                    long timestamp = activitySnapshot.child("timestamp").getValue(Long.class);
+
+                                    // Update continueSection UI
+                                    continueModuleTitle.setText(activityType.replace("module - ", "").trim());
+                                    continueModuleSubtitle.setText(moduleTitle);
+                                    continueModuleTime.setText(getTimeAgo(timestamp));
+                                    continueModuleIcon.setImageResource(R.drawable.learning_icon);
+                                    continueSection.setTag(referenceId); // Store the module ID for navigation
+                                    continueSection.setVisibility(View.VISIBLE);
+                                    return;
+                                }
+                            }
+                        }
+                        // Hide the section if no recent module is found
+                        continueSection.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("MainActivity", "Error loading latest module: " + error.getMessage());
+                        continueSection.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    private void navigateToModule(String referenceId, String category, String title) {
+        try {
+            Intent intent = new Intent(this, ModulesContentActivity.class);
+            intent.putExtra("subcategoryId", Integer.parseInt(referenceId)); // Pass the reference ID
+            intent.putExtra("Category", category); // Module category
+            intent.putExtra("subcategory", title); // Module title
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error navigating to module: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("MainActivity", "Error navigating to module: ", e);
+        }
+    }
+
+    private String getTimeAgo(long timestamp) {
+        long now = System.currentTimeMillis();
+        long diff = now - timestamp;
+
+        if (diff < 60 * 60 * 1000) {
+            return (diff / (60 * 1000)) + " minutes ago";
+        } else if (diff < 24 * 60 * 60 * 1000) {
+            return (diff / (60 * 60 * 1000)) + " hours ago";
+        } else {
+            return (diff / (24 * 60 * 60 * 1000)) + " days ago";
         }
     }
 
@@ -92,16 +180,13 @@ public class MainActivity extends BaseActivity {
                         String lastLogin = snapshot.child("lastLogin").getValue(String.class);
 
                         if (!today.equals(lastLogin)) {
-                            // If today is different from lastLogin, calculate streak
                             updateStreak(userId, snapshot, today, streakText);
                         } else {
-                            // If today is the same, just update the UI
                             int streak = snapshot.child("streak").getValue(Integer.class);
                             streakText.setText("You Have a " + streak + " Day Streak!");
                             updateLeafIcons(streak);
                         }
                     } else {
-                        // No lastLogin exists, initialize streak
                         initializeStreak(userId, today, streakText);
                     }
                 } else {
@@ -154,7 +239,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void updateLeafIcons(int streak) {
-        // Find all leaf ImageView references
         ImageView[] leaves = new ImageView[]{
                 findViewById(R.id.leaf1),
                 findViewById(R.id.leaf2),
@@ -165,7 +249,6 @@ public class MainActivity extends BaseActivity {
                 findViewById(R.id.leaf7)
         };
 
-        // Show the correct number of leaves according to the streak
         for (int i = 0; i < leaves.length; i++) {
             if (i < streak) {
                 leaves[i].setVisibility(View.VISIBLE);
