@@ -8,6 +8,8 @@ public class Comment {
     private String userAvatar, commentText, timestamp, username;
     private int upvote;
 
+    private String id;
+
     public Comment(String userAvatar, String username, String commentText, int upvote, String timestamp) {
         this.userAvatar = userAvatar;
         this.commentText = commentText;
@@ -25,6 +27,15 @@ public class Comment {
         this.username = username;
         this.replies = replies;
     }
+
+    public void setId(String username,String commentText) {
+        this.id = username + commentText;
+    }
+
+    public String getId () {
+        return id;
+    }
+
 
     public String getUserAvatar() {
         return userAvatar;
@@ -44,6 +55,10 @@ public class Comment {
 
     public void upvote() {
         upvote++;
+    }
+
+    public void setReplies(List<Comment> replies) {
+        this.replies = replies;
     }
 
     public String getTimestamp() {

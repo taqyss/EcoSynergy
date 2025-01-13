@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class TestYourKnowledgeAdapter extends RecyclerView.Adapter<TestYourKnowledgeAdapter.ViewHolder> {
-    private List<Questions> questions = DummyData.getDummyQuestions();
+
+
+    private List<Questions> questions;
 
     public TestYourKnowledgeAdapter(List<Questions> questions) {
         this.questions = questions;

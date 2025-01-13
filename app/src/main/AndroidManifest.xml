@@ -38,6 +38,7 @@
         <activity android:name=".ModulesContentActivity"/>
         <activity android:name=".ResourceContentActivity"/>
         <activity android:name=".DiscussionActivity"/>
+        <activity android:name=".QuizActivity"/>
 
 
         <!-- CollaborationActivity -->

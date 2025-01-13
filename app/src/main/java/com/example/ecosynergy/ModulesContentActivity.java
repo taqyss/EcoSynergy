@@ -1,17 +1,8 @@
 package com.example.ecosynergy;
 
-import android.Manifest;
-import android.app.DownloadManager;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,21 +10,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModulesContentActivity extends BaseActivity {
 
     // Declare Views
-    private static final int REQUEST_CODE_PERMISSION = 1236767; // code permission - storage
     private ImageButton favoriteButton, downloadButton, transcriptButton;
-    private TextView detailTitle, detailDescription, discussionTextView;
+    private TextView detailTitle, detailDescription;
     private RecyclerView upNextRecyclerView;
     private ImageView videoContainer;
 
@@ -41,7 +27,7 @@ public class ModulesContentActivity extends BaseActivity {
     private List<DataModule.Subcategory> upNextList;
     private ModulesUpNextAdapter upNextAdapter;
 
-    private DownloadManager manager;
+    private FirebaseDataFetcher dataFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,34 +37,37 @@ public class ModulesContentActivity extends BaseActivity {
         // Initialize Views
         initializeViews();
 
-        // Get Intent data
-        int currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
-        String currentCategory = getIntent().getStringExtra("Category");
-        String subcategory = getIntent().getStringExtra("subcategory");
+        dataFetcher = new FirebaseDataFetcher();
 
-        Log.d("ModulesContentActivity", "currentSubcategoryId: " + currentSubcategoryId);
-        Log.d("ModulesContentActivity", "currentCategory: " + currentCategory);
-        Log.d("ModulesContentActivity", "subcategory: " + subcategory);
+        // Fetch all data modules first
+        dataFetcher.fetchDataModules(new FirebaseDataFetcher.FirebaseCallback() {
+            @Override
+            public void onDataFetched(List<DataModule> dataModules) {
+                // Get Intent data
+                String currentCategory = getIntent().getStringExtra("Category");
+                String currentSubcategory = getIntent().getStringExtra("subcategory");
+                int currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
 
-        // Validate Subcategory ID
-        if (currentSubcategoryId == -1) {
-            Log.e("ModulesContentActivity", "Invalid subcategory ID.");
-            return;
-        }
+                Log.d("ModulesContentActivity", "currentSubcategoryId: " + currentSubcategoryId);
+                Log.d("ModulesContentActivity", "currentCategory: " + currentCategory);
+                Log.d("ModulesContentActivity", "subcategory: " + currentSubcategory);
 
-        // Fetch Subcategory data
-        DataModule.Subcategory currentSubcategory = DataModule.getSubcategoryById(currentSubcategoryId, currentCategory);
-        Log.d("ModulesContentActivity", "Current Subcategory: " + currentSubcategory);
+                // Fetch Subcategory data from Firebase
+                fetchSubcategoryFromFirebase(currentCategory, currentSubcategory);
+            }
 
-        if (currentSubcategory != null) {
-            // Populate Subcategory Content
-            populateSubcategoryContent(currentSubcategory);
-        } else {
-            Log.e("ModulesContentActivity", "Subcategory not found.");
-        }
+            @Override
+            public void onError(String errorMessage) {
+                // Handle error here, e.g., log it or show a Toast message
+                Log.e("ModulesContentActivity", "Error fetching data: " + errorMessage);
+                Toast.makeText(ModulesContentActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
+            }
+
+        });
 
         // Set up Toolbar and Bottom Navigation
         setupToolbar(true);
+        String subcategory = getIntent().getStringExtra("subcategory");
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(subcategory);
         }
@@ -86,9 +75,26 @@ public class ModulesContentActivity extends BaseActivity {
 
         // Set Button Click Listeners
         setButtonListeners();
+    }
 
-        // Set up "Up Next" section
-        setupUpNextSection(currentCategory, currentSubcategory);
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return null;
     }
 
     // Initialize Views
@@ -100,6 +106,24 @@ public class ModulesContentActivity extends BaseActivity {
         favoriteButton = findViewById(R.id.favorite_button);
         downloadButton = findViewById(R.id.download_button);
         transcriptButton = findViewById(R.id.transcript_button);
+    }
+
+    // Fetch Subcategory Data from Firebase
+    private void fetchSubcategoryFromFirebase(String currentCategory, String currentSubcategory) {
+        dataFetcher.fetchSubcategoryById(currentSubcategory, new FirebaseDataFetcher.SubcategoryCallback() {
+            @Override
+            public void onSubcategoryFetched(DataModule.Subcategory currentSubcategory) {
+                Log.d("ModulesContentActivity", "Subcategory fetched:");
+                populateSubcategoryContent(currentSubcategory);
+                setupUpNextSection(currentCategory, currentSubcategory);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("ModulesContentActivity", errorMessage);
+                Toast.makeText(ModulesContentActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // Populate Subcategory Content
@@ -159,82 +183,42 @@ public class ModulesContentActivity extends BaseActivity {
     // Setup "Up Next" section
     private void setupUpNextSection(String currentCategory, DataModule.Subcategory currentSubcategory) {
         upNextList = new ArrayList<>();
-        List<DataModule.Subcategory> allSubcategories = DataModule.getSubcategoriesForCategory(currentCategory);
 
-        // Add subcategories following the current one
-        boolean foundCurrent = false;
-        for (DataModule.Subcategory subcategory : allSubcategories) {
-            if (foundCurrent) {
-                upNextList.add(subcategory);
+        dataFetcher.fetchDataModules(new  FirebaseDataFetcher.FirebaseCallback() {
+            @Override
+            public void onDataFetched(List<DataModule> dataModules) {
+                // Loop through modules to find the matching category and level
+                for (DataModule dataModule : dataModules) {
+                    if (dataModule.getCategory().equals(currentCategory)) {
+                        for (DataModule.Subcategory subcategory : dataModule.getSubcategories()) {
+                            if (subcategory.getId() != currentSubcategory.getId()) {
+                                upNextList.add(subcategory); // Add to "Up Next" list
+                            }
+                        }
+                    }
+                }
+
+                // Set up LayoutManager before setting the adapter
+                LinearLayoutManager layoutManager = new LinearLayoutManager(ModulesContentActivity.this);
+                upNextRecyclerView.setLayoutManager(layoutManager);
+
+                // Set up RecyclerView with the adapter
+                upNextAdapter = new ModulesUpNextAdapter(upNextList);
+                upNextRecyclerView.setAdapter(upNextAdapter);
+                upNextAdapter.notifyDataSetChanged();
             }
-            if (subcategory.getId() == currentSubcategory.getId()) {
-                foundCurrent = true;
+            @Override
+            public void onError(String errorMessage) {
+                // Handle error here, e.g., log it or show a Toast message
+                Log.e("ModulesContentActivity", "Error fetching data: " + errorMessage);
+                Toast.makeText(ModulesContentActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
             }
-        }
 
-        // Set up LayoutManager before setting the adapter
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        upNextRecyclerView.setLayoutManager(layoutManager);
-
-        // Set up RecyclerView with the adapter
-        upNextAdapter = new ModulesUpNextAdapter(upNextList);
-        upNextAdapter.setOnSubcategoryClickListener(subcategory -> {
-            // Handle subcategory click
-            Intent intent = new Intent(ModulesContentActivity.this, ModulesContentActivity.class);
-            intent.putExtra("subcategoryId", subcategory.getId());
-            intent.putExtra("subcategory", subcategory.getTitle());
-            intent.putExtra("Category", currentCategory); // Pass the category again
-            startActivity(intent);
         });
-
-        upNextRecyclerView.setAdapter(upNextAdapter);
-        upNextAdapter.notifyDataSetChanged();
     }
 
     // Download Video Method
     private void downloadVideo(String url, String fileName) {
-        // Create a DownloadManager.Request for the video URL
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-        request.setTitle("Downloading Video");
-        request.setDescription("Please wait while the video is being downloaded.");
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-        // Set the destination path within the Movies directory on external storage
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_MOVIES, fileName);
-
-        // Get the system's DownloadManager service
-        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-        if (downloadManager != null) {
-            try {
-                // Enqueue the download request
-                long downloadId = downloadManager.enqueue(request);
-                Log.d("Download", "Download started with ID: " + downloadId);
-                Toast.makeText(this, "Download started!", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Log.e("DownloadError", "Error during video download: " + e.getMessage());
-                Toast.makeText(this, "Failed to download video", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // Additional Adapter Methods (if needed)
-    @Override
-    public int getCount() {
-        return 0;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        // Download logic
     }
 }
