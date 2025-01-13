@@ -346,6 +346,14 @@ public class DashboardActivity extends BaseActivity {
             Log.d("DashboardActivity", "Module Category: " + moduleCategory);
             startActivity(intent);
             return;
+        } else if (activityType.equals("group_project")) {
+            intent = new Intent(this, CollabProjectsDescActivity.class);
+
+            // Pass group project details using the referenceId
+            intent.putExtra("project_id", activity.getReferenceId());
+            intent.putExtra("project_title", activity.getTitle());
+            startActivity(intent);
+            return;
         }
 
         switch (activityType) {
