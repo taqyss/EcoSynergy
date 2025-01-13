@@ -145,21 +145,17 @@
         </LinearLayout>
     </ScrollView>
 
+    <!-- Bottom Navigation Bar -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primaryColor"
         app:itemIconSize="50dp"
-        app:itemIconTint="@color/custom_icon_tint"
         app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/articlesScrollView"
-        app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_navigation_menu">
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        app:menu="@menu/bottom_navigation_menu"
+        style="@style/CustomBottomNavigationView"
+        app:itemIconTint="@color/custom_icon_tint"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
