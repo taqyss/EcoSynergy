@@ -37,11 +37,8 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
 
         holder.projectTitle.setText(project.getProjectTitle());
         holder.projectDescription.setText(project.getDescription());
-        int initialCollaborators = 1; // You are included initially
-        int totalCollaborators = initialCollaborators + project.getCollaboratorAmount();
 
-        // Set total collaborators dynamically (e.g., "1/6 members")
-        String totalMembersText = initialCollaborators + "/" + totalCollaborators + " members";
+        String totalMembersText = project.getCollaboratorAmount() + " members needed";
         holder.totalProjectMembers.setText(totalMembersText);
 
         // Update status indicators
@@ -73,6 +70,12 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.ProjectV
             intent.putExtra("project_link", project.getLink()); // Add this line
             context.startActivity(intent);
         });
+    }
+
+    // Method to update the collaborator amount in the project list
+    public void updateCollaboratorAmount(int position, int newCollaboratorAmount) {
+        projectList.get(position).setCollaboratorAmount(newCollaboratorAmount);
+        notifyItemChanged(position);  // Refresh the particular item in the RecyclerView
     }
 
     @Override
