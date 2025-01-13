@@ -132,27 +132,25 @@ public class ModulesContentActivity extends BaseActivity {
         int currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
         dataFetcher.fetchSubcategoryById(currentSubcategory, new FirebaseDataFetcher.SubcategoryCallback() {
             @Override
-            public void onSubcategoryFetched(DataModule.Subcategory currentSubcategory) {
-                Log.d("ModulesContentActivity", "Subcategory fetched:");
-                populateSubcategoryContent(currentSubcategory);
-                setupUpNextSection(currentCategory, currentSubcategory);
+            public void onSubcategoryFetched(DataModule.Subcategory fetchedSubcategory) {
+                if (fetchedSubcategory.getId() == currentSubcategoryId) {
+                    populateSubcategoryContent(fetchedSubcategory);
+                    setupUpNextSection(currentCategory, fetchedSubcategory);
 
-                // Log recent activity for the module
-                String moduleLevel = currentCategory; // Use the category as the module level
-                String moduleName = currentSubcategory.getTitle(); // Get the module name
-                int subcategoryId = currentSubcategory.getId(); // Get subcategory ID
-
-                // Log recent activity for the module
-                logRecentActivity(moduleLevel, moduleName, subcategoryId);
+                    // Log recent activity for the module
+                    logRecentActivity(currentCategory, fetchedSubcategory.getTitle(), fetchedSubcategory.getId());
+                } else {
+                    Toast.makeText(ModulesContentActivity.this, "No matching subcategory found.", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onError(String errorMessage) {
-                Log.e("ModulesContentActivity", errorMessage);
                 Toast.makeText(ModulesContentActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     // Populate Subcategory Content
     private void populateSubcategoryContent(DataModule.Subcategory currentSubcategory) {
