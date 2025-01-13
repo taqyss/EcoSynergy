@@ -8,11 +8,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.List;
 
 public class SubCategoryResourceAdapter extends BaseAdapter {
 
-    private String category; // Category name
+    private DataSnapshot dataSnapshot;
+    private String category, branch; // Category name
     private final List<DataResource.Subcategory> subcategoryList; // List of subcategories
     private final OnSubcategoryClickListener listener; // Listener for click events
 
@@ -21,6 +24,15 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
         this.category = category;
         this.subcategoryList = subcategories;
         this.listener = listener;
+    }
+
+    // branch = level
+    public SubCategoryResourceAdapter(String category, String branch, List<DataResource.Subcategory> subcategories, DataSnapshot dataSnapshot, OnSubcategoryClickListener listener) {
+        this.category = category;
+        this.branch = branch;
+        this.listener = listener;
+        this.subcategoryList = subcategories;
+        this.dataSnapshot = dataSnapshot;
     }
 
     @Override
@@ -53,10 +65,11 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
         convertView.setOnClickListener(v -> listener.onSubcategoryClick(currentSubcategory));
         // Set click listener on the Discussion TextView
         holder.discussionTextView.setOnClickListener(v -> {
+
+            Log.d("SubCategoryResourceAdapter", "Discussion TextView clicked for: " + currentSubcategory.getArticleTitle());
             // Open DiscussionActivity
             DiscussionActivity.openDiscussionActivity(
                     parent.getContext(),
-                    category,
                     currentSubcategory.getArticleTitle()
             );
         });

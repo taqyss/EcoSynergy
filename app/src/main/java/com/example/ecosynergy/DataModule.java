@@ -2,6 +2,14 @@ package com.example.ecosynergy;
 
 import android.util.Log;
 
+import androidx.recyclerview.widget.AsyncListUtil;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,15 +18,28 @@ import java.util.Map;
 public class DataModule {
     private String level; // "Basic", "Intermediate", "Advanced"
     private String category; // "Solar", "Wind", "Ocean", etc.
-    private List<Subcategory> subcategories; // Subcategories for 'upNext'
+    private Map<String, QuestionSet> questionSets; // A map to store question sets by level
+    private List<Subcategory> subcategories; // A list of subcategories
 
     private static List<DataModule> dataModules = new ArrayList<>();
+    private static DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+
     // Constructor
-    public DataModule(String level, String category, List<Subcategory> subcategories) {
+    public DataModule(String level, String category, List<Subcategory> subcategories, Map<String, QuestionSet> questionSets) {
         this.level = level;
         this.category = category;
         this.subcategories = subcategories;
+        this.questionSets = questionSets;
+    }
+    // No-argument constructor (required for Firebase)
+    public DataModule() {
+    }
 
+    public DataModule(String level, String category) {
+        this.level = level;
+        this.category = category;
+        this.subcategories = new ArrayList<>();
+        this.questionSets = new HashMap<>();
     }
 
     // Getters and Setters
@@ -46,21 +67,159 @@ public class DataModule {
         this.subcategories = subcategories;
     }
 
+    public Map<String, QuestionSet> getQuestionSets() {
+        return questionSets;
+    }
+
+    public void addSubcategory(Subcategory subcategory) {
+        this.subcategories.add(subcategory);
+    }
+
+    public void addQuestionSet(String key, QuestionSet questionSet) {
+        this.questionSets.put(key, questionSet);
+    }
+
+    public void setQuestionSets(Map<String, QuestionSet> questionSets) {
+        this.questionSets = questionSets;
+    }
+
+    // Static method to add a DataModule
     public static void addDataModule(DataModule dataModule) {
         dataModules.add(dataModule);
         Log.d("DataModule", "Added data module: " + dataModule.getCategory());
     }
 
+    // Static method to get all modules
     public static List<DataModule> getAllModules() {
         Log.d("DataModule", "Current modules count: " + dataModules.size());
         return dataModules;
     }
+    // Method to load all DataModules from Firebase
+    public static void addCommentToSubcategory(String category, String subcategory, Comment comment) {
+        String commentId = databaseRef.push().getKey();
+        if (commentId != null) {
+            databaseRef.child("comments")
+                    .child(category)
+                    .child(subcategory)
+                    .child(commentId)
+                    .setValue(comment)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("FirebaseHelper", "Comment added to subcategory.");
+                        } else {
+                            Log.e("FirebaseHelper", "Failed to add comment.");
+                        }
+                    });
+        }
+    }
 
+    // Method to load comments for a specific subcategory from Firebase
+    public static void loadCommentsForSubcategory(String category, String subcategory, ValueEventListener listener) {
+        databaseRef.child("comments")
+                .child(category)
+                .child(subcategory)
+                .addListenerForSingleValueEvent(listener);
+    }
+    public static void updateSubcategory(int subcategoryId, String category, Subcategory newSubcategoryData) {
+        databaseRef.child("dataModules")
+                .orderByChild("category")
+                .equalTo(category)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot moduleSnapshot : dataSnapshot.getChildren()) {
+                            DataModule module = moduleSnapshot.getValue(DataModule.class);
+                            if (module != null) {
+                                for (DataModule.Subcategory subcategory : module.getSubcategories()) {
+                                    if (subcategory.getId() == subcategoryId) {
+                                        // Update the subcategory with new data
+                                        subcategory.setTitle(newSubcategoryData.getTitle());
+                                        subcategory.setDescription(newSubcategoryData.getDescription());
+                                        subcategory.setContentUrl(newSubcategoryData.getContentUrl());
+                                        subcategory.setVideoTitle(newSubcategoryData.getVideoTitle());
+                                        subcategory.setVideoDescription(newSubcategoryData.getVideoDescription());
+
+                                        // Save the updated module to Firebase
+                                        moduleSnapshot.getRef().setValue(module);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("FirebaseHelper", "Error updating subcategory: " + databaseError.getMessage());
+                    }
+                });
+    }
+
+    // Method to fetch questions from Firebase
+    public void fetchQuestions() {
+        databaseRef.child("questions").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Questions> questions = new ArrayList<>();
+                for (DataSnapshot questionSnapshot : dataSnapshot.getChildren()) {
+                    String category = questionSnapshot.child("category").getValue(String.class);
+                    String questionText = questionSnapshot.child("question").getValue(String.class);
+                    if (category != null && questionText != null) {
+                        questions.add(new Questions(category, questionText));
+                    }
+                }
+                // Handle the list of questions here
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("FirebaseHelper", "Error fetching questions: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    // Method to fetch comments from Firebase
+    public void fetchComments() {
+        databaseRef.child("comments").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Comment> comments = new ArrayList<>();
+                for (DataSnapshot commentSnapshot : dataSnapshot.getChildren()) {
+                    String avatar = commentSnapshot.child("avatar").getValue(String.class);
+                    String username = commentSnapshot.child("username").getValue(String.class);
+                    String commentText = commentSnapshot.child("commentText").getValue(String.class);
+                    int upvotes = commentSnapshot.child("upvotes").getValue(Integer.class);
+                    String timestamp = commentSnapshot.child("timestamp").getValue(String.class);
+
+                    List<Comment> replies = new ArrayList<>();
+                    for (DataSnapshot replySnapshot : commentSnapshot.child("replies").getChildren()) {
+                        String replyAvatar = replySnapshot.child("avatar").getValue(String.class);
+                        String replyUsername = replySnapshot.child("username").getValue(String.class);
+                        String replyText = replySnapshot.child("commentText").getValue(String.class);
+                        int replyUpvotes = replySnapshot.child("upvotes").getValue(Integer.class);
+                        String replyTimestamp = replySnapshot.child("timestamp").getValue(String.class);
+                        replies.add(new Comment(replyAvatar, replyUsername, replyText, replyUpvotes, replyTimestamp, new ArrayList<>()));
+                    }
+
+                    if (avatar != null && username != null && commentText != null && timestamp != null) {
+                        comments.add(new Comment(avatar, username, commentText, upvotes, timestamp, replies));
+                    }
+                }
+                // Handle the list of comments here
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("FirebaseHelper", "Error fetching comments: " + databaseError.getMessage());
+            }
+        });
+    }
 
     // Nested class for subcategory
     public static class Subcategory {
 
         private int id;
+
         private List<Comment> comments;
         private String title;
         private String level;
@@ -69,8 +228,27 @@ public class DataModule {
         private String videoDescription;
         private String contentUrl; // URL or resource ID to fetch video/content
 
+        // No-argument constructor (required for Firebase)
+        public Subcategory() {
+        }
+
+        public Subcategory(String title) {
+            this.title = title;
+            this.comments = new ArrayList<>();
+        }
+
         // Constructor
-        public Subcategory(int id, String level, String title, String description, String contentUrl,
+        public Subcategory(String title, String description, String contentUrl,
+                           String videoTitle, String videoDescription) {
+            this.title = title;
+            this.description = description;
+            this.contentUrl = contentUrl;
+            this.videoTitle = videoTitle;
+            this.videoDescription = videoDescription;
+            this.comments = new ArrayList<>();
+        }
+
+        public Subcategory(int id,String level, String title, String description, String contentUrl,
                            String videoTitle, String videoDescription) {
             this.id = id;
             this.level = level;
@@ -81,6 +259,40 @@ public class DataModule {
             this.videoDescription = videoDescription;
             this.comments = new ArrayList<>();
         }
+        public String getLevel() {
+            return level;
+        }
+
+        public void setLevel(String level) {
+            this.level = level;
+        }
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getVideoTitle() {
+            return videoTitle;
+        }
+
+        public void setVideoTitle(String videoTitle) {
+            this.videoTitle = videoTitle;
+        }
+
+        public String getContentUrl() {
+            return contentUrl;
+        }
+
+        public void setContentUrl(String contentUrl) {
+            this.contentUrl = contentUrl;
+        }
+
+        public String getVideoDescription() {
+            return videoDescription;
+        }
+
+        public void setVideoDescription(String videoDescription) {
+            this.videoDescription = videoDescription;
+        }
 
         public List<Comment> getComments() {
             return comments;
@@ -90,13 +302,10 @@ public class DataModule {
             this.comments.add(comment);
         }
 
-        public void setComments(List<Comment> comments) {
-            this.comments = comments;
-        }
-
         public int getId() {
             return id;
         }
+
         // Getters and Setters
         public String getTitle() {
             return title;
@@ -113,38 +322,6 @@ public class DataModule {
         public void setDescription(String description) {
             this.description = description;
         }
-
-        public String getContentUrl() {
-            return contentUrl;
-        }
-
-        public void setContentUrl(String contentUrl) {
-            this.contentUrl = contentUrl;
-        }
-
-        public String getVideoTitle() {
-            return videoTitle;
-        }
-
-        public String getLevel() {
-            return level;
-        }
-
-        public void setLevel(String level) {
-            this.level = level;
-        }
-
-        public void setVideoTitle(String videoTitle) {
-            this.videoTitle = videoTitle;
-        }
-
-        public String getVideoDescription() {
-            return videoDescription;
-        }
-
-        public void setVideoDescription(String videoDescription) {
-            this.videoDescription = videoDescription;
-        }
     }
 
     private static Map<String, Map<String, List<Comment>>> commentsData = new HashMap<>();
@@ -157,14 +334,6 @@ public class DataModule {
             }
         }
         return new ArrayList<>();  // Return empty list if no comments found
-    }
-
-    // Add a comment to a subcategory
-    public static void addCommentToSubcategory(String category, String subcategory, Comment comment) {
-        commentsData.putIfAbsent(category, new HashMap<>());
-        Map<String, List<Comment>> subcategories = commentsData.get(category);
-        subcategories.putIfAbsent(subcategory, new ArrayList<>());
-        subcategories.get(subcategory).add(comment);
     }
 
     // Add multiple comments to a subcategory
@@ -189,53 +358,29 @@ public class DataModule {
 
     public static Subcategory getSubcategoryById(int subcategoryId, String category) {
         // Assuming you have a method to fetch the module by category
-        List<DataModule> modules = getAllModules();  // Fetch all modules (you can replace this with your actual method)
-
-        // Log to check the modules fetched
-        Log.d("DataModule", "Fetched " + modules.size() + " modules");
-
-        // Iterate through the modules to find the subcategory
+        List<DataModule> modules = getAllModules();
         for (DataModule module : modules) {
-            // Log the category of the current module
-            Log.d("DataModule", "Checking module - category: " + module.getCategory());
-
-            // Check if the module's category matches
             if (module.getCategory().equals(category)) {
-                // Log if the category matches
-                Log.d("DataModule", "Found matching category: " + category);
-
-                // Iterate through the subcategories of this module
                 for (Subcategory subcategory : module.getSubcategories()) {
-                    // Log the subcategory ID being checked
-                    Log.d("DataModule", "Checking subcategory with ID: " + subcategory.getId());
-
-                    // Check if the subcategory ID matches
                     if (subcategory.getId() == subcategoryId) {
-                        Log.d("DataModule", "Found subcategory with ID: " + subcategoryId);
-                        return subcategory;  // Return the subcategory if found
+                        return subcategory;
                     }
                 }
             }
         }
-
-        // Log if no subcategory is found
-        Log.d("DataModule", "No subcategory found with ID: " + subcategoryId);
-        return null;  // Return null if no subcategory with the given ID is found
+        return null;
     }
 
     public List<Subcategory> getUpNextSubcategories(int currentSubcategoryId) {
         List<Subcategory> upNext = new ArrayList<>();
         int currentIndex = -1;
 
-        // Find the current subcategory index
         for (int i = 0; i < subcategories.size(); i++) {
             if (subcategories.get(i).getId() == currentSubcategoryId) {
                 currentIndex = i;
                 break;
             }
         }
-
-        // Add the current subcategory and the next two (if available)
         if (currentIndex != -1) {
             for (int i = currentIndex + 1; i <= currentIndex + 2 && i < subcategories.size(); i++) {
                 upNext.add(subcategories.get(i));
@@ -250,75 +395,4 @@ public class DataModule {
         Subcategory subcategory = subcategoryMap.get(currentSubcategoryId);
         return (subcategory != null) ? subcategory.getContentUrl() : "URL is not available";
     }
-
-    public static List<DataModule> getDataModulesForCategory(String categoryName) {
-
-        if ("Solar Energy".equals(categoryName)) {
-            List<Subcategory> basicSubcategories = new ArrayList<>();
-            basicSubcategories.add(new Subcategory(1, "Basic", "What is Solar Energy?", "Intro to solar energy", "https://youtu.be/yFwGpiCs3ss?si=qNHzXlJ4e6giqnRq", "Intro to Solar Energy", "Solar energy is a renewable resource. In this video, we will learn the basics of solar energy."));
-
-            List<Subcategory> intermediateSubcategories = new ArrayList<>();
-            intermediateSubcategories.add(new Subcategory(1, "Intermediate", "Solar Energy Conversion", "How solar panels work", "url2", "Solar Energy Conversion", "This video explains the process of converting solar energy into usable electricity."));
-
-            List<Subcategory> advancedSubcategories = new ArrayList<>();
-            advancedSubcategories.add(new Subcategory(1, "Advanced", "Advanced Solar Technologies", "Exploring cutting-edge solar technology", "url3", "Advanced Solar", "In this video, we explore advanced solar technologies and their applications."));
-
-            dataModules.add(new DataModule("Basic", "Solar Energy", assignIds(basicSubcategories)));
-            dataModules.add(new DataModule("Intermediate", "Solar Energy", assignIds(intermediateSubcategories)));
-            dataModules.add(new DataModule("Advanced", "Solar Energy", assignIds(advancedSubcategories)));
-        }
-        if ("Wind Energy".equals(categoryName)) {
-            List<Subcategory> basicSubcategories = new ArrayList<>();
-            basicSubcategories.add(new Subcategory(0, "Basic", "What is Wind Energy?", "Intro to wind energy", "url4", "Intro to Wind Energy", "Wind energy is harnessed using turbines. Learn the basics of wind energy in this video."));
-
-            List<Subcategory> intermediateSubcategories = new ArrayList<>();
-            intermediateSubcategories.add(new Subcategory(0, "Intermediate", "Wind Turbine Mechanics", "How wind turbines work", "url5", "Wind Turbine Mechanics", "In this video, we dive into the mechanics of wind turbines and their working principle."));
-
-            List<Subcategory> advancedSubcategories = new ArrayList<>();
-            advancedSubcategories.add(new Subcategory(0, "Advanced", "Wind Energy in Large-Scale Applications", "Harnessing wind for entire cities", "url6", "Large-Scale Wind Energy", "We explore how large-scale wind energy is used to power cities and industries."));
-
-            dataModules.add(new DataModule("Basic", "Wind Energy", assignIds(basicSubcategories)));
-            dataModules.add(new DataModule("Intermediate", "Wind Energy", assignIds(intermediateSubcategories)));
-            dataModules.add(new DataModule("Advanced", "Wind Energy", assignIds(advancedSubcategories)));
-        }
-        else if ("Hydro Energy".equals(categoryName)) {
-            List<Subcategory> basicSubcategories = new ArrayList<>();
-            basicSubcategories.add(new Subcategory(1, "Basic", "Introduction to Hydro Energy", "How hydroelectricity works", "url7", "Intro to Hydro Energy", "Learn how hydroelectric power plants convert water flow into electricity."));
-
-            List<Subcategory> intermediateSubcategories = new ArrayList<>();
-            intermediateSubcategories.add(new Subcategory(2, "Intermediate", "Hydroelectric Power Plants", "Exploring hydroelectric power plants", "url8", "Hydroelectric Power Plants", "In this video, we will take a closer look at the components of hydroelectric power plants."));
-
-            List<Subcategory> advancedSubcategories = new ArrayList<>();
-            advancedSubcategories.add(new Subcategory(3, "Advanced", "Pumped Storage Hydroelectricity", "Understanding pumped storage", "url9", "Pumped Storage Hydroelectricity", "This video explores the advanced technique of pumped storage hydroelectricity, used to manage energy demand."));
-
-            dataModules.add(new DataModule("Basic", "Hydro Energy", assignIds(basicSubcategories)));
-            dataModules.add(new DataModule("Intermediate", "Hydro Energy", assignIds(intermediateSubcategories)));
-            dataModules.add(new DataModule("Advanced", "Hydro Energy", assignIds(advancedSubcategories)));
-        }
-        // Geothermal Energy
-        else if ("Geothermal Energy".equals(categoryName)) {
-            // Add subcategories for Geothermal Energy...
-        }
-        // Biomass Energy
-        else if ("Biomass Energy".equals(categoryName)) {
-            // Add subcategories for Biomass Energy...
-        }
-        // Ocean Energy
-        else if ("Ocean Energy".equals(categoryName)) {
-            // Add subcategories for Ocean Energy...
-        }
-        // Add more categories below (e.g., Wind Energy, Hydro Energy, etc.)
-        return dataModules;
-    }
-
-    private static List<Subcategory> assignIds(List<Subcategory> subcategories) {
-        for (int i = 0; i < subcategories.size(); i++) {
-            Subcategory subcategory = subcategories.get(i);
-            subcategories.set(i, new Subcategory(i + 1, subcategory.getLevel(), subcategory.getTitle(), subcategory.getDescription(),
-                    subcategory.getContentUrl(), subcategory.getVideoTitle(), subcategory.getVideoDescription()));
-        }
-        return subcategories;
-    }
-
 }
-

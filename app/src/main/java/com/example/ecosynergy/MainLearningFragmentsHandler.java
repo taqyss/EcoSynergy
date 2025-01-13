@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainLearningFragmentsHandler extends Fragment {
@@ -21,6 +21,18 @@ public class MainLearningFragmentsHandler extends Fragment {
     private MainAdapter adapter;
     private List<String> category;
     private ListView listView;
+
+    public static List<String> getAllCategory() {
+        List<String> modules = new ArrayList<>();
+        modules.add("Solar Energy");
+        modules.add("Wind Energy");
+        modules.add("Hydro Energy");
+        modules.add("Geothermal Energy");
+        modules.add("Biomass and Bioenergy Energy");
+        modules.add("Ocean Energy");
+
+        return modules;
+    }
 
     // Factory method to create an instance of the fragment
     public static MainLearningFragmentsHandler newInstance(String categoryType) {
@@ -40,7 +52,7 @@ public class MainLearningFragmentsHandler extends Fragment {
         String categoryType = getArguments() != null ? getArguments().getString(ARG_CATEGORY_TYPE) : "";
 
         // Fetch the category data
-        category = DummyData.getAllCategory();
+        category = getAllCategory();
         listView = rootView.findViewById(R.id.main_list);
 
         // Set up ListView and Adapter
