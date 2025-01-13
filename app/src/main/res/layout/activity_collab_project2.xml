@@ -25,19 +25,6 @@
         app:itemIconTint="@color/custom_icon_tint"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/projectTitleEdit"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="28dp"-->
-<!--        android:layout_marginTop="80dp"-->
-<!--        android:fontFamily="@font/inria_sans_bold"-->
-<!--        android:text="Project Title"-->
-<!--        android:textColor="#4a654d"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="0dp"
@@ -606,6 +593,28 @@
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab20"
         app:layout_constraintTop_toTopOf="@+id/roundedRectCollab20"
         app:srcCompat="@drawable/collab_link_icon" />
+
+    <TextView
+        android:id="@+id/fileAttachmentStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:textSize="14sp"
+        android:textColor="#89a385"
+        app:layout_constraintTop_toBottomOf="@id/fileIcon"
+        app:layout_constraintStart_toStartOf="@id/roundedRectCollab18" />
+
+    <TextView
+        android:id="@+id/imageAttachmentStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:textSize="14sp"
+        android:textColor="#89a385"
+        app:layout_constraintTop_toBottomOf="@id/galleryIcon"
+        app:layout_constraintStart_toStartOf="@id/roundedRectCollab19" />
 
     <TextView
         android:id="@+id/totalCollaborators"

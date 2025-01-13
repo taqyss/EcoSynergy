@@ -17,6 +17,11 @@ public class Project {
     private String userName;  // Add this field
     private int currentMembers;
     private Map<String, Boolean> joinedUsers;
+    private String fileUrl;
+    private String imageUrl;
+
+    private String fileName;
+    private String imageName;
 
     // Constructor (required for Firebase)
     public Project() {}
@@ -25,7 +30,7 @@ public class Project {
     public Project(String projectTitle, String category, int collaboratorAmount, String description, String link, String status) {
         this.projectTitle = projectTitle;
         this.category = category;
-        this.collaboratorAmount = collaboratorAmount;
+        this.collaboratorAmount = collaboratorAmount + 1;
         this.description = description;
         this.link = link;
         this.status = status;
@@ -81,4 +86,26 @@ public class Project {
     public void setJoinedUsers(Map<String, Boolean> joinedUsers) {
         this.joinedUsers = joinedUsers;
     }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getFileName() { return fileName; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
+    public String getImageName() { return imageName; }
+    public void setImageName(String imageName) { this.imageName = imageName; }
 }
