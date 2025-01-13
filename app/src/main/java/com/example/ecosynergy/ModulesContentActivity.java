@@ -132,30 +132,43 @@ public class ModulesContentActivity extends BaseActivity {
 
     // Fetch Subcategory Data from Firebase
     private void fetchSubcategoryFromFirebase(String currentCategory, String currentSubcategory) {
+        // Fetch subcategory ID from the intent
         int currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
+
+        // Make sure category and subcategory are not empty before calling
+        if (currentCategory == null || currentSubcategory == null) {
+            Log.e("ModulesContentActivity", "Category or Subcategory is null.");
+            return;
+        }
+
+        // Fetch subcategory data by title
         dataFetcher.fetchSubcategoryById(currentSubcategory, new FirebaseDataFetcher.SubcategoryCallback() {
             @Override
-            public void onSubcategoryFetched(DataModule.Subcategory currentSubcategory) {
-                Log.d("ModulesContentActivity", "Subcategory fetched:");
-                populateSubcategoryContent(currentSubcategory);
-                setupUpNextSection(currentCategory, currentSubcategory);
+            public void onSubcategoryFetched(DataModule.Subcategory fetchedSubcategory) {
+                Log.d("ModulesContentActivity", "Subcategory fetched: " + fetchedSubcategory.getTitle());
 
-                // Log recent activity for the module
-                String moduleLevel = currentCategory;
-                String moduleName = currentSubcategory.getTitle();
-                int subcategoryId = currentSubcategory.getId();
+                // Populate the UI with fetched subcategory data
+                populateSubcategoryContent(fetchedSubcategory);
+
+                // Set up the "Up Next" section (based on current category and subcategory)
+                setupUpNextSection(currentCategory, fetchedSubcategory);
+
+                // Log recent activity for tracking user interactions with the module
+                String moduleLevel = currentCategory;  // Category (level) of the subcategory
+                String moduleName = fetchedSubcategory.getTitle();  // Subcategory title
+                int subcategoryId = fetchedSubcategory.getId();  // Unique subcategory ID
 
                 logRecentActivity(moduleLevel, moduleName, subcategoryId);
             }
 
             @Override
             public void onError(String errorMessage) {
+                // Handle errors: Log and show a toast message
                 Log.e("ModulesContentActivity", errorMessage);
                 Toast.makeText(ModulesContentActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
-
     // Populate Subcategory Content
     YouTubePlayerView youTubePlayerView;
     private void populateSubcategoryContent(DataModule.Subcategory currentSubcategory) {
