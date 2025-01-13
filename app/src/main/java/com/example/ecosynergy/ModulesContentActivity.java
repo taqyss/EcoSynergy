@@ -42,7 +42,7 @@ public class ModulesContentActivity extends BaseActivity {
         // Fetch all data modules first
         dataFetcher.fetchDataModules(new FirebaseDataFetcher.FirebaseCallback() {
             @Override
-            public void onDataFetched(List<DataModule> dataModules) {
+            public void onDataFetchedModules(List<DataModule> dataModules) {
                 // Get Intent data
                 String currentCategory = getIntent().getStringExtra("Category");
                 String currentSubcategory = getIntent().getStringExtra("subcategory");
@@ -186,7 +186,7 @@ public class ModulesContentActivity extends BaseActivity {
 
         dataFetcher.fetchDataModules(new  FirebaseDataFetcher.FirebaseCallback() {
             @Override
-            public void onDataFetched(List<DataModule> dataModules) {
+            public void onDataFetchedModules(List<DataModule> dataModules) {
                 // Loop through modules to find the matching category and level
                 for (DataModule dataModule : dataModules) {
                     if (dataModule.getCategory().equals(currentCategory)) {

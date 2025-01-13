@@ -49,7 +49,7 @@ public class ModulesUpNextAdapter extends RecyclerView.Adapter<ModulesUpNextAdap
         // Set click listener for the discussion link
         holder.descriptionTextView.setOnClickListener(v -> {
             if (v.getContext() != null) {
-                DiscussionActivity.openDiscussionActivity(v.getContext(), subcategory.getTitle());
+                DiscussionActivity.openDiscussionActivity(v.getContext(), subcategory.getTitle(), CommentType.MODULE);
             }
         });
     }

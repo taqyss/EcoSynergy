@@ -98,28 +98,28 @@ public class SubCategoryModuleActivity extends BaseActivity implements Navigatio
     private void loadSubcategoriesFromFirebaseDataFetcher(String categoryName, String level) {
         firebaseDataFetcher.fetchDataModules(new FirebaseDataFetcher.FirebaseCallback() {
             @Override
-            public void onDataFetched(List<DataModule> dataModules) {
+            public void onDataFetchedModules(List<DataModule> dataModules) {
+                currentSubcategories.clear();
                 boolean subcategoryFound = false;  // Flag to check if subcategory is found
                 // Loop through the dataModules and check both level and category
                 for (DataModule dataModule : dataModules) {
                     Log.d("SubCategoryModuleActivity", "Checking dataModule - Level: " + dataModule.getLevel() + ", Category: " + dataModule.getCategory());
 
                     // Filter by both level and category
-                    if (dataModule.getLevel().equals(level)) {
+                    if (dataModule.getLevel().equals(level) && dataModule.getCategory().equals(categoryName)) {
                         Log.d("SubCategoryModuleActivity", "Found matching dataModule");
-                        currentSubcategories.clear();
                         currentSubcategories.addAll(dataModule.getSubcategories());
                         Log.d("SubCategoryModuleActivity", "Loaded subcategories: " + currentSubcategories.size());
-                        subCategoryModuleAdapter.notifyDataSetChanged();
                         subcategoryFound = true;  // Set flag to true when data is found
-                        break;  // Exit after finding the correct dataModule
+                        // Exit after finding the correct dataModule
                     }
                 }
-
                 // If no matching subcategories are found, log a warning
                 if (!subcategoryFound) {
                     Log.d("SubCategoryModuleActivity", "No subcategories found for Level: " + level + ", Category: " + categoryName);
                 }
+
+                subCategoryModuleAdapter.notifyDataSetChanged();
             }
 
             @Override

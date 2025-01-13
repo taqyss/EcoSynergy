@@ -1,5 +1,6 @@
 package com.example.ecosynergy;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,10 +40,14 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         DataResource.Subcategory currentSubcategory = subcategoryList.get(position);
+
         Log.d("SubCategoryResourceAdapter", "Subcategory Resource: " + currentSubcategory.getArticleTitle());
 
         // Logging with Log.d() instead of printf
         Log.d("SubCategoryResourceAdapter", currentSubcategory.toString());
+
+        Log.d("SubCategoryResourceAdapter", "Category: " + category);
+        Log.d("SubCategoryResourceAdapter", "Branch: " + branch);
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -61,18 +66,32 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
 
         // Set the title, description, and icon for the subcategory
         holder.titleTextView.setText(currentSubcategory.getArticleTitle());
-        // Set click listener on the root view
-        convertView.setOnClickListener(v -> listener.onSubcategoryClick(currentSubcategory));
+
+        // Handle click on article title to go to ResourceContentActivity
+        convertView.setOnClickListener(v -> {
+            Intent detailIntent = new Intent(parent.getContext(), ResourceContentActivity.class);
+            detailIntent.putExtra("Category", category);
+            Log.d("SubCategoryResourceAdapter", "Category Passed: " + category);
+            detailIntent.putExtra("subcategory", currentSubcategory.getArticleTitle());
+            Log.d("SubCategoryResourceAdapter", "Subcategory Passed: " + currentSubcategory.getArticleTitle());
+            detailIntent.putExtra("HIERARCHY", branch);
+            Log.d("SubCategoryResourceAdapter", "Level Passed: " + branch);
+            detailIntent.putExtra("subcategoryId", currentSubcategory.getId());
+            detailIntent.putExtra("articleTitle", currentSubcategory.getArticleTitle());
+            parent.getContext().startActivity(detailIntent);
+        });
+
         // Set click listener on the Discussion TextView
         holder.discussionTextView.setOnClickListener(v -> {
-
             Log.d("SubCategoryResourceAdapter", "Discussion TextView clicked for: " + currentSubcategory.getArticleTitle());
-            // Open DiscussionActivity
+            // Open DiscussionActivity with the type
             DiscussionActivity.openDiscussionActivity(
                     parent.getContext(),
-                    currentSubcategory.getArticleTitle()
+                    currentSubcategory.getArticleTitle(),
+                    CommentType.RESOURCE // Pass the type here
             );
         });
+
         return convertView;
     }
 

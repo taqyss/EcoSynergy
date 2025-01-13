@@ -9,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +34,11 @@ public class ResourceContentActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference favoritesRef;
 
+    int currentSubcategoryId;
+
+    String currentCategory, subcategory, branch, articleTitle;
+    private FirebaseResourceFetcher firebaseResourceFetcher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,17 +46,70 @@ public class ResourceContentActivity extends BaseActivity {
 
         initializeViews();
 
+        firebaseResourceFetcher = new FirebaseResourceFetcher();
+
+        firebaseResourceFetcher.fetchDataResource(new FirebaseResourceFetcher.SubcategoryCallback() {
+            @Override
+            public void onDataFetched(List<DataResource> dataResources) {
+
+                // Get Intent data
+                String category = getIntent().getStringExtra("Category");
+                Log.d("ResourceContentActivity", "Category: " + category);
+                String subcategory = getIntent().getStringExtra("subcategory");
+                articleTitle = getIntent().getStringExtra("articleTitle");
+                String branch = getIntent().getStringExtra("HIERARCHY");
+                currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
+
+
+                if (category != null && subcategory != null && branch != null) {
+                    Log.d("ResourceContentActivity", "Category: " + category);
+                    Log.d("ResourceContentActivity", "Subcategory: " + subcategory);
+                    Log.d("ResourceContentActivity", "Hierarchy: " + branch);
+
+                    // Fetch and display the content based on the passed data
+
+                    Log.d("ResourceContentActivity", "Fetching subcategory content for:" + category);
+                    Log.d("ResourceContentActivity", "Fetching subcategory title for:" + articleTitle);
+                    fetchSubcategoryContent(category, articleTitle, branch);
+                } else {
+                    Log.e("ResourceContentActivity", "Category or article title missing from intent.");
+                }
+
+                if (category != null && subcategory != null && branch != null) {
+                    fetchSubcategoryContent(category, articleTitle, branch);
+                } else {
+                    Log.e("ResourceContentActivity", "Category or article title missing from intent.");
+                }
+
+                fetchSubcategoryContent(category, articleTitle, branch);
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+
+            }
+
+            @Override
+            public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
+
+            }
+
+            @Override
+            public void onDataFetchedResource(List<DataResource> dataResources) {
+
+            }
+
+            @Override
+            public void onError(Exception error) {
+
+            }
+
+        });
+
+
         mAuth = FirebaseAuth.getInstance();
         String userId = mAuth.getCurrentUser().getUid();
         favoritesRef = FirebaseDatabase.getInstance().getReference("Favorites").child(userId);
-
-        int currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
-        String currentCategory = getIntent().getStringExtra("Category");
-        String subcategory = getIntent().getStringExtra("subcategory");
-
-        Log.d("ResourceContentActivity", "currentSubcategoryId: " + currentSubcategoryId);
-        Log.d("ResourceContentActivity", "currentCategory: " + currentCategory);
-        Log.d("ResourceContentActivity", "subcategory: " + subcategory);
 
         if (currentSubcategoryId == -1) {
             Log.e("ResourceContentActivity", "Invalid subcategory ID.");
@@ -76,7 +133,37 @@ public class ResourceContentActivity extends BaseActivity {
         setupUpNextSection(currentCategory, currentSubcategory);
     }
 
+    private void fetchSubcategoryContent(String category, String articleTitle, String branch) {
+        firebaseResourceFetcher.fetchSubcategoryContent(category, articleTitle, branch, new FirebaseResourceFetcher.SubcategoryCallback() {
+
+            @Override
+            public void onError(Exception error) {
+                Log.e("ResourceContentActivity", "Error fetching subcategory: " + error.getMessage());
+                Toast.makeText(ResourceContentActivity.this, "Error fetching content", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDataFetched(List<DataResource> dataResources) {}
+
+            @Override
+            public void onSuccess(Object result) {}
+
+            @Override
+            public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
+                populateSubcategoryContent(subcategory);
+            }
+
+            @Override
+            public void onDataFetchedResource(List<DataResource> dataResources) {
+
+            }
+        });
+    }
+
     private void initializeViews() {
+        detailTitle = findViewById(R.id.articleTitle);
+        detailDescription = findViewById(R.id.articleContent);
+        firebaseResourceFetcher = new FirebaseResourceFetcher();
         upNextRecyclerView = findViewById(R.id.RecylcleViewUpNext);
         detailTitle = findViewById(R.id.detail_title);
         detailDescription = findViewById(R.id.detail_description);
@@ -97,11 +184,6 @@ public class ResourceContentActivity extends BaseActivity {
 
         shareButton.setOnClickListener(view -> {
             shareContent(currentSubcategory.getArticleTitle(), currentSubcategory.getArticleContent());
-        });
-
-        textToSpeechButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Text-to-Speech button clicked!", Toast.LENGTH_SHORT).show();
-            // Add Text-to-Speech functionality here
         });
     }
 

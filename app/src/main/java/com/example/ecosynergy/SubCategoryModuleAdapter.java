@@ -1,6 +1,7 @@
 package com.example.ecosynergy;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,9 +79,14 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
             listener.onSubcategoryClick(currentSubcategory, false);
         });
 
-        // Set click listener for Discussion
         holder.discussionTextView.setOnClickListener(v -> {
-            DiscussionActivity.openDiscussionActivity(parent.getContext(), currentSubcategory.getTitle());
+            Log.d("SubCategoryResourceAdapter", "Discussion TextView clicked for: " + currentSubcategory.getTitle());
+            // Open DiscussionActivity with the type
+            DiscussionActivity.openDiscussionActivity(
+                    parent.getContext(),
+                    currentSubcategory.getTitle(),
+                    CommentType.MODULE // Pass the type here
+            );
         });
 
         return convertView;

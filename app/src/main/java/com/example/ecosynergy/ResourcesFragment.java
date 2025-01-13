@@ -24,7 +24,7 @@ public class ResourcesFragment extends Fragment {
         tabLayout.setVisibility(View.VISIBLE);
 
         // Set up the first fragment initially
-        Fragment articlesFragment = MainLearningFragmentsHandler.newInstance("Articles");
+        Fragment articlesFragment = MainLearningFragmentsHandler.newInstance("Article");
         replaceFragment(articlesFragment);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -36,7 +36,7 @@ public class ResourcesFragment extends Fragment {
                         fragment = MainLearningFragmentsHandler.newInstance("Article");
                         break;
                     case 1:  // Intermediate
-                        fragment = MainLearningFragmentsHandler.newInstance("Report");
+                        fragment = MainLearningFragmentsHandler.newInstance("Reports");
                         break;
                     case 2:  // Advanced
                         fragment = MainLearningFragmentsHandler.newInstance("Toolkits");

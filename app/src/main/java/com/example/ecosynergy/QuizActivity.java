@@ -81,7 +81,7 @@ public class QuizActivity extends BaseActivity {
         // Fetch all data modules first
         dataFetcher.fetchDataModules(new FirebaseDataFetcher.FirebaseCallback() {
             @Override
-            public void onDataFetched(List<DataModule> dataModules) {
+            public void onDataFetchedModules(List<DataModule> dataModules) {
 
 //                // Get data passed via Intent
 //                currentCategory = getIntent().getStringExtra("CATEGORY");
