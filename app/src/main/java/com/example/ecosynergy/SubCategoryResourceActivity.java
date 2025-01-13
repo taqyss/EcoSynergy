@@ -88,45 +88,55 @@ public class SubCategoryResourceActivity extends BaseActivity implements Navigat
         firebaseResourceFetcher.fetchDataResource(new FirebaseResourceFetcher.SubcategoryCallback() {
             @Override
             public void onDataFetched(List<DataResource> dataResources) {
-                currentSubcategories.clear();
                 Log.d("SubCategoryResourceActivity", "Data fetched successfully");
-                boolean subcategoryFound = false;  // Flag to check if subcategory is found
 
-                // Loop through the dataResources and check for category and branch match
+                // Clear the current list
+                currentSubcategories.clear();
+
+                boolean subcategoryFound = false;
+
+                // Iterate through dataResources
                 for (DataResource dataResource : dataResources) {
                     Log.d("SubCategoryResourceActivity", "Checking dataResource - Category: " + dataResource.getCategory() + ", Branch: " + dataResource.getBranch());
-                    if (dataResource.getCategory().equals(categoryName) && dataResource.getBranch().equals(branch)) {
-                        for (DataResource.Subcategory subcategory : dataResource.getSubcategories()) {
-                            Log.d("SubCategoryResourceActivity", "Found matching subcategory for Category: " + categoryName + " and Branch: " + branch);
 
-                            currentSubcategories.add(subcategory);
+                    if (dataResource.getBranch().equals(branch) && dataResource.getCategory().equals(categoryName)) {
+                        Log.d("SubCategoryResourceActivity", "Match found for Category: " + categoryName + ", Branch: " + branch);
 
-                            Log.d("SubCategoryResourceActivity", "Loaded subcategories: " + currentSubcategories.size());
-                            subcategoryFound = true;  // Set flag to true when subcategory is found
-                              // Exit after finding the matching subcategory
+                        // Extract and add subcategories from the matched resource
+                        List<DataResource.Subcategory> subcategories = dataResource.getSubcategories();
+                        if (subcategories != null) {
+                            currentSubcategories.addAll(subcategories);
+                            subcategoryFound = true;
                         }
+                        // Stop the loop after finding a match
+                        break;
                     }
                 }
+                Log.d("SubCategoryResourceActivity", "current subcategories size: " + currentSubcategories.size());
+                // Update the adapter once
                 subCategoryResourceAdapter.notifyDataSetChanged();
-                // If no matching subcategory is found, log a warning
+
+                // Log warnings if no matching subcategories are found
                 if (!subcategoryFound) {
-                    Log.d("SubCategoryResourceActivity", "No subcategory found for Category: " + categoryName + " and Branch: " + branch);
+                    Log.w("SubCategoryResourceActivity", "No subcategories found for Category: " + categoryName + " and Branch: " + branch);
+                } else {
+                    Log.d("SubCategoryResourceActivity", "Total subcategories loaded: " + currentSubcategories.size());
                 }
             }
 
             @Override
             public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
-
+                // Optional callback if needed
             }
 
             @Override
             public void onDataFetchedResource(List<DataResource> dataResources) {
-
+                // Optional callback if needed
             }
 
             @Override
             public void onSuccess(Object result) {
-                // Handle success
+                Log.d("SubCategoryResourceActivity", "Operation succeeded: " + result);
             }
 
             @Override
@@ -134,8 +144,8 @@ public class SubCategoryResourceActivity extends BaseActivity implements Navigat
                 Log.e("SubCategoryResourceActivity", "Error fetching data", error);
             }
         });
-
     }
+
 
     private void updateSubcategoryListView() {
         ListView listView = findViewById(R.id.subcategory_list);
