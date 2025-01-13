@@ -29,6 +29,7 @@ public class CollabProjectsDescActivity extends BaseActivity {
     private TextView membersTextView;
     private ImageView joinButton;
     private String projectLink;
+    private ProjectAdapter projectAdapter;  // Declare the adapter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,9 @@ public class CollabProjectsDescActivity extends BaseActivity {
         setupToolbar(true);
         getSupportActionBar().setTitle("Project Details");
         setupBottomNavigation();
+
+        // Get the adapter passed through the intent
+        projectAdapter = (ProjectAdapter) getIntent().getSerializableExtra("projectAdapter");
 
         // Get project details from intent
         Intent intent = getIntent();
@@ -79,76 +83,47 @@ public class CollabProjectsDescActivity extends BaseActivity {
             }
         }
 
-        // Update members text
-        updateMembersText();
+        final int initialCollaborators = intent.getIntExtra("project_collaborators", 0);
+        final int[] currentAmount = {initialCollaborators}; // Use an array to modify value
 
-        // Set up Join button click listener
-        joinButton.setOnClickListener(v -> joinProject());
-    }
-
-    private void updateMembersText() {
-        String membersText = String.format("(%d/%d)", collaborators, collaborators + 1);
+// Set initial text
+        TextView membersTextView = findViewById(R.id.TotalGroupMember);
+        String membersText = currentAmount[0] + " members needed";
         membersTextView.setText(membersText);
-    }
 
-    private void joinProject() {
-        // Open project link in browser
-        if (projectLink != null && !projectLink.isEmpty()) {
-            try {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(projectLink));
-                startActivity(browserIntent);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, "No browser app found", Toast.LENGTH_SHORT).show();
-                return;
-            } catch (Exception e) {
-                Toast.makeText(this, "Invalid link format", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        } else {
-            Toast.makeText(this, "No project link available", Toast.LENGTH_SHORT).show();
-            return;
-        }
+// Set up the Join button
+        joinButton.setOnClickListener(v -> {
+            if (currentAmount[0] > 0) {
+                // Decrease the local collaborator amount
+                currentAmount[0]--;
 
-        // Increment collaborators count in Firebase
-        incrementCollaboratorsInFirebase();
-    }
+                // Update the UI
+                String newMembersText = currentAmount[0] + " members needed";
+                membersTextView.setText(newMembersText);
 
-    private void incrementCollaboratorsInFirebase() {
-        DatabaseReference projectRef = database.child("Projects").child(projectId);
-
-        projectRef.child("collaboratorAmount").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot collaboratorSnapshot) {
-                Integer currentCollaborators = collaboratorSnapshot.getValue(Integer.class);
-                if (currentCollaborators != null) {
-                    projectRef.child("collaboratorAmount").setValue(currentCollaborators + 1);
-                    collaborators++;
-                    updateMembersText();
-                    Toast.makeText(CollabProjectsDescActivity.this,
-                            "You have joined the project!", Toast.LENGTH_SHORT).show();
-
-                    // Disable Join button if project is full
-                    if (collaborators == currentCollaborators + 1) {
-                        disableJoinButton();
-                    }
+                // Disable the button if the project is full
+                if (currentAmount[0] == 0) {
+                    joinButton.setEnabled(false);
+                    joinButton.setAlpha(0.5f); // Dim the button to indicate it's disabled
+                    Toast.makeText(CollabProjectsDescActivity.this, "This project is now full.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(CollabProjectsDescActivity.this,
-                            "Failed to retrieve collaborator data.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CollabProjectsDescActivity.this, "You have successfully joined the project!", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(CollabProjectsDescActivity.this,
-                        "Failed to join project: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                // Optionally, open the project link
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(projectLink));
+                    startActivity(browserIntent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(CollabProjectsDescActivity.this, "No browser app found.", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(CollabProjectsDescActivity.this, "Invalid link format.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // Already full
+                Toast.makeText(CollabProjectsDescActivity.this, "This project is full.", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void disableJoinButton() {
-        joinButton.setEnabled(false);
-        joinButton.setAlpha(0.5f); // Dim the button to indicate it's disabled
-        Toast.makeText(this, "This project is now full.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
