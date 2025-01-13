@@ -33,8 +33,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-}
 
+}
 dependencies {
 
     implementation(libs.appcompat)
@@ -50,6 +50,8 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
 
 
     // TODO: Add the dependencies for Firebase products you want to use
