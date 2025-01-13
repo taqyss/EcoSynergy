@@ -1,6 +1,7 @@
 package com.example.ecosynergy;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 public class TodaysPickFragment extends Fragment {
 
@@ -25,11 +28,37 @@ public class TodaysPickFragment extends Fragment {
         checkThisOutRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         testYourKnowledgeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Example: Setting dummy data for each section
-        didYouKnowRecyclerView.setAdapter(new DidYouKnowAdapter(DummyData.getDummyArticles()));
-        checkThisOutRecyclerView.setAdapter(new CheckThisOutAdapter(DummyData.getDummyVideos()));
-        testYourKnowledgeRecyclerView.setAdapter(new TestYourKnowledgeAdapter(DummyData.getDummyQuestions()));
+        DataTodaysPick dataTodaysPick = new DataTodaysPick();
 
+        // Fetch articles asynchronously
+        dataTodaysPick.fetchArticles(new DataTodaysPick.DataCallback<List<Article>>() {
+            @Override
+            public void onDataFetched(List<Article> data) {
+                // Handle the fetched articles
+                Log.d("ArticlesFetched", "Fetched " + data.size() + " articles.");
+
+                // Set the adapter once the data is fetched
+                didYouKnowRecyclerView.setAdapter(new DidYouKnowAdapter(data));
+            }
+        });
+
+        dataTodaysPick.fetchVideos(new DataTodaysPick.DataCallback<List<Video>>() {
+            @Override
+            public void onDataFetched(List<Video> data) {
+                // Handle the fetched videos, e.g., update the UI
+                Log.d("VideosFetched", "Fetched " + data.size() + " videos.");
+                checkThisOutRecyclerView.setAdapter(new CheckThisOutAdapter(data));
+            }
+        });
+
+        dataTodaysPick.fetchQuestions(new DataTodaysPick.DataCallback<List<Questions>>() {
+            @Override
+            public void onDataFetched(List<Questions> data) {
+                Log.d("QuestionsFetched", "Fetched " + data.size() + " questions.");
+                testYourKnowledgeRecyclerView.setAdapter(new TestYourKnowledgeAdapter(data));
+
+            }
+        });
         return view;
     }
 }

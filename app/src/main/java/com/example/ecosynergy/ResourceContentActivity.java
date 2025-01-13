@@ -133,7 +133,7 @@ public class ResourceContentActivity extends BaseActivity {
             TextView discussionTextView = findViewById(R.id.DiscussionUpNext);
             if (discussionTextView != null) {
                 discussionTextView.setOnClickListener(v -> {
-                    DiscussionActivity.openDiscussionActivity(ResourceContentActivity.this, currentCategory, subcategory.getArticleTitle());
+                    DiscussionActivity.openDiscussionActivity(ResourceContentActivity.this, subcategory.getArticleTitle());
                 });
             }
 

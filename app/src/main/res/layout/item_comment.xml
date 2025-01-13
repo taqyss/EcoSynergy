@@ -119,10 +119,10 @@
         <LinearLayout
             android:id="@+id/replies_container"
             android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="70dp"
             android:layout_marginEnd="10dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingTop="8dp">
             <!-- Dynamically add replies here in the Adapter -->
         </LinearLayout>
