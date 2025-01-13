@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String username = snapshot.child("username").getValue(String.class);
-                    homeMessage.setText("Welcome back, " + username + "!");
+                    homeMessage.setText("Welcome back, \n" + username + "!");
 
                     // Handle streak logic
                     String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
