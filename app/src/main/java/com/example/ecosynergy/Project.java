@@ -18,6 +18,7 @@ public class Project {
     private String fileName;  // Name of the file
     private String imageName; // Name of the image
 
+
     // Default constructor required for Firebase
     public Project() {}
 
@@ -143,5 +144,7 @@ public class Project {
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }
+
+
 }
 

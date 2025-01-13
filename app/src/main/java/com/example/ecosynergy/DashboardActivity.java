@@ -334,41 +334,45 @@ public class DashboardActivity extends BaseActivity {
         Intent intent;
         String activityType = activity.getActivityType().toLowerCase();
 
-        if (activityType.startsWith("module")) {
+        if (activityType.equals("article")) {
+            intent = new Intent(this, ResourceContentActivity.class);
+
+            // Pass required data to ResourceContentActivity
+            intent.putExtra("subcategoryId", Integer.parseInt(activity.getReferenceId())); // Use Reference ID
+            intent.putExtra("subcategory", activity.getTitle()); // Article title
+            intent.putExtra("Category", "Articles"); // Assuming articles are categorized under "Articles"
+
+            Log.d("DashboardActivity", "Navigating to Article with SubcategoryId: " + activity.getReferenceId());
+            startActivity(intent);
+            return;
+        } else if (activityType.startsWith("module")) {
             intent = new Intent(this, ModulesContentActivity.class);
 
-            // Extract the module category from the activity type (e.g., "module - Solar Energy")
+            // Extract module category and pass to ModulesContentActivity
             String moduleCategory = activity.getActivityType().substring(8); // Skip "module - "
-            intent.putExtra("subcategoryId", Integer.parseInt(activity.getReferenceId())); // Use Reference ID
-            intent.putExtra("Category", moduleCategory.trim()); // Module category
-            intent.putExtra("subcategory", activity.getTitle()); // Module title
+            intent.putExtra("subcategoryId", Integer.parseInt(activity.getReferenceId()));
+            intent.putExtra("Category", moduleCategory.trim());
+            intent.putExtra("subcategory", activity.getTitle());
 
             Log.d("DashboardActivity", "Module Category: " + moduleCategory);
             startActivity(intent);
             return;
-        } else if (activityType.equals("group_project")) {
+        } else if (activityType.startsWith("group_project")) {
             intent = new Intent(this, CollabProjectsDescActivity.class);
 
-            // Pass group project details using the referenceId
             intent.putExtra("project_id", activity.getReferenceId());
             intent.putExtra("project_title", activity.getTitle());
             startActivity(intent);
             return;
-        }
 
-        switch (activityType) {
-            case "discussion":
-                intent = new Intent(this, ChatActivity.class);
-                break;
-            default:
-                Toast.makeText(this, "Unhandled activity type: " + activity.getActivityType(), Toast.LENGTH_SHORT).show();
-                return;
+        } else if (activityType.equals("discussion")) {
+            intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
+            return;
+        } else {
+            Toast.makeText(this, "Unhandled activity type: " + activity.getActivityType(), Toast.LENGTH_SHORT).show();
         }
-        startActivity(intent);
     }
-
-
-
 
 
     private void navigateToModule(DashboardModuleProgress progress) {

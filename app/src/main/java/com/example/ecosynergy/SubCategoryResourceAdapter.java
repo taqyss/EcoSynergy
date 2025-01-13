@@ -67,6 +67,11 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
         // Set the title, description, and icon for the subcategory
         holder.titleTextView.setText(currentSubcategory.getArticleTitle());
 
+        // Logging for debugging
+        Log.d("SubCategoryResourceAdapter", "subcategoryId: " + currentSubcategory.getId());
+        Log.d("SubCategoryResourceAdapter", "Article Title: " + currentSubcategory.getArticleTitle());
+
+
         // Handle click on article title to go to ResourceContentActivity
         convertView.setOnClickListener(v -> {
             Intent detailIntent = new Intent(parent.getContext(), ResourceContentActivity.class);
