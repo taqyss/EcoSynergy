@@ -263,6 +263,10 @@ public class DataModule {
             return level;
         }
 
+        public void setComments(List<Comment> comments) {
+            this.comments = comments;
+        }
+
         public void setLevel(String level) {
             this.level = level;
         }

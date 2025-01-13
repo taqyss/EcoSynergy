@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                 android:background="@drawable/container_shape"
                 android:id="@+id/videoContainer"
                 android:layout_width="match_parent"
@@ -176,11 +176,9 @@
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/modulesScrollView"
-        app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_navigation_menu">
+
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 

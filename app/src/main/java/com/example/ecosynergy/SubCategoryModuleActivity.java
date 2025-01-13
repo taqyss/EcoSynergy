@@ -100,31 +100,34 @@ public class SubCategoryModuleActivity extends BaseActivity implements Navigatio
             @Override
             public void onDataFetchedModules(List<DataModule> dataModules) {
                 currentSubcategories.clear();
-                boolean subcategoryFound = false;  // Flag to check if subcategory is found
-                // Loop through the dataModules and check both level and category
+                boolean subcategoryFound = false; // Flag to check if subcategory is found
+
+                // Loop through the dataModules and filter by both level and category
                 for (DataModule dataModule : dataModules) {
                     Log.d("SubCategoryModuleActivity", "Checking dataModule - Level: " + dataModule.getLevel() + ", Category: " + dataModule.getCategory());
 
                     // Filter by both level and category
-                    if (dataModule.getLevel().equals(level) && dataModule.getCategory().equals(categoryName)) {
+                    if (dataModule.getLevel().equalsIgnoreCase(level) && dataModule.getCategory().equalsIgnoreCase(categoryName)) {
                         Log.d("SubCategoryModuleActivity", "Found matching dataModule");
                         currentSubcategories.addAll(dataModule.getSubcategories());
-                        Log.d("SubCategoryModuleActivity", "Loaded subcategories: " + currentSubcategories.size());
-                        subcategoryFound = true;  // Set flag to true when data is found
-                        // Exit after finding the correct dataModule
+                        subcategoryFound = true; // Set flag to true when data is found
                     }
                 }
+
                 // If no matching subcategories are found, log a warning
                 if (!subcategoryFound) {
                     Log.d("SubCategoryModuleActivity", "No subcategories found for Level: " + level + ", Category: " + categoryName);
                 }
 
-                subCategoryModuleAdapter.notifyDataSetChanged();
+                // Notify the adapter about the data change
+                if (subCategoryModuleAdapter != null) {
+                    subCategoryModuleAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onError(String errorMessage) {
-                Log.e("ModulesContentActivity", "Error fetching data: " + errorMessage);
+                Log.e("SubCategoryModuleActivity", "Error fetching data: " + errorMessage);
                 Toast.makeText(SubCategoryModuleActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
             }
         });

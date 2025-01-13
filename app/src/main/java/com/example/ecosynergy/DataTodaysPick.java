@@ -66,7 +66,6 @@ public class DataTodaysPick {
             return null;
         }, callback);
     }
-
     public void fetchQuestions(final DataCallback<List<Questions>> callback) {
         fetchData("TestYourKnowledge/questions", snapshot -> {  // Path adjusted
             String questionText = snapshot.child("question").getValue(String.class);
