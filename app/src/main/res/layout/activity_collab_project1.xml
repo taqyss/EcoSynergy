@@ -93,6 +93,23 @@
         app:layout_constraintEnd_toStartOf="@+id/textFilter"
         app:srcCompat="@drawable/collab_search_icon" />
 
+    <EditText
+        android:id="@+id/searchEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Search projects..."
+        android:background="@drawable/search_edittext_background"
+        android:padding="8dp"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/roundedRectCollab4" />
+
+
     <TextView
         android:id="@+id/addNewTitle"
         android:layout_width="wrap_content"
@@ -204,17 +221,5 @@
         android:text="Filter"
         app:layout_constraintBottom_toTopOf="@+id/roundedRectCollab4"
         app:layout_constraintEnd_toStartOf="@+id/collabFilterIcon" />
-
-<!--    <TextView-->
-<!--        android:id="@+id/ProjectDesc1"-->
-<!--        android:layout_width="286dp"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:fontFamily="@font/inria_sans"-->
-<!--        android:text="This project focuses on exploring innovative solutions to optimize energy consumption and promote sustainability by analyzing renewable energy sources and strategies."-->
-<!--        android:textSize="10sp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab8"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab8"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab8"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab8" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

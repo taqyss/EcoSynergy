@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,8 +49,6 @@ public class ContentManagementActivity extends BaseActivity {
         moduleList = new ArrayList<>();
 
         // Initialize buttons
-        Button btnEditModule = findViewById(R.id.btn_editmodule);
-        Button btnDelete = findViewById(R.id.btn_delete);
         Button btnCreate = findViewById(R.id.btn_create);
 
         ImageView backButton = findViewById(R.id.back_button);
@@ -139,10 +138,15 @@ public class ContentManagementActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 moduleList.clear();
+                filteredModuleList.clear();
+
                 for (DataSnapshot moduleSnapshot : snapshot.getChildren()) {
                     Module module = moduleSnapshot.getValue(Module.class);
+                    if (module != null) {
                     moduleList.add(module);
+                    }
                 }
+                filteredModuleList.addAll(moduleList);
                 adapter.notifyDataSetChanged();
             }
             @Override
@@ -162,11 +166,13 @@ public class ContentManagementActivity extends BaseActivity {
         EditText etModuleName = dialogView.findViewById(R.id.etModuleName);
         ProgressBar progressBar = dialogView.findViewById(R.id.progressBar);
         SeekBar seekBar = dialogView.findViewById(R.id.seekBar);
+        TextView progressText = dialogView.findViewById(R.id.progressText);
 
         etModuleName.setText(module.getName());
         int currentProgress = module.getProgress();
         progressBar.setProgress(currentProgress);
         seekBar.setProgress(currentProgress);
+        progressText.setText("Progress: " + currentProgress + "%");
 
         Button btnSave = dialogView.findViewById(R.id.btnSave);
 
@@ -175,6 +181,7 @@ public class ContentManagementActivity extends BaseActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressBar.setProgress(progress);
+                progressText.setText("Progress: " + progress + "%");
             }
 
             @Override
@@ -199,6 +206,16 @@ public class ContentManagementActivity extends BaseActivity {
 
                     module.setName(newModuleName);
                     module.setProgress(newProgress);
+
+                    // update the module in the database
+                    databaseReference.child(module.getName()).setValue(module)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(this, "Module Edited: " + newModuleName + " with progress " + newProgress, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(this, "Failed to update module", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
 
                     adapter.notifyDataSetChanged();
@@ -227,9 +244,36 @@ public class ContentManagementActivity extends BaseActivity {
         btnCancelDelete.setOnClickListener(view -> dialog.dismiss());
 
         btnConfirmDelete.setOnClickListener(view -> {
-            moduleList.remove(position);
-            adapter.notifyDataSetChanged();
-            Toast.makeText(this, "Module Deleted", Toast.LENGTH_SHORT).show();
+            if (position >= 0 && position < moduleList.size()) {
+                Module moduleToDelete = moduleList.get(position);
+
+                // Find the correct index in the main moduleList
+                int indexInModuleList = moduleList.indexOf(moduleToDelete);
+
+                // Remove from Firebase
+                String moduleId = moduleToDelete.getName();  // Get the name of the module to delete
+                if (moduleId != null) {
+                    databaseReference.child(moduleId).removeValue()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    // Remove the module from the local list and notify the adapter
+                                    if (indexInModuleList >= 0) {
+                                    moduleList.remove(position);
+                                    }
+                                    filteredModuleList.remove(position);
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(ContentManagementActivity.this, "Module Deleted", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ContentManagementActivity.this, "Failed to delete module", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Toast.makeText(ContentManagementActivity.this, "Module ID is null", Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+                Toast.makeText(this, "Invalid position for deletion", Toast.LENGTH_SHORT).show();
+            }
             dialog.dismiss();
         });
         dialog.show();
@@ -256,7 +300,20 @@ public class ContentManagementActivity extends BaseActivity {
                 moduleList.add(newModule);
                 filteredModuleList.add(newModule);
 
+
                 adapter.notifyDataSetChanged();
+
+                String moduleId = moduleName.replaceAll("\\s+", "_");  // Replace spaces with underscores to avoid issues
+                databaseReference.child(moduleId).setValue(newModule)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(ContentManagementActivity.this, "Module Created: " + moduleName, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ContentManagementActivity.this, "Failed to create module", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
 
                 // Clear the search query to show the full list
                 SearchView searchView = findViewById(R.id.search);

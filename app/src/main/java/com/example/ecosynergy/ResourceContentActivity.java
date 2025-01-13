@@ -6,36 +6,46 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ResourceContentActivity extends BaseActivity {
 
-    // Declare Views
     private ImageButton favoriteButton, shareButton, textToSpeechButton;
-    private TextView detailTitle, detailDescription, discussionTextView;
+    private TextView detailTitle, detailDescription;
     private RecyclerView upNextRecyclerView;
 
-    // Declare data structure for "Up Next" subcategories
     private List<DataResource.Subcategory> upNextList;
     private ResourcesUpNextAdapter upNextAdapter;
+
+    private boolean isFavorite = false; // Track the favorite status
+    private FirebaseAuth mAuth;
+    private DatabaseReference favoritesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subcategory_content_articles);
 
-        // Initialize Views
         initializeViews();
 
-        // Get Intent data
+        mAuth = FirebaseAuth.getInstance();
+        String userId = mAuth.getCurrentUser().getUid();
+        favoritesRef = FirebaseDatabase.getInstance().getReference("Favorites").child(userId);
+
         int currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
         String currentCategory = getIntent().getStringExtra("Category");
         String subcategory = getIntent().getStringExtra("subcategory");
@@ -44,39 +54,28 @@ public class ResourceContentActivity extends BaseActivity {
         Log.d("ResourceContentActivity", "currentCategory: " + currentCategory);
         Log.d("ResourceContentActivity", "subcategory: " + subcategory);
 
-        // Validate Subcategory ID
         if (currentSubcategoryId == -1) {
             Log.e("ResourceContentActivity", "Invalid subcategory ID.");
             return;
         }
 
-        // Fetch Subcategory data
         DataResource.Subcategory currentSubcategory = DataResource.getSubcategoryById(currentSubcategoryId, currentCategory);
-        Log.d("ResourceContentActivity", "Current Subcategory: " + currentSubcategory);
-
         if (currentSubcategory != null) {
-            // Populate Subcategory Content
             populateSubcategoryContent(currentSubcategory);
         } else {
             Log.e("ResourceContentActivity", "Subcategory not found.");
         }
 
-        // Set up Toolbar
         setupToolbar(true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(subcategory);
         }
 
         setupBottomNavigation();
-
-        // Set Button Click Listeners
-        setButtonListeners();
-
-        // Set up "Up Next" section
+        setButtonListeners(currentSubcategoryId, currentSubcategory);
         setupUpNextSection(currentCategory, currentSubcategory);
     }
 
-    // Initialize Views
     private void initializeViews() {
         upNextRecyclerView = findViewById(R.id.RecylcleViewUpNext);
         detailTitle = findViewById(R.id.detail_title);
@@ -86,33 +85,79 @@ public class ResourceContentActivity extends BaseActivity {
         textToSpeechButton = findViewById(R.id.tts_button);
     }
 
-    // Populate Subcategory Content
     private void populateSubcategoryContent(DataResource.Subcategory currentSubcategory) {
         detailTitle.setText(currentSubcategory.getArticleTitle());
         detailDescription.setText(currentSubcategory.getArticleContent());
     }
 
-    // Set Button Click Listeners
-    private void setButtonListeners() {
+    private void setButtonListeners(int subcategoryId, DataResource.Subcategory currentSubcategory) {
         favoriteButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Favorite button clicked!", Toast.LENGTH_SHORT).show();
+            toggleFavorite(subcategoryId, currentSubcategory.getArticleTitle());
         });
 
         shareButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Share button clicked!", Toast.LENGTH_SHORT).show();
+            shareContent(currentSubcategory.getArticleTitle(), currentSubcategory.getArticleContent());
         });
 
         textToSpeechButton.setOnClickListener(view -> {
             Toast.makeText(this, "Text-to-Speech button clicked!", Toast.LENGTH_SHORT).show();
+            // Add Text-to-Speech functionality here
         });
     }
 
-    // Setup "Up Next" section
+    private void toggleFavorite(int subcategoryId, String articleTitle) {
+        isFavorite = !isFavorite;
+
+        if (isFavorite) {
+            favoriteButton.setImageResource(R.drawable.ic_favourite_full);
+            saveFavorite(subcategoryId, articleTitle);
+            Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT).show();
+        } else {
+            favoriteButton.setImageResource(R.drawable.ic_favourite);
+            removeFavorite(subcategoryId);
+            Toast.makeText(this, "Removed from favorites!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveFavorite(int subcategoryId, String articleTitle) {
+        Map<String, Object> favoriteData = new HashMap<>();
+        favoriteData.put("id", subcategoryId);
+        favoriteData.put("title", articleTitle);
+
+        favoritesRef.child(String.valueOf(subcategoryId)).setValue(favoriteData)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Favorites", "Favorite saved successfully.");
+                    } else {
+                        Log.e("Favorites", "Failed to save favorite.", task.getException());
+                    }
+                });
+    }
+
+    private void removeFavorite(int subcategoryId) {
+        favoritesRef.child(String.valueOf(subcategoryId)).removeValue()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Favorites", "Favorite removed successfully.");
+                    } else {
+                        Log.e("Favorites", "Failed to remove favorite.", task.getException());
+                    }
+                });
+    }
+
+    private void shareContent(String title, String content) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, content);
+
+        startActivity(Intent.createChooser(shareIntent, "Share via"));
+    }
+
     private void setupUpNextSection(String currentCategory, DataResource.Subcategory currentSubcategory) {
         upNextList = new ArrayList<>();
         List<DataResource.Subcategory> allSubcategories = DataResource.getSubcategoriesForCategory(currentCategory);
 
-        // Add subcategories following the current one
         boolean foundCurrent = false;
         for (DataResource.Subcategory subcategory : allSubcategories) {
             if (foundCurrent) {
@@ -123,25 +168,15 @@ public class ResourceContentActivity extends BaseActivity {
             }
         }
 
-        // Set up LayoutManager before setting the adapter
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         upNextRecyclerView.setLayoutManager(layoutManager);
 
-        // Set up RecyclerView with the adapter
         upNextAdapter = new ResourcesUpNextAdapter(upNextList);
         upNextAdapter.setOnSubcategoryClickListener(subcategory -> {
-            TextView discussionTextView = findViewById(R.id.DiscussionUpNext);
-            if (discussionTextView != null) {
-                discussionTextView.setOnClickListener(v -> {
-                    DiscussionActivity.openDiscussionActivity(ResourceContentActivity.this, subcategory.getArticleTitle());
-                });
-            }
-
-            // Handle subcategory click, navigate to another activity
             Intent intent = new Intent(ResourceContentActivity.this, ResourceContentActivity.class);
             intent.putExtra("subcategoryId", subcategory.getId());
             intent.putExtra("subcategory", subcategory.getArticleTitle());
-            intent.putExtra("Category", currentCategory); // Pass the category again
+            intent.putExtra("Category", currentCategory);
             startActivity(intent);
         });
 
@@ -149,7 +184,6 @@ public class ResourceContentActivity extends BaseActivity {
         upNextAdapter.notifyDataSetChanged();
     }
 
-    // Additional methods for Adapter implementation (if needed)
     @Override
     public int getCount() {
         return 0;
