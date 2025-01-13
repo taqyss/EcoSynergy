@@ -14,6 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import androidx.annotation.NonNull;
 
 public class ModulesContentActivity extends BaseActivity {
 
@@ -28,6 +36,7 @@ public class ModulesContentActivity extends BaseActivity {
     private ModulesUpNextAdapter upNextAdapter;
 
     private FirebaseDataFetcher dataFetcher;
+    private DatabaseReference recentActivitiesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +45,9 @@ public class ModulesContentActivity extends BaseActivity {
 
         // Initialize Views
         initializeViews();
+
+        // Initialize Firebase reference
+        setupFirebase();
 
         dataFetcher = new FirebaseDataFetcher();
 
@@ -77,6 +89,13 @@ public class ModulesContentActivity extends BaseActivity {
         setButtonListeners();
     }
 
+    private void setupFirebase() {
+        recentActivitiesRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("recent_activities");
+    }
+
     @Override
     public int getCount() {
         return 0;
@@ -110,12 +129,21 @@ public class ModulesContentActivity extends BaseActivity {
 
     // Fetch Subcategory Data from Firebase
     private void fetchSubcategoryFromFirebase(String currentCategory, String currentSubcategory) {
+        int currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
         dataFetcher.fetchSubcategoryById(currentSubcategory, new FirebaseDataFetcher.SubcategoryCallback() {
             @Override
             public void onSubcategoryFetched(DataModule.Subcategory currentSubcategory) {
                 Log.d("ModulesContentActivity", "Subcategory fetched:");
                 populateSubcategoryContent(currentSubcategory);
                 setupUpNextSection(currentCategory, currentSubcategory);
+
+                // Log recent activity for the module
+                String moduleLevel = currentCategory; // Use the category as the module level
+                String moduleName = currentSubcategory.getTitle(); // Get the module name
+                int subcategoryId = currentSubcategory.getId(); // Get subcategory ID
+
+                // Log recent activity for the module
+                logRecentActivity(moduleLevel, moduleName, subcategoryId);
             }
 
             @Override
@@ -221,4 +249,37 @@ public class ModulesContentActivity extends BaseActivity {
     private void downloadVideo(String url, String fileName) {
         // Download logic
     }
+    private void logRecentActivity(String moduleLevel, String moduleName, int subcategoryId) {
+        String activityType = "module - " + moduleLevel;
+        String activityTitle = moduleName;
+        long timestamp = System.currentTimeMillis();
+
+        Query query = recentActivitiesRef.orderByChild("title").equalTo(activityTitle);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Update timestamp if activity already exists
+                    for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                        activitySnapshot.getRef().child("timestamp").setValue(timestamp);
+                    }
+                } else {
+                    // Add new recent activity
+                    String activityId = recentActivitiesRef.push().getKey();
+                    DashboardRecentActivity recentActivity = new DashboardRecentActivity(
+                            activityId, activityType, activityTitle, timestamp, String.valueOf(subcategoryId)
+                    );
+                    if (activityId != null) {
+                        recentActivitiesRef.child(activityId).setValue(recentActivity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ModulesContentActivity", "Error logging recent activity: " + error.getMessage());
+            }
+        });
+    }
+
 }

@@ -270,12 +270,7 @@ public class DashboardActivity extends BaseActivity {
         int iconResource = getActivityIcon(activity.getActivityType());
         activityIcons[index].setImageResource(iconResource);
 
-        // Set OnClickListener for the ImageButton
-        activityIcons[index].setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, ChatActivity.class);
-            intent.putExtra("referenceId", activity.getReferenceId());
-            startActivity(intent);
-        });
+        activityCards[index].setOnClickListener(v -> navigateToActivity(activity));
     }
 
     private int getActivityIcon(String activityType) {
@@ -332,18 +327,17 @@ public class DashboardActivity extends BaseActivity {
             case "group_project":
                 intent = new Intent(this, CollabProjectsActivity.class);
                 break;
-            case "article":
             case "module":
-                intent = new Intent(this, LearningActivity.class);
+                // Redirect to ModulesContentActivity
+                intent = new Intent(this, ModulesContentActivity.class);
+                intent.putExtra("subcategoryId", Integer.parseInt(activity.getReferenceId()));
+                intent.putExtra("Category", activity.getActivityType().replace("module - ", "")); // Extract module level
+                intent.putExtra("subcategory", activity.getTitle()); // Pass subcategory title
                 break;
             default:
-                return;
+                return; // Do nothing if activity type is unhandled
         }
-        // Log this navigation as a recent activity
-        //saveRecentActivity(activity.getActivityType(), activity.getTitle());
-
-        // Start the activity
-        intent.putExtra("referenceId", activity.getReferenceId());
+        // Start the activity with the provided intent
         startActivity(intent);
     }
 

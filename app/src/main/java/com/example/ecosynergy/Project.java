@@ -1,8 +1,5 @@
 package com.example.ecosynergy;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Project {
     private String projectTitle;
     private String category;
@@ -10,9 +7,8 @@ public class Project {
     private String description;
     private String link;
     private String status;
-    private long timestamp;
-    private String title;
 
+<<<<<<< HEAD
     private String userId;    // Add this field
     private String userName;  // Add this field
     private int currentMembers;
@@ -24,9 +20,10 @@ public class Project {
     private String imageName;
 
     // Constructor (required for Firebase)
+=======
+>>>>>>> 23749c3832b42f08b2978d9b8e93653f39a0e775
     public Project() {}
 
-    // Parameterized Constructor
     public Project(String projectTitle, String category, int collaboratorAmount, String description, String link, String status) {
         this.projectTitle = projectTitle;
         this.category = category;
@@ -34,12 +31,8 @@ public class Project {
         this.description = description;
         this.link = link;
         this.status = status;
-        this.timestamp = System.currentTimeMillis();
-        this.currentMembers = 1; // Start with 1 (the creator)
-        this.joinedUsers = new HashMap<>();
     }
 
-    // Getters and Setters (optional but useful)
     public String getProjectTitle() { return projectTitle; }
     public void setProjectTitle(String projectTitle) { this.projectTitle = projectTitle; }
 
@@ -57,6 +50,7 @@ public class Project {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+<<<<<<< HEAD
 
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
@@ -108,4 +102,6 @@ public class Project {
 
     public String getImageName() { return imageName; }
     public void setImageName(String imageName) { this.imageName = imageName; }
+=======
+>>>>>>> 23749c3832b42f08b2978d9b8e93653f39a0e775
 }

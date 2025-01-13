@@ -42,13 +42,13 @@ tools:context=".DashboardActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activityCard2"
-            android:layout_width="126dp"
-            android:layout_height="122dp"
+            android:layout_width="160dp"
+            android:layout_height="145dp"
             android:layout_marginTop="28dp"
             android:background="@drawable/recently_activity_card"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.853"
+            app:layout_constraintHorizontal_bias="0.924"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TVRecentlyActivity">
 
@@ -99,15 +99,17 @@ tools:context=".DashboardActivity">
                 app:srcCompat="@drawable/collab_icon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Progress Card 2 -->
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activityCard3"
-            android:layout_width="126dp"
-            android:layout_height="122dp"
+            android:layout_width="160dp"
+            android:layout_height="145dp"
             android:layout_marginTop="28dp"
             android:background="@drawable/recently_activity_card"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.162"
+            app:layout_constraintHorizontal_bias="0.066"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/activityCard1">
 
@@ -157,17 +159,15 @@ tools:context=".DashboardActivity">
                 app:srcCompat="@drawable/collab_icon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Progress Card 2 -->
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activityCard4"
-            android:layout_width="126dp"
-            android:layout_height="122dp"
+            android:layout_width="160dp"
+            android:layout_height="145dp"
             android:layout_marginTop="28dp"
             android:background="@drawable/recently_activity_card"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.853"
+            app:layout_constraintHorizontal_bias="0.924"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/activityCard2">
 
@@ -291,13 +291,13 @@ tools:context=".DashboardActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/activityCard1"
-            android:layout_width="126dp"
-            android:layout_height="122dp"
+            android:layout_width="160dp"
+            android:layout_height="145dp"
             android:layout_marginTop="28dp"
             android:background="@drawable/recently_activity_card"
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.162"
+            app:layout_constraintHorizontal_bias="0.066"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TVRecentlyActivity">
 
