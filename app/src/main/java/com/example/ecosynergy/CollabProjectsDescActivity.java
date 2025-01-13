@@ -18,8 +18,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class CollabProjectsDescActivity extends BaseActivity {
+    public static final int RESULT_COLLABORATOR_UPDATED = 1001;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -29,7 +32,9 @@ public class CollabProjectsDescActivity extends BaseActivity {
     private TextView membersTextView;
     private ImageView joinButton;
     private String projectLink;
-    private ProjectAdapter projectAdapter;  // Declare the adapter
+    private int position;
+    private boolean hasJoined;
+    private int[] currentAmount = new int[1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +46,6 @@ public class CollabProjectsDescActivity extends BaseActivity {
         getSupportActionBar().setTitle("Project Details");
         setupBottomNavigation();
 
-        // Get the adapter passed through the intent
-        projectAdapter = (ProjectAdapter) getIntent().getSerializableExtra("projectAdapter");
-
         // Get project details from intent
         Intent intent = getIntent();
         projectId = intent.getStringExtra("project_id");
@@ -52,6 +54,14 @@ public class CollabProjectsDescActivity extends BaseActivity {
         String projectStatus = intent.getStringExtra("project_status");
         collaborators = intent.getIntExtra("project_collaborators", 0);
         projectLink = intent.getStringExtra("project_link");
+        position = intent.getIntExtra("position", -1);
+        hasJoined = intent.getBooleanExtra("has_joined", false);
+
+        if (projectId == null || projectTitle == null) {
+            Toast.makeText(this, "Project details are missing. Cannot load the project.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         // Initialize UI elements
         TextView titleTextView = findViewById(R.id.ProjectTitleProject);
@@ -83,53 +93,77 @@ public class CollabProjectsDescActivity extends BaseActivity {
             }
         }
 
-        final int initialCollaborators = intent.getIntExtra("project_collaborators", 0);
-        final int[] currentAmount = {initialCollaborators}; // Use an array to modify value
+        // Set initial values
+        currentAmount[0] = collaborators;
+        updateMembersText();
 
-// Set initial text
-        TextView membersTextView = findViewById(R.id.TotalGroupMember);
-        String membersText = currentAmount[0] + " members needed";
-        membersTextView.setText(membersText);
+        // Check if user has already joined
+        if (hasJoined) {
+            disableJoinButton("You have already joined this project");
+        }
 
-// Set up the Join button
+        // Set up the Join button
         joinButton.setOnClickListener(v -> {
+            if (hasJoined) {
+                Toast.makeText(CollabProjectsDescActivity.this,
+                        "You have already joined this project", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (currentAmount[0] > 0) {
                 // Decrease the local collaborator amount
                 currentAmount[0]--;
+                updateMembersText();
 
-                // Update the UI
-                String newMembersText = currentAmount[0] + " members needed";
-                membersTextView.setText(newMembersText);
+                // Mark as joined
+                hasJoined = true;
+                disableJoinButton("You have joined this project!");
 
-                // Disable the button if the project is full
-                if (currentAmount[0] == 0) {
-                    joinButton.setEnabled(false);
-                    joinButton.setAlpha(0.5f); // Dim the button to indicate it's disabled
-                    Toast.makeText(CollabProjectsDescActivity.this, "This project is now full.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(CollabProjectsDescActivity.this, "You have successfully joined the project!", Toast.LENGTH_SHORT).show();
-                }
+                // Create intent to pass back the updated data
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("position", position);
+                resultIntent.putExtra("new_collaborator_amount", currentAmount[0]);
+                setResult(RESULT_COLLABORATOR_UPDATED, resultIntent);
 
-                // Optionally, open the project link
+                // Open the project link
                 try {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(projectLink));
                     startActivity(browserIntent);
                 } catch (ActivityNotFoundException e) {
-                    Toast.makeText(CollabProjectsDescActivity.this, "No browser app found.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CollabProjectsDescActivity.this,
+                            "No browser app found.", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
-                    Toast.makeText(CollabProjectsDescActivity.this, "Invalid link format.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CollabProjectsDescActivity.this,
+                            "Invalid link format.", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                // Already full
-                Toast.makeText(CollabProjectsDescActivity.this, "This project is full.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CollabProjectsDescActivity.this,
+                        "This project is full.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateMembersText() {
+        String membersText = currentAmount[0] + " members needed";
+        membersTextView.setText(membersText);
+
+        // Disable join button if project is full
+        if (currentAmount[0] == 0) {
+            disableJoinButton("This project is full");
+        }
+    }
+
+    private void disableJoinButton(String message) {
+        joinButton.setEnabled(false);
+        joinButton.setAlpha(0.5f);
+        Toast.makeText(CollabProjectsDescActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected int getCurrentActivityId() {
         return R.id.nav_collaboration;
     }
+
 
     @Override
     public int getCount() {
@@ -149,5 +183,43 @@ public class CollabProjectsDescActivity extends BaseActivity {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return null;
+    }
+
+    private void logRecentActivity(String projectId, String projectTitle) {
+        DatabaseReference recentActivitiesRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("recent_activities");
+
+        String activityType = "Group Project";
+        String activityTitle = projectTitle;
+        long timestamp = System.currentTimeMillis();
+
+        Query query = recentActivitiesRef.orderByChild("referenceId").equalTo(projectId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Update timestamp if activity already exists
+                    for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                        activitySnapshot.getRef().child("timestamp").setValue(timestamp);
+                    }
+                } else {
+                    // Add new recent activity
+                    String activityId = recentActivitiesRef.push().getKey();
+                    DashboardRecentActivity recentActivity = new DashboardRecentActivity(
+                            activityId, activityType, activityTitle, timestamp, projectId
+                    );
+                    if (activityId != null) {
+                        recentActivitiesRef.child(activityId).setValue(recentActivity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CollabProjectsDescActivity.this, "Failed to log recent activity", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
