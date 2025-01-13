@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class CollabProjectsDescActivity extends BaseActivity {
 
@@ -30,11 +32,20 @@ public class CollabProjectsDescActivity extends BaseActivity {
     private ImageView joinButton;
     private String projectLink;
     private ProjectAdapter projectAdapter;  // Declare the adapter
+    private DatabaseReference recentActivitiesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collab_project3);
+
+        // Initialize Firebase reference for recent activities
+        recentActivitiesRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("recent_activities");
+
+
 
         // Set up the toolbar
         setupToolbar(true);
@@ -52,6 +63,16 @@ public class CollabProjectsDescActivity extends BaseActivity {
         String projectStatus = intent.getStringExtra("project_status");
         collaborators = intent.getIntExtra("project_collaborators", 0);
         projectLink = intent.getStringExtra("project_link");
+
+        if (projectId == null || projectTitle == null) {
+            Toast.makeText(this, "Project details are missing. Cannot load the project.", Toast.LENGTH_SHORT).show();
+            finish(); // Close the activity if the data is invalid
+            return;
+        }
+
+        // Log recent activity
+        logRecentActivity(projectId, projectTitle);
+
 
         // Initialize UI elements
         TextView titleTextView = findViewById(R.id.ProjectTitleProject);
@@ -124,6 +145,8 @@ public class CollabProjectsDescActivity extends BaseActivity {
                 Toast.makeText(CollabProjectsDescActivity.this, "This project is full.", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     @Override
@@ -149,5 +172,43 @@ public class CollabProjectsDescActivity extends BaseActivity {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return null;
+    }
+
+    private void logRecentActivity(String projectId, String projectTitle) {
+        DatabaseReference recentActivitiesRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("recent_activities");
+
+        String activityType = "Group Project";
+        String activityTitle = projectTitle;
+        long timestamp = System.currentTimeMillis();
+
+        Query query = recentActivitiesRef.orderByChild("referenceId").equalTo(projectId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Update timestamp if activity already exists
+                    for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                        activitySnapshot.getRef().child("timestamp").setValue(timestamp);
+                    }
+                } else {
+                    // Add new recent activity
+                    String activityId = recentActivitiesRef.push().getKey();
+                    DashboardRecentActivity recentActivity = new DashboardRecentActivity(
+                            activityId, activityType, activityTitle, timestamp, projectId
+                    );
+                    if (activityId != null) {
+                        recentActivitiesRef.child(activityId).setValue(recentActivity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CollabProjectsDescActivity.this, "Failed to log recent activity", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
