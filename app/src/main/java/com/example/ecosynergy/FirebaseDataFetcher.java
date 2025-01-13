@@ -15,7 +15,10 @@ public class FirebaseDataFetcher {
     private DatabaseReference subcategoryRef;
     private DatabaseReference commentsRef;
 
+    public DataModule dataModule;
+
     public List<DataModule.Subcategory> subcategories = new ArrayList<>();
+    List<DataModule> dataModules = new ArrayList<>();
 
     public FirebaseDataFetcher() {
         // Initialize Firebase Database reference
@@ -26,23 +29,31 @@ public class FirebaseDataFetcher {
     }
 
     public void fetchDataModules(final FirebaseCallback callback) {
-        List<DataModule> dataModules = new ArrayList<>();
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot levelSnapshot : dataSnapshot.getChildren()) {
                     String level = levelSnapshot.getKey();
+                    Log.d("onDataChange", "level: " + level);
 
                     for (DataSnapshot categorySnapshot : levelSnapshot.getChildren()) {
                         String category = categorySnapshot.getKey();
+                        Log.d("onDataChange", "level: " + level);
+                        Log.d("onDataChange", "category: " + category);
 
+                        // Create a new DataModule for each category
                         DataModule dataModule = new DataModule(level, category);
+
+                        // Local list for subcategories
+                        List<DataModule.Subcategory> subcategories = new ArrayList<>();
 
                         // Process all subcategories for this category
                         for (DataSnapshot subcategorySnapshot : categorySnapshot.child("subcategories").getChildren()) {
                             DataModule.Subcategory subcategory = processSubcategory(subcategorySnapshot);
                             subcategories.add(subcategory);
+
+                            Log.d("onDataChange", "subcategory: " + subcategory.getTitle());
 
                             // Add questions and answers to each subcategory
                             List<QuestionSet> questionSets = new ArrayList<>();
@@ -50,7 +61,7 @@ public class FirebaseDataFetcher {
                             // Iterate through each question and answer
                             for (DataSnapshot questionSnapshot : subcategorySnapshot.child("questions").getChildren()) {
                                 String questionNumber = questionSnapshot.getKey();
-                                List<String> questionText  = new ArrayList<>();
+                                List<String> questionText = new ArrayList<>(); // Populate this list if needed
 
                                 // Get the list of answer options for the question
                                 List<String> answers = new ArrayList<>();
@@ -70,28 +81,37 @@ public class FirebaseDataFetcher {
 
                             // Add the list of QuestionSets to the DataModule's question set
                             for (QuestionSet questionSet : questionSets) {
-                                // Use the title of the subcategory as the key (you can customize this if needed)
                                 dataModule.addQuestionSet(subcategory.getTitle(), questionSet);
+                                Log.d("onDataChange", "questionSet: " + subcategory.getTitle());
                             }
                         }
 
-                        // Add subcategories to dataModule
+                        // Add subcategories to the DataModule
                         dataModule.setSubcategories(subcategories);
 
-                        // Add the dataModule to the list
+                        // Add the DataModule to the list
                         dataModules.add(dataModule);
                     }
                 }
 
-                // Call callback with the fetched data
+                // Debugging: Log all Basic-level DataModules
+                for (DataModule dm : dataModules) {
+                    if ("Basic".equals(dm.getLevel())) {
+                        Log.d("onDataChange", "DM: " + dm.getCategory());
+                    }
+                }
+
+                // Call the callback with the fetched data
                 callback.onDataFetchedModules(dataModules);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.e("onDataChange", "Error fetching data", databaseError.toException());
             }
         });
     }
+
     // Process a subcategory
     private DataModule.Subcategory processSubcategory(DataSnapshot subcategorySnapshot) {
         int subcategoryId = -1;
@@ -147,40 +167,34 @@ public class FirebaseDataFetcher {
 
     // Fetch Subcategory by ID
     public void fetchSubcategoryById(String currentSubcategory, final SubcategoryCallback callback) {
-        subcategoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        if (currentSubcategory == null || currentSubcategory.isEmpty()) {
+            Log.e("FirebaseDataFetcher", "Invalid subcategory title provided.");
+            callback.onError("Invalid subcategory title.");
+            return;
+        }
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("FirebaseDataFetcher", "Fetching subcategory with ID: " + currentSubcategory);
+        Log.d("FirebaseDataFetcher", "Fetching subcategory with title: " + currentSubcategory);
 
-                DataModule.Subcategory matchedSubcategory = null;
-                Log.d("FirebaseDataFetcher", "Datamodule.subcategroy:" );
+        boolean found = false;
 
-                // Check if the subcategories list is populated
-                if (subcategories != null && !subcategories.isEmpty()) {
-                    for (DataModule.Subcategory subcategory : subcategories) {
-                        if (subcategory.getTitle().equals(currentSubcategory)) {
-                            matchedSubcategory = subcategory;
-                            break;
-                        }
-                    }
-                } else {
-                    callback.onError("Subcategories not available.");
-                    return;
-                }
-
-                if (matchedSubcategory != null) {
-                    callback.onSubcategoryFetched(matchedSubcategory);
-                } else {
-                    callback.onError("Subcategory not found");
+        // Iterate through the dataModules to find the matching subcategory
+        for (DataModule dataModule : dataModules) {
+            for (DataModule.Subcategory subcategory : dataModule.getSubcategories()) {
+                if (subcategory.getTitle().equalsIgnoreCase(currentSubcategory)) {
+                    Log.d("FirebaseDataFetcher", "Subcategory found: " + subcategory.getTitle());
+                    callback.onSubcategoryFetched(subcategory);
+                    found = true;
+                    break; // Exit the loop once the subcategory is found
                 }
             }
+            if (found) break; // Exit outer loop if subcategory is found
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                callback.onError("Error fetching data: " + databaseError.getMessage());
-            }
-        });
+        // If no subcategory is found after processing all dataModules
+        if (!found) {
+            Log.w("FirebaseDataFetcher", "Subcategory not found for title: " + currentSubcategory);
+            callback.onError("Subcategory not found.");
+        }
     }
 
     // Fetch comments for a specific subcategory

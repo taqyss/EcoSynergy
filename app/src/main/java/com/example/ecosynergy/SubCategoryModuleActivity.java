@@ -95,31 +95,48 @@ public class SubCategoryModuleActivity extends BaseActivity implements Navigatio
         }
     }
 
+    @Override
+    public int getCount() {
+        return 0;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return null;
+    }
+
     private void loadSubcategoriesFromFirebaseDataFetcher(String categoryName, String level) {
         firebaseDataFetcher.fetchDataModules(new FirebaseDataFetcher.FirebaseCallback() {
             @Override
             public void onDataFetchedModules(List<DataModule> dataModules) {
                 currentSubcategories.clear();
-                boolean subcategoryFound = false; // Flag to check if subcategory is found
+                boolean subcategoryFound = false;
 
-                // Loop through the dataModules and filter by both level and category
                 for (DataModule dataModule : dataModules) {
-                    Log.d("SubCategoryModuleActivity", "Checking dataModule - Level: " + dataModule.getLevel() + ", Category: " + dataModule.getCategory());
-
-                    // Filter by both level and category
                     if (dataModule.getLevel().equalsIgnoreCase(level) && dataModule.getCategory().equalsIgnoreCase(categoryName)) {
-                        Log.d("SubCategoryModuleActivity", "Found matching dataModule");
                         currentSubcategories.addAll(dataModule.getSubcategories());
-                        subcategoryFound = true; // Set flag to true when data is found
+                        subcategoryFound = true;
+
+                        if (!dataModule.getLevel().equalsIgnoreCase(level) || !dataModule.getCategory().equalsIgnoreCase(categoryName)) {
+                            break;
+                        }
                     }
                 }
 
-                // If no matching subcategories are found, log a warning
                 if (!subcategoryFound) {
-                    Log.d("SubCategoryModuleActivity", "No subcategories found for Level: " + level + ", Category: " + categoryName);
+                    Log.w("SubCategoryModuleActivity", "No subcategories found for Level: " + level + ", Category: " + categoryName);
                 }
 
-                // Notify the adapter about the data change
                 if (subCategoryModuleAdapter != null) {
                     subCategoryModuleAdapter.notifyDataSetChanged();
                 }
@@ -128,36 +145,14 @@ public class SubCategoryModuleActivity extends BaseActivity implements Navigatio
             @Override
             public void onError(String errorMessage) {
                 Log.e("SubCategoryModuleActivity", "Error fetching data: " + errorMessage);
-                Toast.makeText(SubCategoryModuleActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SubCategoryModuleActivity.this, "Failed to fetch subcategories. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
     @Override
     public void onCategorySelected(String category) {
-        if (!category.equals(currentCategory)) {
-            currentCategory = category;
-            loadSubcategoriesFromFirebaseDataFetcher(currentCategory, currentLevel);
-        }
-    }
 
-    @Override
-    public int getCount() {
-        return currentSubcategories.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return currentSubcategories.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
     }
 }

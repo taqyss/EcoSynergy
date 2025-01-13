@@ -38,48 +38,46 @@ public class FirebaseResourceFetcher {
                 // Iterate through all branches (e.g., Article, Report, Toolkit)
                 for (DataSnapshot branchSnapshot : dataSnapshot.getChildren()) {
                     String branch = branchSnapshot.getKey();
-
-                    // Log the branch name for debugging
                     Log.d("onDataChange", "Branch: " + branch);
 
-                    // Iterate through categories within the branch (e.g., Solar Energy, Wind Energy)
+                    // Iterate through categories within the branch
                     for (DataSnapshot categorySnapshot : branchSnapshot.getChildren()) {
                         String category = categorySnapshot.getKey();
-
-                        // Log the category name for debugging
                         Log.d("onDataChange", "Category: " + category);
 
                         DataResource dataResource = new DataResource(branch, category);
 
-                        // Iterate through subcategories (e.g., individual topics like "Introduction to Solar Energy")
+                        // Create a new list of subcategories for this dataResource
+                        List<DataResource.Subcategory> subcategories = new ArrayList<>();
+
+                        // Populate subcategories for this category
                         for (DataSnapshot subcategorySnapshot : categorySnapshot.child("subcategories").getChildren()) {
                             DataResource.Subcategory subcategory = processSubcategory(subcategorySnapshot);
                             subcategories.add(subcategory);
 
-                            // Log the subcategory information for debugging
                             Log.d("onDataChange", "Subcategory: " + subcategory.getArticleTitle());
                             Log.d("onDataChange", "Subcategory: " + subcategory.getArticleContent());
-
                         }
 
-                        // Set the subcategories in the DataResource
+                        // Set the unique subcategories list to the current dataResource
                         dataResource.setSubcategories(subcategories);
                         dataResources.add(dataResource);
                     }
                 }
 
-                // Log the final data resources
                 Log.d("onDataChange", "Fetched Data Resources: " + dataResources.toString());
 
                 // Call callback with the fetched data
                 callback.onDataFetched(dataResources);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle error if necessary
+                Log.e("onDataChange", "Error fetching data", databaseError.toException());
             }
         });
     }
+
 
     // Process a subcategory
     private DataResource.Subcategory processSubcategory(DataSnapshot subcategorySnapshot) {
@@ -134,19 +132,23 @@ public class FirebaseResourceFetcher {
     // Fetch subcategory content based on category and subcategory title
     public void fetchSubcategoryContent(String category, String subcategoryTitle, String branch, final SubcategoryCallback callback) {
         this.fetchDataResource(new FirebaseResourceFetcher.SubcategoryCallback() {
-
             @Override
             public void onDataFetched(List<DataResource> dataResources) {
-
                 Log.d("SubCategoryResourceActivity", "Overriding");
 
-                if (subcategories.isEmpty()) {
-                    callback.onError(new Exception("Subcategories are not loaded. Please fetch data resources first."));
-                    return;
-                }
+                // Iterate through the data resources to find the matching category and branch
                 for (DataResource dataResource : dataResources) {
                     if (dataResource.getCategory().equals(category) && dataResource.getBranch().equals(branch)) {
-                        for (DataResource.Subcategory subcategory : dataResource.getSubcategories()) {
+                        // Get the subcategories for the matching category
+                        List<DataResource.Subcategory> localSubcategories = dataResource.getSubcategories();
+
+                        if (localSubcategories == null || localSubcategories.isEmpty()) {
+                            callback.onError(new Exception("No subcategories found for category \"" + category + "\" in branch \"" + branch + "\"."));
+                            return;
+                        }
+
+                        // Search for the matching subcategory title
+                        for (DataResource.Subcategory subcategory : localSubcategories) {
                             if (subcategory.getArticleTitle().equals(subcategoryTitle)) {
                                 // Match found, call the callback with the subcategory
                                 callback.onSubcategoryFetched(subcategory);
@@ -157,31 +159,31 @@ public class FirebaseResourceFetcher {
                 }
 
                 // If no match is found, return an error
-                callback.onError(new Exception("Subcategory with the title \"" + subcategoryTitle + "\" not found in category \"" + category + "\"."));
+                callback.onError(new Exception("Subcategory with the title \"" + subcategoryTitle + "\" not found in category \"" + category + "\" and branch \"" + branch + "\"."));
             }
 
             @Override
             public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
-
+                // Not used in this context
             }
 
             @Override
             public void onDataFetchedResource(List<DataResource> dataResources) {
-
+                // Not used in this context
             }
 
             @Override
             public void onSuccess(Object result) {
-                // Handle success if necessary
+                // Optional handling for success
             }
+
             @Override
             public void onError(Exception error) {
                 Log.e("SubCategoryResourceActivity", "Error fetching data", error);
             }
         });
-        // Ensure subcategories are already fetched
-
     }
+
 
 
     // Fetch resources by branch (Article, Report, Toolkit) and category (e.g., Solar Energy)
