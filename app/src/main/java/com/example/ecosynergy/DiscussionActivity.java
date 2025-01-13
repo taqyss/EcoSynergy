@@ -14,7 +14,9 @@ import java.util.List;
 public class DiscussionActivity extends BaseActivity {
 
     private String currentSubcategoryTitle;
+    private CommentType discussionType;
     private FirebaseDataFetcher dataFetcher;
+    private FirebaseResourceFetcher resourceFetcher;
     private List<Comment> comments = new ArrayList<>();
 
     @Override
@@ -30,50 +32,86 @@ public class DiscussionActivity extends BaseActivity {
 
         setupBottomNavigation();
 
+        // Initialize data fetchers
         dataFetcher = new FirebaseDataFetcher();
+        resourceFetcher = new FirebaseResourceFetcher();
 
-        // Fetch all data modules first
-        dataFetcher.fetchDataModules(new FirebaseDataFetcher.FirebaseCallback() {
-            @Override
-            public void onDataFetched(List<DataModule> dataModules) {
+        // Fetch subcategory title and discussion type from intent
+        currentSubcategoryTitle = getIntent().getStringExtra("SUBCATEGORY");
+        String typeString = getIntent().getStringExtra("discussionType");
+        if (typeString != null) {
+            discussionType = CommentType.valueOf(typeString);
+        }
 
-                // Get data passed via Intent
-                currentSubcategoryTitle = getIntent().getStringExtra("SUBCATEGORY");
-
-                // Pass data to the fragment
-                Bundle arguments = new Bundle();
-                arguments.putString("SUBCATEGORY", currentSubcategoryTitle);
-
-                // Fetch Subcategory data from Firebase
-                fetchCommentsForSubcategory(currentSubcategoryTitle);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                // Handle error here, e.g., log it or show a Toast message
-                Log.e("ModulesContentActivity", "Error fetching data: " + errorMessage);
-                Toast.makeText(com.example.ecosynergy.DiscussionActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
-            }
-
-        });
+        // Fetch data based on discussion type
+        if (discussionType == CommentType.MODULE) {
+            fetchModulesData();
+        } else if (discussionType == CommentType.RESOURCE) {
+            fetchResourcesData();
+        }
 
         // Load the fragment
         DiscussionFragment fragment = new DiscussionFragment();
+        Bundle arguments = new Bundle();
+        arguments.putString("SUBCATEGORY", currentSubcategoryTitle);
+        fragment.setArguments(arguments);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
     }
 
-    public static void openDiscussionActivity(Context context, String subcategory) {
-        Intent intent = new Intent(context, DiscussionActivity.class);
-        intent.putExtra("SUBCATEGORY", subcategory);
-        context.startActivity(intent);
+    private void fetchModulesData() {
+        dataFetcher.fetchDataModules(new FirebaseDataFetcher.FirebaseCallback() {
+            @Override
+            public void onDataFetchedModules(List<DataModule> dataModules) {
+                Log.d("DiscussionActivity", "Modules Data Fetched");
+                fetchCommentsForModules(currentSubcategoryTitle);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("DiscussionActivity", "Error fetching modules: " + errorMessage);
+                Toast.makeText(DiscussionActivity.this, "Error fetching modules", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    // Method to fetch comments for the current subcategory
-    private void fetchCommentsForSubcategory(String subcategory) {
-        dataFetcher.fetchCommentsForSubcategory(subcategory, new FirebaseDataFetcher.CommentsCallback() {
+    private void fetchResourcesData() {
+        resourceFetcher.fetchDataResource(new FirebaseResourceFetcher.SubcategoryCallback() {
+            @Override
+            public void onDataFetched(List<DataResource> dataResources) {
+                Log.d("DiscussionActivity", "Resource Data Fetched");
+                fetchCommentsForResource(currentSubcategoryTitle);
+            }
+
+            @Override
+            public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
+                // No implementation needed for this case
+            }
+
+            @Override
+            public void onDataFetchedResource(List<DataResource> dataResources) {
+                Log.d("DiscussionActivity", "Resource Data Fetched");
+                fetchCommentsForResource(currentSubcategoryTitle);
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                // No implementation needed for this case
+            }
+
+            @Override
+            public void onError(Exception error) {
+                Log.e("DiscussionActivity", "Error fetching resource data", error);
+                Toast.makeText(DiscussionActivity.this, "Error fetching resources", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchCommentsForModules(String subcategory) {
+        dataFetcher.fetchCommentsForSubcategory(subcategory, new FirebaseDataFetcher.CommentsModuleCallback() {
             @Override
             public void onCommentsFetched(List<Comment> fetchedComments) {
                 comments.clear();
@@ -89,28 +127,36 @@ public class DiscussionActivity extends BaseActivity {
         });
     }
 
-    // Method to store the new comment
-    public void storeNewComment(Comment newComment) {
-        dataFetcher.storeNewComment(currentSubcategoryTitle, newComment, new FirebaseDataFetcher.StoreCommentCallback() {
+    private void fetchCommentsForResource(String subcategory) {
+        resourceFetcher.fetchCommentsForSubcategory(subcategory, new FirebaseResourceFetcher.CommentsCallback() {
             @Override
-            public void onCommentStored() {
-                Toast.makeText(DiscussionActivity.this, "Comment posted successfully", Toast.LENGTH_SHORT).show();
+            public void onCommentsFetched(List<Comment> fetchedComments) {
+                comments.clear();
+                comments.addAll(fetchedComments);
+                updateFragmentComments(fetchedComments);
             }
 
             @Override
             public void onError(String errorMessage) {
-                Toast.makeText(DiscussionActivity.this, "Error posting comment", Toast.LENGTH_SHORT).show();
+                Log.e("DiscussionActivity", "Error fetching comments: " + errorMessage);
+                Toast.makeText(DiscussionActivity.this, "Error fetching comments", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Method to update the fragment with fetched comments
     private void updateFragmentComments(List<Comment> comments) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         DiscussionFragment fragment = (DiscussionFragment) fragmentManager.findFragmentById(R.id.fragment_container);
         if (fragment != null) {
             fragment.displayComments(comments);
         }
+    }
+
+    public static void openDiscussionActivity(Context context, String subcategory, CommentType type) {
+        Intent intent = new Intent(context, DiscussionActivity.class);
+        intent.putExtra("SUBCATEGORY", subcategory);
+        intent.putExtra("discussionType", type.name());
+        context.startActivity(intent);
     }
 
     @Override

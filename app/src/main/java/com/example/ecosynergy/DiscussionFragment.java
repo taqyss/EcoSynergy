@@ -42,9 +42,6 @@ public class DiscussionFragment extends Fragment {
                 comments.add(newComment);
                 commentsAdapter.notifyItemInserted(comments.size() - 1);
                 askQuestionInput.setText(""); // Clear input field
-                if (getActivity() instanceof DiscussionActivity) {
-                    ((DiscussionActivity) getActivity()).storeNewComment(newComment); // Delegate storing to activity
-                }
             }
         });
 

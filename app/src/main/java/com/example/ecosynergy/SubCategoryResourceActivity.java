@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -36,7 +37,31 @@ public class SubCategoryResourceActivity extends BaseActivity implements Navigat
 
         Intent intent = getIntent();
         String categoryName = intent.getStringExtra("CATEGORY_NAME");
+        Log.d("SubCategoryResourceActivity", "Received category name:" + categoryName);
         String hierarchy = intent.getStringExtra("HIERARCHY");
+
+        if (subCategoryResourceAdapter == null) {
+            Log.d("SubCategoryResourceActivity", "Initializing SubCategoryResourceAdapter");
+            subCategoryResourceAdapter = new SubCategoryResourceAdapter(
+                    categoryName,
+                    hierarchy,
+                    currentSubcategories,
+                    null,
+                    subcategory -> {
+                        Intent detailIntent = new Intent(SubCategoryResourceActivity.this, ModulesContentActivity.class);
+                        detailIntent.putExtra("Category", categoryName);
+                        detailIntent.putExtra("subcategory", subcategory.getArticleTitle());
+                        detailIntent.putExtra("HIERARCHY", hierarchy);
+                        startActivity(detailIntent);
+                    }
+            );
+
+            ListView listView = findViewById(R.id.subcategory_list);
+            listView.setAdapter(subCategoryResourceAdapter);
+        } else {
+            Log.d("SubCategoryResourceActivity", "Updating SubCategoryResourceAdapter");
+            subCategoryResourceAdapter.notifyDataSetChanged();
+        }
 
         if (categoryName != null && hierarchy != null) {
             currentCategory = categoryName;
@@ -50,54 +75,21 @@ public class SubCategoryResourceActivity extends BaseActivity implements Navigat
             setupBottomNavigation();
 
             Log.d("SubCategoryResourceActivity", "Loading subcategories for category: " + categoryName);
-            loadSubcategoriesFromFirebaseDataFetcher(categoryName, hierarchy);
-
-            ListView listView = findViewById(R.id.subcategory_list);
-
-            DatabaseReference subcategoryRef = FirebaseDatabase.getInstance()
-                    .getReference("dataResources")
-                    .child(currentLevel)
-                    .child(currentCategory)
-                    .child("subcategories");
-
-            subcategoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    // Create adapter after retrieving the data
-                    subCategoryResourceAdapter = new SubCategoryResourceAdapter(
-                            currentCategory,
-                            currentLevel,
-                            currentSubcategories,
-                            dataSnapshot,
-                            new SubCategoryResourceAdapter.OnSubcategoryClickListener() {
-                                @Override
-                                public void onSubcategoryClick(DataResource.Subcategory subcategory) {
-                                    Intent detailIntent = new Intent(SubCategoryResourceActivity.this, ModulesContentActivity.class);
-                                    detailIntent.putExtra("Category", currentCategory);
-                                    detailIntent.putExtra("subcategory", subcategory.getArticleTitle());
-                                    detailIntent.putExtra("HIERARCHY", currentLevel);
-                                    startActivity(detailIntent);
-                                }
-                            });
-
-                    listView.setAdapter(subCategoryResourceAdapter);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.e("SubCategoryResourceActivity", "Error fetching subcategories: " + databaseError.getMessage());
-                    Toast.makeText(SubCategoryResourceActivity.this, "Failed to load subcategories.", Toast.LENGTH_SHORT).show();
-                }
-            });
+            loadSubcategories(categoryName, hierarchy);
         } else {
             Log.e("SubCategoryResourceActivity", "Invalid category or hierarchy data");
         }
     }
 
+    private void loadSubcategories(String categoryName, String branch) {
+        loadSubcategoriesFromFirebaseDataFetcher(categoryName, branch);
+    }
     private void loadSubcategoriesFromFirebaseDataFetcher(String categoryName, String branch) {
-        firebaseResourceFetcher.fetchDataResource(new FirebaseResourceFetcher.FirebaseCallback() {
+        firebaseResourceFetcher.fetchDataResource(new FirebaseResourceFetcher.SubcategoryCallback() {
             @Override
             public void onDataFetched(List<DataResource> dataResources) {
+                currentSubcategories.clear();
+                Log.d("SubCategoryResourceActivity", "Data fetched successfully");
                 boolean subcategoryFound = false;  // Flag to check if subcategory is found
 
                 // Loop through the dataResources and check for category and branch match
@@ -107,25 +99,29 @@ public class SubCategoryResourceActivity extends BaseActivity implements Navigat
                         for (DataResource.Subcategory subcategory : dataResource.getSubcategories()) {
                             Log.d("SubCategoryResourceActivity", "Found matching subcategory for Category: " + categoryName + " and Branch: " + branch);
 
-                            // Clear the current list and add the matching subcategory
-                            currentSubcategories.clear();
                             currentSubcategories.add(subcategory);
 
-                            // Log how many subcategories were loaded
                             Log.d("SubCategoryResourceActivity", "Loaded subcategories: " + currentSubcategories.size());
-
-                            // Notify the adapter of the change
-                            subCategoryResourceAdapter.notifyDataSetChanged();
                             subcategoryFound = true;  // Set flag to true when subcategory is found
-                            break;  // Exit after finding the matching subcategory
+                              // Exit after finding the matching subcategory
                         }
                     }
                 }
-
+                subCategoryResourceAdapter.notifyDataSetChanged();
                 // If no matching subcategory is found, log a warning
                 if (!subcategoryFound) {
                     Log.d("SubCategoryResourceActivity", "No subcategory found for Category: " + categoryName + " and Branch: " + branch);
                 }
+            }
+
+            @Override
+            public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
+
+            }
+
+            @Override
+            public void onDataFetchedResource(List<DataResource> dataResources) {
+
             }
 
             @Override
@@ -138,14 +134,22 @@ public class SubCategoryResourceActivity extends BaseActivity implements Navigat
                 Log.e("SubCategoryResourceActivity", "Error fetching data", error);
             }
         });
+
     }
 
+    private void updateSubcategoryListView() {
+        ListView listView = findViewById(R.id.subcategory_list);
+        if (subCategoryResourceAdapter != null) {
+            subCategoryResourceAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public void onCategorySelected(String category) {
+        Log.d("SubCategoryResourceActivity", "Updating the new category: " + category);
         if (!category.equals(currentCategory)) {
             currentCategory = category;
-            loadSubcategoriesFromFirebaseDataFetcher(currentCategory, currentLevel);
+            loadSubcategories(currentCategory, currentLevel);
         }
     }
 

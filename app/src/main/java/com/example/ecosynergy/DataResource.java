@@ -97,6 +97,14 @@ public class DataResource {
             return articleTitle;
         }
 
+        public List<Comment> getComments() {
+            return comments;
+        }
+
+        public void setComments(List<Comment> comments) {
+            this.comments = comments;
+        }
+
         public void setArticleTitle(String articleTitle) {
             this.articleTitle = articleTitle;
         }

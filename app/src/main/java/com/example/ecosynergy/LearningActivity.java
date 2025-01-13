@@ -52,27 +52,6 @@ public class LearningActivity extends BaseActivity {
         }).attach();
     }
 
-    private void fetchDataModules() {
-        FirebaseDataFetcher dataFetcher = new FirebaseDataFetcher();
-
-        dataFetcher.fetchDataModules(new FirebaseDataFetcher.FirebaseCallback() {
-            @Override
-            public void onDataFetched(List<DataModule> dataModules) {
-                // Handle the fetched data
-                for (DataModule module : dataModules) {
-                    Log.d("LearningActivity", "Fetched module: " + module.getCategory());
-                }
-                // Update the UI with the fetched data if needed
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                // Handle errors
-                Log.e("LearningActivity", "Error fetching data: " + errorMessage);
-            }
-        });
-    }
-
     @Override
     protected int getCurrentActivityId() {
         return R.id.nav_learning; // This is the ID of the "Learning" menu item

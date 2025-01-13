@@ -84,7 +84,7 @@ public class FirebaseDataFetcher {
                 }
 
                 // Call callback with the fetched data
-                callback.onDataFetched(dataModules);
+                callback.onDataFetchedModules(dataModules);
             }
 
             @Override
@@ -184,7 +184,7 @@ public class FirebaseDataFetcher {
     }
 
     // Fetch comments for a specific subcategory
-    public void fetchCommentsForSubcategory(String subcategoryTitle, final CommentsCallback callback) {
+    public void fetchCommentsForSubcategory(String subcategoryTitle, final CommentsModuleCallback callback) {
         // Find the subcategory with matching title
         DataModule.Subcategory matchedSubcategory = null;
         Log.d("FirebaseDataFetcher", "Fetching comments for subcategory:" + subcategoryTitle);
@@ -244,7 +244,7 @@ public class FirebaseDataFetcher {
     }
 
     // Callback interface for comments
-    public interface CommentsCallback {
+    public interface CommentsModuleCallback {
         void onCommentsFetched(List<Comment> comments);
 
         void onError(String errorMessage);
@@ -259,7 +259,8 @@ public class FirebaseDataFetcher {
 
     // Callback interface for data fetching
     public interface FirebaseCallback {
-        void onDataFetched(List<DataModule> dataModules);
+
+        void onDataFetchedModules(List<DataModule> dataModules);
 
         void onError(String errorMessage);
     }
