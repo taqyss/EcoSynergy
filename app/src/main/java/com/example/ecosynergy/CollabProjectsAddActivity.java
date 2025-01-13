@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
-public class CollabProjectsAddActivity extends BaseActivity{
+public class CollabProjectsAddActivity extends BaseActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
     private StorageReference storageReference;
@@ -61,15 +61,6 @@ public class CollabProjectsAddActivity extends BaseActivity{
 
         // Set up bottom navigation
         setupBottomNavigation();
-
-        ImageView collabSearchUserIcon = findViewById(R.id.collabSearcUserIcon);
-        View.OnClickListener navigateToSearchUserProjects = view -> {
-            Intent intent = new Intent(CollabProjectsAddActivity.this, CollabSearchUserActivity.class);
-            startActivity(intent);
-        };
-
-        collabSearchUserIcon.setOnClickListener(navigateToSearchUserProjects);
-
 
         TextView totalCollaborators = findViewById(R.id.totalCollaborators);
         ImageView collabCircle1 = findViewById(R.id.collabCircle1);
@@ -114,22 +105,6 @@ public class CollabProjectsAddActivity extends BaseActivity{
         fileAttachmentStatus = findViewById(R.id.fileAttachmentStatus);
         imageAttachmentStatus = findViewById(R.id.imageAttachmentStatus);
 
-        // Set up file upload button
-        ImageView fileIcon = findViewById(R.id.fileIcon);
-        fileIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            startActivityForResult(intent, PICK_FILE_REQUEST);
-        });
-
-        // Set up image upload button
-        ImageView galleryIcon = findViewById(R.id.galleryIcon);
-        galleryIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            startActivityForResult(intent, PICK_IMAGE_REQUEST);
-        });
-
         // Initialize Firebase Auth and Database Reference
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -142,6 +117,7 @@ public class CollabProjectsAddActivity extends BaseActivity{
         publishButton.setOnClickListener(publishClickListener);
 
     }
+
     private void saveProjectToFirebase() {
         FirebaseUser user = auth.getCurrentUser(); // Use the global 'auth' instance
         if (user != null) {
@@ -195,12 +171,6 @@ public class CollabProjectsAddActivity extends BaseActivity{
         selectedTextView.setSelected(false);
         selectedFileUri = null;
         selectedImageUri = null;
-        if (fileAttachmentStatus != null) {
-            fileAttachmentStatus.setVisibility(View.GONE);
-        }
-        if (imageAttachmentStatus != null) {
-            imageAttachmentStatus.setVisibility(View.GONE);
-        }
     }
 
     private boolean isValidUrl(String url) {
@@ -231,6 +201,7 @@ public class CollabProjectsAddActivity extends BaseActivity{
         // Handle clicks on the TextView
         textView.setOnClickListener(v -> handleOptionSelection(imageView, textView));
     }
+
     private void setupSelectableOptions() {
         // Define the ImageViews and TextViews for the options
         ImageView optionImage1 = findViewById(R.id.roundedRectCollab10);
@@ -264,49 +235,6 @@ public class CollabProjectsAddActivity extends BaseActivity{
         setupOptionClickListener(optionImage7, optionText7);
 
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == PICK_FILE_REQUEST) {
-                selectedFileUri = data.getData();
-                String fileName = getFileName(selectedFileUri);
-                fileAttachmentStatus.setText("File attached: " + fileName);
-                fileAttachmentStatus.setVisibility(View.VISIBLE);
-            } else if (requestCode == PICK_IMAGE_REQUEST) {
-                selectedImageUri = data.getData();
-                String imageName = getFileName(selectedImageUri);
-                imageAttachmentStatus.setText("Image attached: " + imageName);
-                imageAttachmentStatus.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    private String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
-
 
     @Override
     protected int getCurrentActivityId() {
