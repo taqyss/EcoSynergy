@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +37,7 @@ public class CollabProjectsActivity extends BaseActivity {
     private List<Project> filteredList; // For search and filter
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
+    private static final int REQUEST_CODE_PROJECT_UPDATE = 1002;
 
     private EditText searchEditText; // For Find functionality
     private ImageView searchIcon, filterIcon; // For Search and Filter functionality
@@ -83,6 +85,24 @@ public class CollabProjectsActivity extends BaseActivity {
 
         // Set up Filter functionality
         setupFilter();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_PROJECT_UPDATE &&
+                resultCode == CollabProjectsDescActivity.RESULT_COLLABORATOR_UPDATED &&
+                data != null) {
+
+            int position = data.getIntExtra("position", -1);
+            int newCollaboratorAmount = data.getIntExtra("new_collaborator_amount", -1);
+
+            if (position != -1 && newCollaboratorAmount != -1) {
+                // This should update both the data and the UI
+                projectAdapter.updateCollaboratorAmount(position, newCollaboratorAmount);
+            }
+        }
     }
 
     private void loadAllProjects() {
