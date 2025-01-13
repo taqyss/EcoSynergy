@@ -328,27 +328,23 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void navigateToActivity(DashboardRecentActivity activity) {
-
+        Log.d("DashboardActivity", "Navigating to activity: " + activity.getActivityType());
+        Log.d("DashboardActivity", "Title: " + activity.getTitle() + ", ReferenceId: " + activity.getReferenceId());
 
         Intent intent;
         String activityType = activity.getActivityType().toLowerCase();
 
-            if (activityType.equals("article")) {
-                intent = new Intent(this, ResourceContentActivity.class);
+        if (activityType.equals("article")) {
+            intent = new Intent(this, ResourceContentActivity.class);
 
-                // Ensure referenceId is valid
-                int subcategoryId = Integer.parseInt(activity.getReferenceId());
-                if (subcategoryId <= 0) {
-                    throw new IllegalArgumentException("Invalid subcategoryId: " + activity.getReferenceId());
-                }
+            // Pass required data to ResourceContentActivity
+            intent.putExtra("subcategoryId", Integer.parseInt(activity.getReferenceId())); // Use Reference ID
+            intent.putExtra("subcategory", activity.getTitle()); // Article title
+            intent.putExtra("Category", "Articles"); // Assuming articles are categorized under "Articles"
 
-                // Pass data to ResourceContentActivity
-                intent.putExtra("subcategoryId", subcategoryId);
-                intent.putExtra("subcategory", activity.getTitle());
-                intent.putExtra("Category", "Articles");
-
-                Log.d("DashboardActivity", "Navigating to Article with SubcategoryId: " + activity.getReferenceId());
-                startActivity(intent);
+            Log.d("DashboardActivity", "Navigating to Article with SubcategoryId: " + activity.getReferenceId());
+            startActivity(intent);
+            return;
         } else if (activityType.startsWith("module")) {
             intent = new Intent(this, ModulesContentActivity.class);
 
@@ -361,13 +357,14 @@ public class DashboardActivity extends BaseActivity {
             Log.d("DashboardActivity", "Module Category: " + moduleCategory);
             startActivity(intent);
             return;
-        } else if (activityType.equals("group_project")) {
+        } else if (activityType.startsWith("group_project")) {
             intent = new Intent(this, CollabProjectsDescActivity.class);
 
             intent.putExtra("project_id", activity.getReferenceId());
             intent.putExtra("project_title", activity.getTitle());
             startActivity(intent);
             return;
+
         } else if (activityType.equals("discussion")) {
             intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
@@ -376,9 +373,6 @@ public class DashboardActivity extends BaseActivity {
             Toast.makeText(this, "Unhandled activity type: " + activity.getActivityType(), Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
 
 
     private void navigateToModule(DashboardModuleProgress progress) {
