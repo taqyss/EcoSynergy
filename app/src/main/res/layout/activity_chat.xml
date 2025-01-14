@@ -29,13 +29,6 @@
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
 
-        <ImageView
-            android:id="@+id/attachButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/attach"
-            android:contentDescription="Attachment" />
-
         <EditText
             android:id="@+id/messageInput"
             android:layout_width="0dp"
