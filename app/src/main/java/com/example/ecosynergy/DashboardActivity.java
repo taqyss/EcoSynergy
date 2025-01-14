@@ -74,8 +74,8 @@ public class DashboardActivity extends BaseActivity {
         database = FirebaseDatabase.getInstance();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         activitiesRef = database.getReference("Users").child(userId).child("recent_activities");
-        progressRef = database.getReference("users").child(userId).child("module_progress");
-    } // FIREBASE NOT DETECTED
+        progressRef = database.getReference("Users").child(userId).child("module_progress");
+    }
 
     private void initializeUIElements() {
         // Initialize activity cards arrays
@@ -192,23 +192,6 @@ public class DashboardActivity extends BaseActivity {
     }
 
 
-    /*private void saveRecentActivity(String type, String title) {
-        String activityId = activitiesRef.push().getKey();
-        long timestamp = System.currentTimeMillis();
-
-        DashboardRecentActivity activity = new DashboardRecentActivity(
-                activityId,
-                type,
-                title,
-                timestamp,
-                null
-        );
-
-        if (activityId != null) {
-            activitiesRef.child(activityId).setValue(activity);
-        }
-    }*/
-
 
     @Override
     protected void onResume() {
@@ -295,7 +278,7 @@ public class DashboardActivity extends BaseActivity {
         }
     }
 
-    private void loadModuleProgress() {  //FIREBASE not detected
+    private void loadModuleProgress() {
         progressRef.orderByChild("timestamp").limitToLast(2)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -317,38 +300,7 @@ public class DashboardActivity extends BaseActivity {
                 });
     }
 
-    /*private void updateProgressCard(int index, DashboardModuleProgress progress) {
-        progressCards[index].setVisibility(View.VISIBLE);
-        progressTitles[index].setText(progress.getModuleName());
-        progressBars[index].setProgress(progress.getProgressPercentage());
-        progressPercentages[index].setText(progress.getProgressPercentage() + "%");
 
-        // Set click listener
-        progressCards[index].setOnClickListener(v -> navigateToModule(progress));
-    }*/
-
-    /*private void loadModuleProgress() {
-        // Example for loading progress of specific modules
-        String[] moduleCategories = {"Beginner", "Intermediate"}; // Add your actual categories
-
-        for (int i = 0; i < Math.min(moduleCategories.length, progressCards.length); i++) {
-            final int index = i;
-            ProgressTracker.getModuleProgress(moduleCategories[i], new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    DashboardModuleProgress progress = snapshot.getValue(DashboardModuleProgress.class);
-                    if (progress != null) {
-                        updateProgressCard(index, progress);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("Dashboard", "Error loading progress: " + error.getMessage());
-                }
-            });
-        }
-    }*/
 
     private void updateProgressCard(int index, DashboardModuleProgress progress) {
         progressCards[index].setVisibility(View.VISIBLE);
