@@ -107,24 +107,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center_horizontal"
-                    android:layout_marginHorizontal="8dp">
-
-                    <ImageButton
-                        android:id="@+id/tts_button"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_text_to_speech"
-                        app:tint="@color/lightGreen"
-                        android:background="@null"
-                        android:contentDescription="Text-to-Speech" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TTS"
-                        android:textSize="15sp"
-                        android:textColor="@color/primaryColor" />
-                </LinearLayout>
+                    android:layout_marginHorizontal="8dp"/>
 
             </LinearLayout>
 

@@ -262,6 +262,67 @@ public class FirebaseResourceFetcher {
         }
     }
 
+//    public void storeNewComment(String branch, String category, String subcategoryId, Comment newComment, final StoreCommentCallback callback) {
+//        // Reference to the subcategory's comments
+//        DatabaseReference subcategoryCommentsRef = mDatabase.child(branch).child(category).child("subcategories")
+//                .child(subcategoryId).child("comments");
+//
+//        // Generate a unique comment ID using push()
+//        String commentId = subcategoryCommentsRef.push().getKey();
+//
+//        if (commentId != null) {
+//            // Create a map to store the comment with replies
+//            Map<String, Object> commentMap = new HashMap<>();
+//            commentMap.put("commentText", newComment.getCommentText());
+//            commentMap.put("timestamp", newComment.getTimestamp());
+//            commentMap.put("upvote", newComment.getVoteCount());
+//            commentMap.put("username", newComment.getUsername());
+//            commentMap.put("userAvatar", newComment.getUserAvatar());
+//
+//            // Store replies if there are any (assuming the Comment object has a getReplies() method returning a List)
+//            if (newComment.getReplies() != null && !newComment.getReplies().isEmpty()) {
+//                List<Map<String, Object>> repliesList = new ArrayList<>();
+//                for (Comment reply : newComment.getReplies()) {
+//                    Map<String, Object> replyMap = new HashMap<>();
+//                    replyMap.put("commentText", reply.getCommentText());
+//                    replyMap.put("timestamp", reply.getTimestamp());
+//                    replyMap.put("upvote", reply.getVoteCount());
+//                    replyMap.put("username", reply.getUsername());
+//                    replyMap.put("userAvatar", reply.getUserAvatar());
+//                    repliesList.add(replyMap);
+//                }
+//                commentMap.put("replies", repliesList);
+//            }
+//
+//            // Store the comment with the generated comment ID
+//            subcategoryCommentsRef.child(commentId).setValue(commentMap)
+//                    .addOnSuccessListener(aVoid -> callback.onCommentStored())
+//                    .addOnFailureListener(e -> callback.onError("Failed to store comment"));
+//        } else {
+//            callback.onError("Failed to generate comment ID");
+//        }
+//    }
+
+    public void storeNewComment(final String subcategory, final Comment comment, final StoreCommentCallback callback) {
+        // Assuming you have a reference to Firebase's Realtime Database or Firestore for resources
+        DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference("resources").child(subcategory).child("comments");
+
+        // Push the new comment to Firebase
+        commentRef.push().setValue(comment)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully added the comment to Firebase
+                    Log.d("FirebaseResourceFetcher", "Comment added successfully for resource: " + subcategory);
+                    callback.onCommentStored(); // Notify success
+                })
+                .addOnFailureListener(e -> {
+                    // Failed to add the comment to Firebase
+                    Log.e("FirebaseResourceFetcher", "Error adding comment: " + e.getMessage());
+                    callback.onError("Error adding comment for resource: " + e.getMessage()); // Notify error
+                });
+    }
+
+
+
 
     // Fetch all comments for a given subcategory
     public void getComments(String branch, String category, String subcategoryId, SubcategoryCallback callback) {
@@ -307,6 +368,7 @@ public class FirebaseResourceFetcher {
         void onCommentsFetched(List<Comment> comments);
         void onError(String errorMessage);
     }
+
     // Callback interface
     public interface FirebaseCallback {
         void onDataFetchedResource(List<DataResource> dataResources); // Called when all data is fetched

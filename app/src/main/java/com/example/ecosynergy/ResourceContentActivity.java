@@ -132,7 +132,6 @@ public class ResourceContentActivity extends BaseActivity {
         detailDescription = findViewById(R.id.detail_description);
         favoriteButton = findViewById(R.id.favorite_button);
         shareButton = findViewById(R.id.share_button);
-        textToSpeechButton = findViewById(R.id.tts_button);
     }
 
     private void populateSubcategoryContent(DataResource.Subcategory currentSubcategory) {

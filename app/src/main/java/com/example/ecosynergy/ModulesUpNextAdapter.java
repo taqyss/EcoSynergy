@@ -37,7 +37,7 @@ public class ModulesUpNextAdapter extends RecyclerView.Adapter<ModulesUpNextAdap
 
         // Bind data to the views
         holder.upNextTwo.setText(subcategory.getVideoTitle());
-        holder.descriptionTextView.setText(subcategory.getDescription());
+        holder.descriptionTextView.setText("Discussion");
 
         // Set click listener for the subcategory title
         holder.upNextTwo.setOnClickListener(v -> {
