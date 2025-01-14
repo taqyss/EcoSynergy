@@ -8,14 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,92 +49,52 @@ public class ResourceContentActivity extends BaseActivity {
 
         initializeViews();
 
-        firebaseResourceFetcher = new FirebaseResourceFetcher();
+        // Firebase initialization for recent activities
+        DatabaseReference recentActivitiesRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("recent_activities");
 
-        firebaseResourceFetcher.fetchDataResource(new FirebaseResourceFetcher.SubcategoryCallback() {
-            @Override
-            public void onDataFetched(List<DataResource> dataResources) {
+        // Fetch intent data
+        String category = getIntent().getStringExtra("Category");
+        String articleTitle = getIntent().getStringExtra("articleTitle");
+        int subcategoryId = getIntent().getIntExtra("subcategoryId", -1);
+        String subcategory = getIntent().getStringExtra("subcategory");
+        String branch = getIntent().getStringExtra("HIERARCHY");
 
-                // Get Intent data
-                String category = getIntent().getStringExtra("Category");
-                Log.d("ResourceContentActivity", "Category: " + category);
-                String subcategory = getIntent().getStringExtra("subcategory");
-                articleTitle = getIntent().getStringExtra("articleTitle");
-                String branch = getIntent().getStringExtra("HIERARCHY");
-                currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
-
-
-                if (category != null && subcategory != null && branch != null) {
-                    Log.d("ResourceContentActivity", "Category: " + category);
-                    Log.d("ResourceContentActivity", "Subcategory: " + subcategory);
-                    Log.d("ResourceContentActivity", "Hierarchy: " + branch);
-
-                    // Fetch and display the content based on the passed data
-
-                    Log.d("ResourceContentActivity", "Fetching subcategory content for:" + category);
-                    Log.d("ResourceContentActivity", "Fetching subcategory title for:" + articleTitle);
-                    fetchSubcategoryContent(category, articleTitle, branch);
-                } else {
-                    Log.e("ResourceContentActivity", "Category or article title missing from intent.");
-                }
-
-                if (category != null && subcategory != null && branch != null) {
-                    fetchSubcategoryContent(category, articleTitle, branch);
-                } else {
-                    Log.e("ResourceContentActivity", "Category or article title missing from intent.");
-                }
-
-                fetchSubcategoryContent(category, articleTitle, branch);
-            }
-
-            @Override
-            public void onSuccess(Object result) {
-
-            }
-
-            @Override
-            public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
-
-            }
-
-            @Override
-            public void onDataFetchedResource(List<DataResource> dataResources) {
-
-            }
-
-            @Override
-            public void onError(Exception error) {
-
-            }
-
-        });
-
-
-        mAuth = FirebaseAuth.getInstance();
-        String userId = mAuth.getCurrentUser().getUid();
-        favoritesRef = FirebaseDatabase.getInstance().getReference("Favorites").child(userId);
-
-        if (currentSubcategoryId == -1) {
-            Log.e("ResourceContentActivity", "Invalid subcategory ID.");
+        // Validate intent data
+        if (category == null || articleTitle == null || subcategoryId == -1 || subcategory == null) {
+            Log.e("ResourceContentActivity", "Missing or invalid intent data.");
+            Toast.makeText(this, "Unable to load article. Please try again.", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
-        DataResource.Subcategory currentSubcategory = DataResource.getSubcategoryById(currentSubcategoryId, currentCategory);
+        // Log recent activity for the article
+        logRecentActivity(recentActivitiesRef, "article", articleTitle, subcategoryId);
+
+        // Populate UI with article data
+        DataResource.Subcategory currentSubcategory = DataResource.getSubcategoryById(subcategoryId, category);
         if (currentSubcategory != null) {
             populateSubcategoryContent(currentSubcategory);
         } else {
             Log.e("ResourceContentActivity", "Subcategory not found.");
         }
 
+        // Fetch article content
+        firebaseResourceFetcher = new FirebaseResourceFetcher();
+        fetchSubcategoryContent(category, articleTitle, branch);
+
+        // Setup UI
         setupToolbar(true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(subcategory);
         }
-
         setupBottomNavigation();
-        setButtonListeners(currentSubcategoryId, currentSubcategory);
-        setupUpNextSection(currentCategory, currentSubcategory);
+        setButtonListeners(subcategoryId, currentSubcategory);
+        setupUpNextSection(category, currentSubcategory);
     }
+
 
     private void fetchSubcategoryContent(String category, String articleTitle, String branch) {
         firebaseResourceFetcher.fetchSubcategoryContent(category, articleTitle, branch, new FirebaseResourceFetcher.SubcategoryCallback() {
@@ -285,4 +248,35 @@ public class ResourceContentActivity extends BaseActivity {
     public View getView(int position, View convertView, ViewGroup parent) {
         return null;
     }
+
+    private void logRecentActivity(DatabaseReference recentActivitiesRef, String activityType, String title, int referenceId) {
+        long timestamp = System.currentTimeMillis();
+        Query query = recentActivitiesRef.orderByChild("referenceId").equalTo(String.valueOf(referenceId));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Update timestamp for existing activity
+                    for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                        activitySnapshot.getRef().child("timestamp").setValue(timestamp);
+                    }
+                } else {
+                    // Add new recent activity
+                    String activityId = recentActivitiesRef.push().getKey();
+                    DashboardRecentActivity recentActivity = new DashboardRecentActivity(
+                            activityId, activityType, title, timestamp, String.valueOf(referenceId)
+                    );
+                    if (activityId != null) {
+                        recentActivitiesRef.child(activityId).setValue(recentActivity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ResourceContentActivity", "Error logging recent activity: " + error.getMessage());
+            }
+        });
+    }
+
 }
