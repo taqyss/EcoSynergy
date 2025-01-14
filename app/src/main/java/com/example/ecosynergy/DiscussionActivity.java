@@ -152,6 +152,32 @@ public class DiscussionActivity extends BaseActivity {
         }
     }
 
+    public void storeComment(String subcategory, Comment comment) {
+        StoreCommentCallback callback = new StoreCommentCallback() {
+            @Override
+            public void onCommentStored() {
+                Toast.makeText(DiscussionActivity.this, "Comment stored successfully!", Toast.LENGTH_SHORT).show();
+                // Optionally, refresh the comments list
+                if (discussionType == CommentType.MODULE) {
+                    fetchCommentsForModules(subcategory);
+                } else if (discussionType == CommentType.RESOURCE) {
+                    fetchCommentsForResource(subcategory);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(DiscussionActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        if (discussionType == CommentType.MODULE) {
+            dataFetcher.storeNewComment(subcategory, comment, callback);
+        } else if (discussionType == CommentType.RESOURCE) {
+            resourceFetcher.storeNewComment(subcategory, comment, callback);
+        }
+    }
+
     public static void openDiscussionActivity(Context context, String subcategory, CommentType type) {
         Intent intent = new Intent(context, DiscussionActivity.class);
         intent.putExtra("SUBCATEGORY", subcategory);
