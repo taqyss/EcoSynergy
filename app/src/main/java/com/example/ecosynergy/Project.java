@@ -26,7 +26,7 @@ public class Project {
     public Project(String projectTitle, String category, int collaboratorAmount, String description, String link, String status) {
         this.projectTitle = projectTitle;
         this.category = category;
-        this.collaboratorAmount = collaboratorAmount + 1; // Add 1 for the creator
+        this.collaboratorAmount = collaboratorAmount; // Add 1 for the creator
         this.description = description;
         this.link = link;
         this.status = status;
