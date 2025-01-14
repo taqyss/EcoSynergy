@@ -317,7 +317,7 @@ public class DashboardActivity extends BaseActivity {
                 });
     }
 
-    private void updateProgressCard(int index, DashboardModuleProgress progress) {
+    /*private void updateProgressCard(int index, DashboardModuleProgress progress) {
         progressCards[index].setVisibility(View.VISIBLE);
         progressTitles[index].setText(progress.getModuleName());
         progressBars[index].setProgress(progress.getProgressPercentage());
@@ -325,7 +325,45 @@ public class DashboardActivity extends BaseActivity {
 
         // Set click listener
         progressCards[index].setOnClickListener(v -> navigateToModule(progress));
+    }*/
+
+    /*private void loadModuleProgress() {
+        // Example for loading progress of specific modules
+        String[] moduleCategories = {"Beginner", "Intermediate"}; // Add your actual categories
+
+        for (int i = 0; i < Math.min(moduleCategories.length, progressCards.length); i++) {
+            final int index = i;
+            ProgressTracker.getModuleProgress(moduleCategories[i], new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    DashboardModuleProgress progress = snapshot.getValue(DashboardModuleProgress.class);
+                    if (progress != null) {
+                        updateProgressCard(index, progress);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("Dashboard", "Error loading progress: " + error.getMessage());
+                }
+            });
+        }
+    }*/
+
+    private void updateProgressCard(int index, DashboardModuleProgress progress) {
+        progressCards[index].setVisibility(View.VISIBLE);
+        progressTitles[index].setText(progress.getModuleName());
+        progressBars[index].setProgress(progress.getProgressPercentage());
+        progressPercentages[index].setText(progress.getProgressPercentage() + "%");
+
+        // Set click listener
+        progressCards[index].setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, LearningActivity.class);
+            intent.putExtra("moduleId", progress.getModuleId());
+            startActivity(intent);
+        });
     }
+
 
     private void navigateToActivity(DashboardRecentActivity activity) {
         Log.d("DashboardActivity", "Navigating to activity: " + activity.getActivityType());
