@@ -1,13 +1,21 @@
 package com.example.ecosynergy;
 
-import static com.example.ecosynergy.DataResource.getDataResourcesForCategory;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,130 +23,163 @@ import java.util.List;
 public class SubCategoryResourceActivity extends BaseActivity implements NavigationUtils.OnCategorySelectedListener {
 
     private List<DataResource.Subcategory> currentSubcategories = new ArrayList<>();
-
     private SubCategoryResourceAdapter subCategoryResourceAdapter;
     private String currentCategory;
     private String currentLevel;
+    private FirebaseResourceFetcher firebaseResourceFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_subcategory);
 
-        // Get the category name and hierarchy from the intent
+        firebaseResourceFetcher = new FirebaseResourceFetcher();
+
         Intent intent = getIntent();
         String categoryName = intent.getStringExtra("CATEGORY_NAME");
+        Log.d("SubCategoryResourceActivity", "Received category name:" + categoryName);
         String hierarchy = intent.getStringExtra("HIERARCHY");
 
-        // Initialize currentCategory and currentLevel
+        if (subCategoryResourceAdapter == null) {
+            Log.d("SubCategoryResourceActivity", "Initializing SubCategoryResourceAdapter");
+            subCategoryResourceAdapter = new SubCategoryResourceAdapter(
+                    categoryName,
+                    hierarchy,
+                    currentSubcategories,
+                    null,
+                    subcategory -> {
+                        Intent detailIntent = new Intent(SubCategoryResourceActivity.this, ModulesContentActivity.class);
+                        detailIntent.putExtra("Category", categoryName);
+                        detailIntent.putExtra("subcategory", subcategory.getArticleTitle());
+                        detailIntent.putExtra("HIERARCHY", hierarchy);
+                        startActivity(detailIntent);
+                    }
+            );
+
+            ListView listView = findViewById(R.id.subcategory_list);
+            listView.setAdapter(subCategoryResourceAdapter);
+        } else {
+            Log.d("SubCategoryResourceActivity", "Updating SubCategoryResourceAdapter");
+            subCategoryResourceAdapter.notifyDataSetChanged();
+        }
+
         if (categoryName != null && hierarchy != null) {
             currentCategory = categoryName;
             currentLevel = hierarchy;
 
-            // Set up the toolbar with back button enabled
             setupToolbar(true);
-
-            // Set toolbar title to the category name
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle(categoryName);
             }
 
-            // Set up bottom navigation
             setupBottomNavigation();
 
-            // Log category name to ensure it's correct
-            Log.d("SubCategoryResourceAdapter", "Category Resource selected: " + categoryName);
-
-            List<DataResource> dataResource = getDataResourcesForCategory(categoryName);
-
-            Log.d("SubCategoryResourceAdapter", "Data resource for category: " + dataResource.size());
-
-            // Filter subcategories based on the level
-            currentSubcategories = filterSubcategoriesByLevel(dataResource, hierarchy);
-
-            // Log filtered subcategories count
-            Log.d("SubCategoryResourceAdapter", "Filtered Resource subcategories: " + currentSubcategories.size());
-
-            // Initialize ListView and adapter
-            ListView listView = findViewById(R.id.subcategory_list);
-            subCategoryResourceAdapter = new SubCategoryResourceAdapter(currentCategory, currentSubcategories, subcategory -> {
-                // Handle subcategory click
-                Log.d("SubCategoryActivity", "Clicked Subcategory: " + subcategory.getArticleTitle());
-
-
-                // Example: Navigate to another activity
-                Intent detailIntent = new Intent(SubCategoryResourceActivity.this, ResourceContentActivity.class);
-                detailIntent.putExtra("Category", categoryName);
-                detailIntent.putExtra("subcategory", subcategory.getArticleTitle());  // Add this line for category
-                detailIntent.putExtra("subcategoryId", subcategory.getId());  // Add this line for subcategory ID
-                startActivity(detailIntent);
-            });
-            subCategoryResourceAdapter.notifyDataSetChanged();
-            listView.setAdapter(subCategoryResourceAdapter);  // Set adapter after filtering data
+            Log.d("SubCategoryResourceActivity", "Loading subcategories for category: " + categoryName);
+            loadSubcategories(categoryName, hierarchy);
         } else {
-            Log.e("SubCategoryResourceAdapter", "Invalid category or hierarchy data");
+            Log.e("SubCategoryResourceActivity", "Invalid category or hierarchy data");
+        }
+    }
+
+    private void loadSubcategories(String categoryName, String branch) {
+        loadSubcategoriesFromFirebaseDataFetcher(categoryName, branch);
+    }
+    private void loadSubcategoriesFromFirebaseDataFetcher(String categoryName, String branch) {
+        firebaseResourceFetcher.fetchDataResource(new FirebaseResourceFetcher.SubcategoryCallback() {
+            @Override
+            public void onDataFetched(List<DataResource> dataResources) {
+                Log.d("SubCategoryResourceActivity", "Data fetched successfully");
+
+                // Clear the current list
+                currentSubcategories.clear();
+
+                boolean subcategoryFound = false;
+
+                // Iterate through dataResources
+                for (DataResource dataResource : dataResources) {
+                    Log.d("SubCategoryResourceActivity", "Checking dataResource - Category: " + dataResource.getCategory() + ", Branch: " + dataResource.getBranch());
+
+                    if (dataResource.getBranch().equals(branch) && dataResource.getCategory().equals(categoryName)) {
+                        Log.d("SubCategoryResourceActivity", "Match found for Category: " + categoryName + ", Branch: " + branch);
+
+                        // Extract and add subcategories from the matched resource
+                        List<DataResource.Subcategory> subcategories = dataResource.getSubcategories();
+                        if (subcategories != null) {
+                            currentSubcategories.addAll(subcategories);
+                            subcategoryFound = true;
+                        }
+                        // Stop the loop after finding a match
+                        break;
+                    }
+                }
+                Log.d("SubCategoryResourceActivity", "current subcategories size: " + currentSubcategories.size());
+                // Update the adapter once
+                subCategoryResourceAdapter.notifyDataSetChanged();
+
+                // Log warnings if no matching subcategories are found
+                if (!subcategoryFound) {
+                    Log.w("SubCategoryResourceActivity", "No subcategories found for Category: " + categoryName + " and Branch: " + branch);
+                } else {
+                    Log.d("SubCategoryResourceActivity", "Total subcategories loaded: " + currentSubcategories.size());
+                }
+            }
+
+            @Override
+            public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
+                // Optional callback if needed
+            }
+
+            @Override
+            public void onDataFetchedResource(List<DataResource> dataResources) {
+                // Optional callback if needed
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                Log.d("SubCategoryResourceActivity", "Operation succeeded: " + result);
+            }
+
+            @Override
+            public void onError(Exception error) {
+                Log.e("SubCategoryResourceActivity", "Error fetching data", error);
+            }
+        });
+    }
+
+
+    private void updateSubcategoryListView() {
+        ListView listView = findViewById(R.id.subcategory_list);
+        if (subCategoryResourceAdapter != null) {
+            subCategoryResourceAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onCategorySelected(String category) {
+        Log.d("SubCategoryResourceActivity", "Updating the new category: " + category);
+        if (!category.equals(currentCategory)) {
+            currentCategory = category;
+            loadSubcategories(currentCategory, currentLevel);
         }
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return currentSubcategories.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return currentSubcategories.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
-    }
-
-    @Override
-    public void onCategorySelected(String category) {
-        // Only update if category has changed
-        if (!category.equals(currentCategory)) {
-            currentCategory = category;
-            updateSubcategories(currentCategory, currentLevel);
-        }
-    }
-
-    private void updateSubcategories(String categoryName, String level) {
-
-        Log.d("SubCategoryActivity", "Updating subcategories for category: " + categoryName);
-        List<DataResource> dataResource = getDataResourcesForCategory(categoryName);
-
-        // Filter the subcategories based on the selected level
-        List<DataResource.Subcategory> filteredSubcategories = filterSubcategoriesByLevel(dataResource, level);
-
-        // Only update if the data has changed
-        if (!filteredSubcategories.equals(currentSubcategories)) {
-            currentSubcategories.clear();
-            currentSubcategories.addAll(filteredSubcategories);
-            subCategoryResourceAdapter.notifyDataSetChanged();
-        }
-
-        Log.d("SubCategoryActivity", "Subcategories updated: " + currentSubcategories.size());
-    }
-
-    private List<DataResource.Subcategory> filterSubcategoriesByLevel(List<DataResource> dataResource, String level) {
-        List<DataResource.Subcategory> filteredList = new ArrayList<>();
-
-        for (DataResource data : dataResource) {
-            Log.d("SubCategoryActivity", "Checking level: " + data.getBranch());
-            if (level.equals(data.getBranch())) {
-                filteredList.addAll(data.getSubcategories());
-                Log.d("SubCategoryActivity", "Added subcategories: " + data.getSubcategories().size());
-            }
-        }
-
-        Log.d("SubCategoryActivity", "Filtered subcategories count: " + filteredList.size());
-        return filteredList;
+        return null; // Implement custom view for subcategory items if needed
     }
 }

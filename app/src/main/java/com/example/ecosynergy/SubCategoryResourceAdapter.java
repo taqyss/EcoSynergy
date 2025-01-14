@@ -1,5 +1,6 @@
 package com.example.ecosynergy;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.List;
 
 public class SubCategoryResourceAdapter extends BaseAdapter {
 
-    private String category; // Category name
+    private DataSnapshot dataSnapshot;
+    private String category, branch; // Category name
     private final List<DataResource.Subcategory> subcategoryList; // List of subcategories
     private final OnSubcategoryClickListener listener; // Listener for click events
 
@@ -23,14 +27,27 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
         this.listener = listener;
     }
 
+    // branch = level
+    public SubCategoryResourceAdapter(String category, String branch, List<DataResource.Subcategory> subcategories, DataSnapshot dataSnapshot, OnSubcategoryClickListener listener) {
+        this.category = category;
+        this.branch = branch;
+        this.listener = listener;
+        this.subcategoryList = subcategories;
+        this.dataSnapshot = dataSnapshot;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         DataResource.Subcategory currentSubcategory = subcategoryList.get(position);
+
         Log.d("SubCategoryResourceAdapter", "Subcategory Resource: " + currentSubcategory.getArticleTitle());
 
         // Logging with Log.d() instead of printf
         Log.d("SubCategoryResourceAdapter", currentSubcategory.toString());
+
+        Log.d("SubCategoryResourceAdapter", "Category: " + category);
+        Log.d("SubCategoryResourceAdapter", "Branch: " + branch);
 
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -49,17 +66,37 @@ public class SubCategoryResourceAdapter extends BaseAdapter {
 
         // Set the title, description, and icon for the subcategory
         holder.titleTextView.setText(currentSubcategory.getArticleTitle());
-        // Set click listener on the root view
-        convertView.setOnClickListener(v -> listener.onSubcategoryClick(currentSubcategory));
+
+        // Logging for debugging
+        Log.d("SubCategoryResourceAdapter", "subcategoryId: " + currentSubcategory.getId());
+        Log.d("SubCategoryResourceAdapter", "Article Title: " + currentSubcategory.getArticleTitle());
+
+
+        // Handle click on article title to go to ResourceContentActivity
+        convertView.setOnClickListener(v -> {
+            Intent detailIntent = new Intent(parent.getContext(), ResourceContentActivity.class);
+            detailIntent.putExtra("Category", category);
+            Log.d("SubCategoryResourceAdapter", "Category Passed: " + category);
+            detailIntent.putExtra("subcategory", currentSubcategory.getArticleTitle());
+            Log.d("SubCategoryResourceAdapter", "Subcategory Passed: " + currentSubcategory.getArticleTitle());
+            detailIntent.putExtra("HIERARCHY", branch);
+            Log.d("SubCategoryResourceAdapter", "Level Passed: " + branch);
+            detailIntent.putExtra("subcategoryId", currentSubcategory.getId());
+            detailIntent.putExtra("articleTitle", currentSubcategory.getArticleTitle());
+            parent.getContext().startActivity(detailIntent);
+        });
+
         // Set click listener on the Discussion TextView
         holder.discussionTextView.setOnClickListener(v -> {
-            // Open DiscussionActivity
+            Log.d("SubCategoryResourceAdapter", "Discussion TextView clicked for: " + currentSubcategory.getArticleTitle());
+            // Open DiscussionActivity with the type
             DiscussionActivity.openDiscussionActivity(
                     parent.getContext(),
-                    category,
-                    currentSubcategory.getArticleTitle()
+                    currentSubcategory.getArticleTitle(),
+                    CommentType.RESOURCE // Pass the type here
             );
         });
+
         return convertView;
     }
 

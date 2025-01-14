@@ -21,8 +21,11 @@ import java.util.List;
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentViewHolder> {
 
     private List<Comment> comments;
+    private FirebaseDataFetcher dataFetcher;
+
     public CommentsAdapter(List<Comment> comments) {
         this.comments = comments;
+        this.dataFetcher = new FirebaseDataFetcher();
     }
 
     @NonNull
@@ -43,6 +46,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         holder.upvoteButton.setOnClickListener(v -> {
             comment.upvote();
             notifyItemChanged(position);
+            dataFetcher.updateVoteCount(comment);  // Update vote count in Firebase
         });
 
         holder.replyButton.setOnClickListener(v -> {
@@ -101,6 +105,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                 Comment reply = new Comment("default_avatar_url", "username", replyText, 0, "Just now");
                 comment.addReply(reply); // Add the reply to the comment's replies list
                 notifyItemChanged(position); // Refresh the comment to show the new reply
+                dataFetcher.addReplyToComment(comment, reply);  // Add the reply to Firebase
             }
         });
 

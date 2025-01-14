@@ -1,12 +1,15 @@
 package com.example.ecosynergy;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.List;
 
 public class LearningActivity extends BaseActivity {
     private TabLayout topTabLayout;

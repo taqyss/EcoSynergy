@@ -2,12 +2,14 @@ package com.example.ecosynergy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,8 +74,8 @@ public class DashboardActivity extends BaseActivity {
         database = FirebaseDatabase.getInstance();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         activitiesRef = database.getReference("Users").child(userId).child("recent_activities");
-        progressRef = database.getReference("users").child(userId).child("module_progress");
-    } // FIREBASE NOT DETECTED
+        progressRef = database.getReference("Users").child(userId).child("module_progress");
+    }
 
     private void initializeUIElements() {
         // Initialize activity cards arrays
@@ -190,23 +192,6 @@ public class DashboardActivity extends BaseActivity {
     }
 
 
-    /*private void saveRecentActivity(String type, String title) {
-        String activityId = activitiesRef.push().getKey();
-        long timestamp = System.currentTimeMillis();
-
-        DashboardRecentActivity activity = new DashboardRecentActivity(
-                activityId,
-                type,
-                title,
-                timestamp,
-                null
-        );
-
-        if (activityId != null) {
-            activitiesRef.child(activityId).setValue(activity);
-        }
-    }*/
-
 
     @Override
     protected void onResume() {
@@ -270,13 +255,15 @@ public class DashboardActivity extends BaseActivity {
         int iconResource = getActivityIcon(activity.getActivityType());
         activityIcons[index].setImageResource(iconResource);
 
-        // Set OnClickListener for the ImageButton
-        activityIcons[index].setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, ChatActivity.class);
-            intent.putExtra("referenceId", activity.getReferenceId());
-            startActivity(intent);
+        // Set click listener for activity card
+        activityCards[index].setOnClickListener(v -> {
+            Log.d("DashboardActivity", "Activity Card Clicked: " + activity.getActivityType());
+            navigateToActivity(activity);
         });
     }
+
+
+
 
     private int getActivityIcon(String activityType) {
         switch (activityType.toLowerCase()) {
@@ -291,7 +278,7 @@ public class DashboardActivity extends BaseActivity {
         }
     }
 
-    private void loadModuleProgress() {  //FIREBASE not detected
+    private void loadModuleProgress() {
         progressRef.orderByChild("timestamp").limitToLast(2)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -313,6 +300,8 @@ public class DashboardActivity extends BaseActivity {
                 });
     }
 
+
+
     private void updateProgressCard(int index, DashboardModuleProgress progress) {
         progressCards[index].setVisibility(View.VISIBLE);
         progressTitles[index].setText(progress.getModuleName());
@@ -320,32 +309,61 @@ public class DashboardActivity extends BaseActivity {
         progressPercentages[index].setText(progress.getProgressPercentage() + "%");
 
         // Set click listener
-        progressCards[index].setOnClickListener(v -> navigateToModule(progress));
+        progressCards[index].setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, LearningActivity.class);
+            intent.putExtra("moduleId", progress.getModuleId());
+            startActivity(intent);
+        });
     }
+
 
     private void navigateToActivity(DashboardRecentActivity activity) {
-        Intent intent;
-        switch (activity.getActivityType().toLowerCase()) {
-            case "discussion":
-                intent = new Intent(this, ChatActivity.class);
-                break;
-            case "group_project":
-                intent = new Intent(this, CollabProjectsActivity.class);
-                break;
-            case "article":
-            case "module":
-                intent = new Intent(this, LearningActivity.class);
-                break;
-            default:
-                return;
-        }
-        // Log this navigation as a recent activity
-        //saveRecentActivity(activity.getActivityType(), activity.getTitle());
+        Log.d("DashboardActivity", "Navigating to activity: " + activity.getActivityType());
+        Log.d("DashboardActivity", "Title: " + activity.getTitle() + ", ReferenceId: " + activity.getReferenceId());
 
-        // Start the activity
-        intent.putExtra("referenceId", activity.getReferenceId());
-        startActivity(intent);
+        Intent intent;
+        String activityType = activity.getActivityType().toLowerCase();
+
+        if (activityType.equals("article")) {
+            intent = new Intent(this, ResourceContentActivity.class);
+
+            // Pass required data to ResourceContentActivity
+            intent.putExtra("subcategoryId", Integer.parseInt(activity.getReferenceId())); // Use Reference ID
+            intent.putExtra("subcategory", activity.getTitle()); // Article title
+            intent.putExtra("Category", "Articles"); // Assuming articles are categorized under "Articles"
+
+            Log.d("DashboardActivity", "Navigating to Article with SubcategoryId: " + activity.getReferenceId());
+            startActivity(intent);
+            return;
+        } else if (activityType.startsWith("module")) {
+            intent = new Intent(this, ModulesContentActivity.class);
+
+            // Extract module category and pass to ModulesContentActivity
+            String moduleCategory = activity.getActivityType().substring(8); // Skip "module - "
+            intent.putExtra("subcategoryId", Integer.parseInt(activity.getReferenceId()));
+            intent.putExtra("Category", moduleCategory.trim());
+            intent.putExtra("subcategory", activity.getTitle());
+
+            Log.d("DashboardActivity", "Module Category: " + moduleCategory);
+            startActivity(intent);
+            return;
+        } else if (activityType.startsWith("group_project")) {
+            intent = new Intent(this, CollabProjectsDescActivity.class);
+
+            intent.putExtra("project_id", activity.getReferenceId());
+            intent.putExtra("project_title", activity.getTitle());
+            startActivity(intent);
+            return;
+
+        } else if (activityType.equals("discussion")) {
+            intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
+            return;
+        } else {
+            Toast.makeText(this, "Unhandled activity type: " + activity.getActivityType(), Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void navigateToModule(DashboardModuleProgress progress) {
         Intent intent = new Intent(this, LearningActivity.class);

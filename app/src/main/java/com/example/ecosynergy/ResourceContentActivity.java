@@ -8,15 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +37,11 @@ public class ResourceContentActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference favoritesRef;
 
+    int currentSubcategoryId;
+
+    String currentCategory, subcategory, branch, articleTitle;
+    private FirebaseResourceFetcher firebaseResourceFetcher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,41 +49,84 @@ public class ResourceContentActivity extends BaseActivity {
 
         initializeViews();
 
-        mAuth = FirebaseAuth.getInstance();
-        String userId = mAuth.getCurrentUser().getUid();
-        favoritesRef = FirebaseDatabase.getInstance().getReference("Favorites").child(userId);
+        // Firebase initialization for recent activities
+        DatabaseReference recentActivitiesRef = FirebaseDatabase.getInstance()
+                .getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("recent_activities");
 
-        int currentSubcategoryId = getIntent().getIntExtra("subcategoryId", -1);
-        String currentCategory = getIntent().getStringExtra("Category");
+        // Fetch intent data
+        String category = getIntent().getStringExtra("Category");
+        String articleTitle = getIntent().getStringExtra("articleTitle");
+        int subcategoryId = getIntent().getIntExtra("subcategoryId", -1);
         String subcategory = getIntent().getStringExtra("subcategory");
+        String branch = getIntent().getStringExtra("HIERARCHY");
 
-        Log.d("ResourceContentActivity", "currentSubcategoryId: " + currentSubcategoryId);
-        Log.d("ResourceContentActivity", "currentCategory: " + currentCategory);
-        Log.d("ResourceContentActivity", "subcategory: " + subcategory);
-
-        if (currentSubcategoryId == -1) {
-            Log.e("ResourceContentActivity", "Invalid subcategory ID.");
+        // Validate intent data
+        if (category == null || articleTitle == null || subcategoryId == -1 || subcategory == null) {
+            Log.e("ResourceContentActivity", "Missing or invalid intent data.");
+            Toast.makeText(this, "Unable to load article. Please try again.", Toast.LENGTH_SHORT).show();
+            finish();
             return;
         }
 
-        DataResource.Subcategory currentSubcategory = DataResource.getSubcategoryById(currentSubcategoryId, currentCategory);
+        // Log recent activity for the article
+        logRecentActivity(recentActivitiesRef, "article", articleTitle, subcategoryId);
+
+        // Populate UI with article data
+        DataResource.Subcategory currentSubcategory = DataResource.getSubcategoryById(subcategoryId, category);
         if (currentSubcategory != null) {
             populateSubcategoryContent(currentSubcategory);
         } else {
             Log.e("ResourceContentActivity", "Subcategory not found.");
         }
 
+        // Fetch article content
+        firebaseResourceFetcher = new FirebaseResourceFetcher();
+        fetchSubcategoryContent(category, articleTitle, branch);
+
+        // Setup UI
         setupToolbar(true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(subcategory);
         }
-
         setupBottomNavigation();
-        setButtonListeners(currentSubcategoryId, currentSubcategory);
-        setupUpNextSection(currentCategory, currentSubcategory);
+        setButtonListeners(subcategoryId, currentSubcategory);
+        setupUpNextSection(category, currentSubcategory);
+    }
+
+
+    private void fetchSubcategoryContent(String category, String articleTitle, String branch) {
+        firebaseResourceFetcher.fetchSubcategoryContent(category, articleTitle, branch, new FirebaseResourceFetcher.SubcategoryCallback() {
+
+            @Override
+            public void onError(Exception error) {
+                Log.e("ResourceContentActivity", "Error fetching subcategory: " + error.getMessage());
+                Toast.makeText(ResourceContentActivity.this, "Error fetching content", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDataFetched(List<DataResource> dataResources) {}
+
+            @Override
+            public void onSuccess(Object result) {}
+
+            @Override
+            public void onSubcategoryFetched(DataResource.Subcategory subcategory) {
+                populateSubcategoryContent(subcategory);
+            }
+
+            @Override
+            public void onDataFetchedResource(List<DataResource> dataResources) {
+
+            }
+        });
     }
 
     private void initializeViews() {
+        detailTitle = findViewById(R.id.articleTitle);
+        detailDescription = findViewById(R.id.articleContent);
+        firebaseResourceFetcher = new FirebaseResourceFetcher();
         upNextRecyclerView = findViewById(R.id.RecylcleViewUpNext);
         detailTitle = findViewById(R.id.detail_title);
         detailDescription = findViewById(R.id.detail_description);
@@ -97,11 +147,6 @@ public class ResourceContentActivity extends BaseActivity {
 
         shareButton.setOnClickListener(view -> {
             shareContent(currentSubcategory.getArticleTitle(), currentSubcategory.getArticleContent());
-        });
-
-        textToSpeechButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Text-to-Speech button clicked!", Toast.LENGTH_SHORT).show();
-            // Add Text-to-Speech functionality here
         });
     }
 
@@ -203,4 +248,35 @@ public class ResourceContentActivity extends BaseActivity {
     public View getView(int position, View convertView, ViewGroup parent) {
         return null;
     }
+
+    private void logRecentActivity(DatabaseReference recentActivitiesRef, String activityType, String title, int referenceId) {
+        long timestamp = System.currentTimeMillis();
+        Query query = recentActivitiesRef.orderByChild("referenceId").equalTo(String.valueOf(referenceId));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Update timestamp for existing activity
+                    for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
+                        activitySnapshot.getRef().child("timestamp").setValue(timestamp);
+                    }
+                } else {
+                    // Add new recent activity
+                    String activityId = recentActivitiesRef.push().getKey();
+                    DashboardRecentActivity recentActivity = new DashboardRecentActivity(
+                            activityId, activityType, title, timestamp, String.valueOf(referenceId)
+                    );
+                    if (activityId != null) {
+                        recentActivitiesRef.child(activityId).setValue(recentActivity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ResourceContentActivity", "Error logging recent activity: " + error.getMessage());
+            }
+        });
+    }
+
 }

@@ -25,29 +25,14 @@
         app:itemIconTint="@color/custom_icon_tint"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/projectTitleEdit"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="28dp"-->
-<!--        android:layout_marginTop="80dp"-->
-<!--        android:fontFamily="@font/inria_sans_bold"-->
-<!--        android:text="Project Title"-->
-<!--        android:textColor="#4a654d"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="80dp"
-        android:layout_marginEnd="8dp"
         android:scrollbars="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/collabOptionIcon"
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- EditText inside the HorizontalScrollView -->
@@ -55,19 +40,19 @@
             android:id="@+id/projectTitleEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inria_sans_bold"
-            android:hint="Project Title"
-            android:textColor="#4a654d"
-            android:textColorHint="#c0cdb3"
-            android:textSize="20sp"
             android:background="@android:color/transparent"
+            android:ellipsize="end"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:inputType="text"
+            android:fontFamily="@font/inria_sans_bold"
+            android:hint="Project Title"
             android:imeOptions="actionDone"
+            android:inputType="text"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:ellipsize="end" />
+            android:textColor="#4a654d"
+            android:textColorHint="#c0cdb3"
+            android:textSize="20sp" />
     </HorizontalScrollView>
 
     <TextView
@@ -124,16 +109,6 @@
         android:text="Status"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab20" />
-
-    <ImageView
-        android:id="@+id/collabOptionIcon"
-        android:layout_width="39dp"
-        android:layout_height="13dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/collab_option_icon" />
 
     <ImageView
         android:id="@+id/roundedRectCollab9"
@@ -410,15 +385,15 @@
     <!-- ScrollView for Typing Space -->
     <ScrollView
         android:id="@+id/scrollViewDescription"
-        android:layout_width="335dp"
-        android:layout_height="104dp"
+        android:layout_width="330dp"
+        android:layout_height="136dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
         android:layout_marginEnd="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab17"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roundedRectCollab18">
+        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab17">
 
         <!-- EditText for the Description -->
         <EditText
@@ -437,26 +412,6 @@
             android:textColorHint="#A9A9A9"
             android:textSize="14sp" />
     </ScrollView>
-
-    <ImageView
-        android:id="@+id/roundedRectCollab18"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab17"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab17"
-        app:srcCompat="@drawable/roundedrect3_collab" />
-
-    <ImageView
-        android:id="@+id/roundedRectCollab19"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/roundedRectCollab18"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab17"
-        app:srcCompat="@drawable/roundedrect3_collab" />
 
     <ImageView
         android:id="@+id/roundedRectCollab20"
@@ -576,26 +531,6 @@
         app:layout_constraintTop_toTopOf="@+id/publishButton" />
 
     <ImageView
-        android:id="@+id/fileIcon"
-        android:layout_width="20dp"
-        android:layout_height="17dp"
-        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab18"
-        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab18"
-        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab18"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab18"
-        app:srcCompat="@drawable/collab_file_icon" />
-
-    <ImageView
-        android:id="@+id/galleryIcon"
-        android:layout_width="21dp"
-        android:layout_height="17dp"
-        app:layout_constraintBottom_toBottomOf="@+id/roundedRectCollab19"
-        app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab19"
-        app:layout_constraintStart_toStartOf="@+id/roundedRectCollab19"
-        app:layout_constraintTop_toTopOf="@+id/roundedRectCollab19"
-        app:srcCompat="@drawable/collab_gallery_icon" />
-
-    <ImageView
         android:id="@+id/linkIcon"
         android:layout_width="29dp"
         android:layout_height="25dp"
@@ -606,6 +541,22 @@
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab20"
         app:layout_constraintTop_toTopOf="@+id/roundedRectCollab20"
         app:srcCompat="@drawable/collab_link_icon" />
+
+    <TextView
+        android:id="@+id/fileAttachmentStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#89a385"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/imageAttachmentStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#89a385"
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/totalCollaborators"
@@ -619,16 +570,6 @@
         app:layout_constraintEnd_toEndOf="@+id/roundedRectCollab9"
         app:layout_constraintStart_toStartOf="@+id/roundedRectCollab9"
         app:layout_constraintTop_toTopOf="@+id/roundedRectCollab9" />
-
-    <ImageView
-        android:id="@+id/collabSearcUserIcon"
-        android:layout_width="52dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/collabCircle1"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:srcCompat="@drawable/collab_search_user_icon" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
