@@ -61,8 +61,8 @@ public class QuizActivity extends BaseActivity {
         setupBottomNavigation();
 
         Intent intent = getIntent();
-        String categoryName = intent.getStringExtra("CATEGORY_NAME");
-        String hierarchy = intent.getStringExtra("HIERARCHY");
+        String categoryName = intent.getStringExtra("Category");
+        String hierarchy = intent.getStringExtra("Level");
 
         if (categoryName != null && hierarchy != null) {
             currentCategory = categoryName;
@@ -91,7 +91,7 @@ public class QuizActivity extends BaseActivity {
 //                arguments.putString("SUBCATEGORY", currentCategory);
 
                 // Load questions from Firebase
-                loadQuestionsFromFirebase("Basic","Solar Energy");
+                loadQuestionsFromFirebase(currentLevel,currentCategory);
 
             }
 
@@ -190,13 +190,19 @@ public class QuizActivity extends BaseActivity {
     private void loadQuestionsFromFirebase(String level, String category) {
         questionsList = new ArrayList<>();
 
+        String trimmedCategory = category.replace("Energy", "").trim();
+        String moduleKey = level.toLowerCase() + trimmedCategory.replace(" ", "");
+
+// Log the generated moduleKey
+        Log.d("ModuleKey", "Generated moduleKey: " + moduleKey);
+
         // Adjust the reference to include the specific level and category
         DatabaseReference questionsRef = FirebaseDatabase.getInstance()
                 .getReference("dataModules")
                 .child(level) // Navigate to the specific level, e.g., "Basic"
                 .child(category) // Navigate to the specific category, e.g., "Solar Energy"
                 .child("questionSets")
-                .child("basicSolar") // Assuming "basicSolar" is the identifier for the question set
+                .child(moduleKey) // Assuming "basicSolar" is the identifier for the question set
                 .child("questions");
 
         questionsRef.addListenerForSingleValueEvent(new ValueEventListener() {

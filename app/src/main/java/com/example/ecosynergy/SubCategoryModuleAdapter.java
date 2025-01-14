@@ -36,6 +36,11 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
         ViewHolder holder;
         DataModule.Subcategory currentSubcategory = subcategoryList.get(position);
 
+        if (currentSubcategory == null || level == null || category == null) {
+            Log.e("SubCategoryAdapter", "Invalid state: subcategory, level, or category is null");
+            return convertView == null ? new View(parent.getContext()) : convertView;
+        }
+
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             holder = new ViewHolder();
@@ -45,7 +50,7 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
             holder.descriptionTextView = convertView.findViewById(R.id.description);
             holder.iconImageView = convertView.findViewById(R.id.ic_video);
             holder.discussionTextView = convertView.findViewById(R.id.DiscussionUpNext);
-            holder.questionTitleTextView = convertView.findViewById(R.id.LevelAndCategoryName); // Recap TextView
+            holder.questionTitleTextView = convertView.findViewById(R.id.LevelAndCategoryName);
             holder.recapTextView = convertView.findViewById(R.id.Recap);
             convertView.setTag(holder);
         } else {
@@ -54,7 +59,6 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
 
         holder.titleTextView.setText(currentSubcategory.getTitle());
         holder.descriptionTextView.setText(currentSubcategory.getDescription());
-
         holder.questionTitleTextView.setText("Recap " + category);
 
         // Check if there are question sets
@@ -63,31 +67,31 @@ public class SubCategoryModuleAdapter extends BaseAdapter {
             convertView.findViewById(R.id.ic_discussion_recap).setVisibility(View.GONE);
             convertView.findViewById(R.id.question_subcat).setVisibility(View.VISIBLE);
             holder.questionTitleTextView.setOnClickListener(v -> {
-                // Launch QuizActivity
-                QuizActivity.openQuizActivity(parent.getContext(), category, level, dataSnapshot);
+                if (dataSnapshot != null && category != null && level != null) {
+                    Log.d("SubcategoryAdapter", "Opening quiz with category: " + category + " and level: " + level);
+                    QuizActivity.openQuizActivity(parent.getContext(), category, level, dataSnapshot);
+                } else {
+                    Log.e("SubcategoryAdapter", "Missing category, level, or dataSnapshot. Cannot open QuizActivity.");
+                }
             });
-            holder.recapTextView.setOnClickListener(v -> {
-                // Launch QuizActivity
-                QuizActivity.openQuizActivity(parent.getContext(), category, level, dataSnapshot);
-            });
-        } else {
+        }
+        else {
             convertView.findViewById(R.id.question_subcat).setVisibility(View.GONE);
         }
 
-        // Set click listener for subcategory title
-        convertView.setOnClickListener(v -> {
-            listener.onSubcategoryClick(currentSubcategory, false);
-        });
+        // Set listener for discussion
+        holder.discussionTextView.setOnClickListener(v ->
+                DiscussionActivity.openDiscussionActivity(
+                        parent.getContext(),
+                        currentSubcategory.getTitle(),
+                        CommentType.MODULE
+                )
+        );
 
-        holder.discussionTextView.setOnClickListener(v -> {
-            Log.d("SubCategoryResourceAdapter", "Discussion TextView clicked for: " + currentSubcategory.getTitle());
-            // Open DiscussionActivity with the type
-            DiscussionActivity.openDiscussionActivity(
-                    parent.getContext(),
-                    currentSubcategory.getTitle(),
-                    CommentType.MODULE // Pass the type here
-            );
-        });
+        // Set click listener for the whole subcategory item
+        convertView.setOnClickListener(v ->
+                listener.onSubcategoryClick(currentSubcategory, false)
+        );
 
         return convertView;
     }

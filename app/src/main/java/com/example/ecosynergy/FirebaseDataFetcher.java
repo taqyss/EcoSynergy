@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FirebaseDataFetcher {
@@ -33,13 +34,15 @@ public class FirebaseDataFetcher {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                dataModules.clear();
+
                 for (DataSnapshot levelSnapshot : dataSnapshot.getChildren()) {
                     String level = levelSnapshot.getKey();
                     Log.d("onDataChange", "level: " + level);
 
                     for (DataSnapshot categorySnapshot : levelSnapshot.getChildren()) {
                         String category = categorySnapshot.getKey();
-                        Log.d("onDataChange", "level: " + level);
                         Log.d("onDataChange", "category: " + category);
 
                         // Create a new DataModule for each category
@@ -57,33 +60,65 @@ public class FirebaseDataFetcher {
 
                             // Add questions and answers to each subcategory
                             List<QuestionSet> questionSets = new ArrayList<>();
+                            Log.d("onDataChange", "Processing subcategory: " + subcategorySnapshot.getKey());
 
-                            // Iterate through each question and answer
-                            for (DataSnapshot questionSnapshot : subcategorySnapshot.child("questions").getChildren()) {
-                                String questionNumber = questionSnapshot.getKey();
-                                List<String> questionText = new ArrayList<>(); // Populate this list if needed
+// Check if the 'questions' node exists
+                            if (subcategorySnapshot.hasChild("questions")) {
+                                Log.d("onDataChange", "Found questions for subcategory: " + subcategorySnapshot.getKey());
 
-                                // Get the list of answer options for the question
-                                List<String> answers = new ArrayList<>();
-                                for (DataSnapshot answerSnapshot : subcategorySnapshot.child("answers").child(questionNumber).getChildren()) {
-                                    answers.add(answerSnapshot.getValue(String.class));
+                                // Iterate through each question and answer
+                                for (DataSnapshot questionSnapshot : subcategorySnapshot.child("questions").getChildren()) {
+                                    Log.d("onDataChange", "Processing question: " + questionSnapshot.getKey());
+
+                                    // Get the question text
+                                    String questionText = questionSnapshot.child("questionText").getValue(String.class);
+                                    Log.d("onDataChange", "Question text: " + questionText);
+
+                                    // Get the list of answer options for the question
+                                    List<String> answers = new ArrayList<>();
+                                    if (questionSnapshot.hasChild("options")) {
+                                        for (DataSnapshot answerSnapshot : questionSnapshot.child("options").getChildren()) {
+                                            String answer = answerSnapshot.getValue(String.class);
+                                            answers.add(answer);
+                                            Log.d("onDataChange", "Answer option: " + answer);
+                                        }
+                                    } else {
+                                        Log.d("onDataChange", "No options found for question: " + questionSnapshot.getKey());
+                                    }
+
+                                    // Get the correct answer for the question
+                                    String correctAnswer = questionSnapshot.child("correctAnswer").getValue(String.class);
+                                    Log.d("onDataChange", "Correct answer: " + correctAnswer);
+
+                                    // Validate fetched data
+                                    if (questionText == null || answers.isEmpty() || correctAnswer == null) {
+                                        Log.d("onDataChange", "Incomplete data for question: " + questionSnapshot.getKey());
+                                        continue; // Skip incomplete questions
+                                    }
+
+                                    // Create a new QuestionSet object
+                                    QuestionSet questionSet = new QuestionSet(
+                                            Collections.singletonList(questionText), // Wrap questionText in a list
+                                            answers,
+                                            correctAnswer
+                                    );
+                                    Log.d("onDataChange", "Created QuestionSet for question: " + questionText);
+
+                                    // Add the QuestionSet to the list
+                                    questionSets.add(questionSet);
                                 }
-
-                                // Get the correct answer for the question
-                                String correctAnswer = subcategorySnapshot.child("correctAnswers").child(questionNumber).getValue(String.class);
-
-                                // Create a new QuestionSet object with the correct answer
-                                QuestionSet questionSet = new QuestionSet(questionText, answers, correctAnswer);
-
-                                // Add the QuestionSet to the list
-                                questionSets.add(questionSet);
+                            } else {
+                                Log.d("onDataChange", "No questions found for subcategory: " + subcategorySnapshot.getKey());
                             }
 
-                            // Add the list of QuestionSets to the DataModule's question set
+                            Log.d("onDataChange", "Total question sets created for subcategory: " + questionSets.size());
+
+// Add the list of QuestionSets to the DataModule's question set
                             for (QuestionSet questionSet : questionSets) {
                                 dataModule.addQuestionSet(subcategory.getTitle(), questionSet);
-                                Log.d("onDataChange", "questionSet: " + subcategory.getTitle());
+                                Log.d("onDataChange", "Added QuestionSet for subcategory: " + subcategory.getTitle());
                             }
+
                         }
 
                         // Add subcategories to the DataModule
@@ -94,13 +129,7 @@ public class FirebaseDataFetcher {
                     }
                 }
 
-                // Debugging: Log all Basic-level DataModules
-                for (DataModule dm : dataModules) {
-                    if ("Basic".equals(dm.getLevel())) {
-                        Log.d("onDataChange", "DM: " + dm.getCategory());
-                    }
-                }
-
+                Log.d("onDataChange firebase", "data modules size:" + dataModules.size());
                 // Call the callback with the fetched data
                 callback.onDataFetchedModules(dataModules);
             }
@@ -111,6 +140,7 @@ public class FirebaseDataFetcher {
             }
         });
     }
+
 
     // Process a subcategory
     private DataModule.Subcategory processSubcategory(DataSnapshot subcategorySnapshot) {
