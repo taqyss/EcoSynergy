@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -142,9 +141,6 @@ public class CollabProjectsDescActivity extends BaseActivity {
                         "This project is full.", Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Log the recent activity for the current project
-        logRecentActivity(projectId, projectTitle);
     }
 
     private void updateMembersText() {
@@ -195,7 +191,8 @@ public class CollabProjectsDescActivity extends BaseActivity {
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("recent_activities");
 
-        String activityType = "group_project";
+        String activityType = "Group Project";
+        String activityTitle = projectTitle;
         long timestamp = System.currentTimeMillis();
 
         Query query = recentActivitiesRef.orderByChild("referenceId").equalTo(projectId);
@@ -203,13 +200,15 @@ public class CollabProjectsDescActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    // Update timestamp if activity already exists
                     for (DataSnapshot activitySnapshot : snapshot.getChildren()) {
                         activitySnapshot.getRef().child("timestamp").setValue(timestamp);
                     }
                 } else {
+                    // Add new recent activity
                     String activityId = recentActivitiesRef.push().getKey();
                     DashboardRecentActivity recentActivity = new DashboardRecentActivity(
-                            activityId, activityType, projectTitle, timestamp, projectId
+                            activityId, activityType, activityTitle, timestamp, projectId
                     );
                     if (activityId != null) {
                         recentActivitiesRef.child(activityId).setValue(recentActivity);
