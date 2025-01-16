@@ -7,7 +7,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseDataFetcher {
     private DatabaseReference databaseReference;
@@ -33,13 +36,15 @@ public class FirebaseDataFetcher {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                dataModules.clear();
+
                 for (DataSnapshot levelSnapshot : dataSnapshot.getChildren()) {
                     String level = levelSnapshot.getKey();
                     Log.d("onDataChange", "level: " + level);
 
                     for (DataSnapshot categorySnapshot : levelSnapshot.getChildren()) {
                         String category = categorySnapshot.getKey();
-                        Log.d("onDataChange", "level: " + level);
                         Log.d("onDataChange", "category: " + category);
 
                         // Create a new DataModule for each category
@@ -51,38 +56,83 @@ public class FirebaseDataFetcher {
                         // Process all subcategories for this category
                         for (DataSnapshot subcategorySnapshot : categorySnapshot.child("subcategories").getChildren()) {
                             DataModule.Subcategory subcategory = processSubcategory(subcategorySnapshot);
+
+                            // Fetch existing comments for this subcategory
+                            List<Comment> comments = new ArrayList<>();
+                            if (subcategorySnapshot.hasChild("comments")) {
+                                for (DataSnapshot commentSnapshot : subcategorySnapshot.child("comments").getChildren()) {
+                                    Comment comment = processComment(commentSnapshot);
+                                    comments.add(comment);
+                                    Log.d("onDataChange", "Fetched comment: " + comment.getCommentText());
+                                }
+                            }
+
+                            // Set the fetched comments to the subcategory
+                            subcategory.setComments(comments);
+
                             subcategories.add(subcategory);
 
                             Log.d("onDataChange", "subcategory: " + subcategory.getTitle());
 
                             // Add questions and answers to each subcategory
                             List<QuestionSet> questionSets = new ArrayList<>();
+                            Log.d("onDataChange", "Processing subcategory: " + subcategorySnapshot.getKey());
 
-                            // Iterate through each question and answer
-                            for (DataSnapshot questionSnapshot : subcategorySnapshot.child("questions").getChildren()) {
-                                String questionNumber = questionSnapshot.getKey();
-                                List<String> questionText = new ArrayList<>(); // Populate this list if needed
+                            // Check if the 'questions' node exists
+                            if (subcategorySnapshot.hasChild("questions")) {
+                                Log.d("onDataChange", "Found questions for subcategory: " + subcategorySnapshot.getKey());
 
-                                // Get the list of answer options for the question
-                                List<String> answers = new ArrayList<>();
-                                for (DataSnapshot answerSnapshot : subcategorySnapshot.child("answers").child(questionNumber).getChildren()) {
-                                    answers.add(answerSnapshot.getValue(String.class));
+                                // Iterate through each question and answer
+                                for (DataSnapshot questionSnapshot : subcategorySnapshot.child("questions").getChildren()) {
+                                    Log.d("onDataChange", "Processing question: " + questionSnapshot.getKey());
+
+                                    // Get the question text
+                                    String questionText = questionSnapshot.child("questionText").getValue(String.class);
+                                    Log.d("onDataChange", "Question text: " + questionText);
+
+                                    // Get the list of answer options for the question
+                                    List<String> answers = new ArrayList<>();
+                                    if (questionSnapshot.hasChild("options")) {
+                                        for (DataSnapshot answerSnapshot : questionSnapshot.child("options").getChildren()) {
+                                            String answer = answerSnapshot.getValue(String.class);
+                                            answers.add(answer);
+                                            Log.d("onDataChange", "Answer option: " + answer);
+                                        }
+                                    } else {
+                                        Log.d("onDataChange", "No options found for question: " + questionSnapshot.getKey());
+                                    }
+
+                                    // Get the correct answer for the question
+                                    String correctAnswer = questionSnapshot.child("correctAnswer").getValue(String.class);
+                                    Log.d("onDataChange", "Correct answer: " + correctAnswer);
+
+                                    // Validate fetched data
+                                    if (questionText == null || answers.isEmpty() || correctAnswer == null) {
+                                        Log.d("onDataChange", "Incomplete data for question: " + questionSnapshot.getKey());
+                                        continue; // Skip incomplete questions
+                                    }
+
+                                    // Create a new QuestionSet object
+                                    QuestionSet questionSet = new QuestionSet(
+                                            Collections.singletonList(questionText), // Wrap questionText in a list
+                                            answers,
+                                            correctAnswer
+                                    );
+                                    Log.d("onDataChange", "Created QuestionSet for question: " + questionText);
+
+                                    // Add the QuestionSet to the list
+                                    questionSets.add(questionSet);
                                 }
-
-                                // Get the correct answer for the question
-                                String correctAnswer = subcategorySnapshot.child("correctAnswers").child(questionNumber).getValue(String.class);
-
-                                // Create a new QuestionSet object with the correct answer
-                                QuestionSet questionSet = new QuestionSet(questionText, answers, correctAnswer);
-
-                                // Add the QuestionSet to the list
-                                questionSets.add(questionSet);
+                            } else {
+                                Log.d("onDataChange", "No questions found for subcategory: " + subcategorySnapshot.getKey());
                             }
+
+                            Log.d("onDataChange", "Total question sets created for subcategory: " + questionSets.size());
 
                             // Add the list of QuestionSets to the DataModule's question set
                             for (QuestionSet questionSet : questionSets) {
                                 dataModule.addQuestionSet(subcategory.getTitle(), questionSet);
-                                Log.d("onDataChange", "questionSet: " + subcategory.getTitle());
+                                Log.d("onDataChange", "Added QuestionSet for subcategory: " + subcategory.getTitle());
                             }
                         }
 
@@ -94,13 +144,7 @@ public class FirebaseDataFetcher {
                     }
                 }
 
-                // Debugging: Log all Basic-level DataModules
-                for (DataModule dm : dataModules) {
-                    if ("Basic".equals(dm.getLevel())) {
-                        Log.d("onDataChange", "DM: " + dm.getCategory());
-                    }
-                }
-
+                Log.d("onDataChange firebase", "data modules size:" + dataModules.size());
                 // Call the callback with the fetched data
                 callback.onDataFetchedModules(dataModules);
             }
@@ -111,6 +155,8 @@ public class FirebaseDataFetcher {
             }
         });
     }
+
+
 
     // Process a subcategory
     private DataModule.Subcategory processSubcategory(DataSnapshot subcategorySnapshot) {
@@ -147,19 +193,20 @@ public class FirebaseDataFetcher {
     }
 
     private Comment processComment(DataSnapshot commentSnapshot) {
-        String userAvatar = commentSnapshot.child("userAvatar").getValue(String.class);
-        String username = commentSnapshot.child("username").getValue(String.class);
         String commentText = commentSnapshot.child("commentText").getValue(String.class);
-        int upvote = commentSnapshot.child("upvote").getValue(Integer.class);
+        String username = commentSnapshot.child("username").getValue(String.class);
+        String userAvatar = commentSnapshot.child("userAvatar").getValue(String.class);
         String timestamp = commentSnapshot.child("timestamp").getValue(String.class);
+        int upvote = commentSnapshot.child("upvote").getValue(Integer.class);
 
-        // Creating Comment object
-        Comment comment = new Comment(userAvatar, username, commentText, upvote, timestamp);
+        Comment comment = new Comment(commentText, username, userAvatar, upvote, timestamp);
 
-        // Handling replies if any
-        for (DataSnapshot replySnapshot : commentSnapshot.child("replies").getChildren()) {
-            Comment reply = processComment(replySnapshot);
-            comment.addReply(reply);
+        // Process replies if any
+        if (commentSnapshot.hasChild("replies")) {
+            for (DataSnapshot replySnapshot : commentSnapshot.child("replies").getChildren()) {
+                Comment reply = processComment(replySnapshot); // Recursive call for replies
+                comment.addReply(reply);
+            }
         }
 
         return comment;
@@ -198,18 +245,31 @@ public class FirebaseDataFetcher {
     }
 
     // Fetch comments for a specific subcategory
+    // Fetch comments for a specific subcategory
     public void fetchCommentsForSubcategory(String subcategoryTitle, final CommentsModuleCallback callback) {
-        // Find the subcategory with matching title
+        // Find the subcategory with the matching title
         DataModule.Subcategory matchedSubcategory = null;
-        Log.d("FirebaseDataFetcher", "Fetching comments for subcategory:" + subcategoryTitle);
-        for (DataModule.Subcategory subcategory : subcategories) {
-            if (subcategory.getTitle().equals(subcategoryTitle)) {
-                Log.d("FirebaseDataFetcher", "Subcategory title exist");
-                matchedSubcategory = subcategory;
-                break;
-            } else Log.d("FirebaseDataFetcher", "Subcategory title doesnt exist");
+        Log.d("FirebaseDataFetcher", "Fetching comments for subcategory: " + subcategoryTitle);
+        Log.d("FirebaseDataFetcher", "Subcategories in comment: " + dataModules.size());
+
+        // Iterate through each DataModule and its subcategories
+        for (DataModule dataModule : dataModules) {
+            // Iterate through subcategories in the current DataModule
+            for (DataModule.Subcategory subcategory : dataModule.getSubcategories()) {
+                if (subcategory.getTitle().equals(subcategoryTitle)) {
+                    Log.d("FirebaseDataFetcher", "Subcategory title exists");
+                    matchedSubcategory = subcategory;
+                    break; // Break out of the loop once the subcategory is found
+                } else {
+                    Log.d("FirebaseDataFetcher", "Subcategory title doesn't exist");
+                }
+            }
+            if (matchedSubcategory != null) {
+                break; // If matched subcategory is found, break out of the outer loop as well
+            }
         }
 
+        // Return the comments if the subcategory is found
         if (matchedSubcategory != null) {
             callback.onCommentsFetched(matchedSubcategory.getComments());
         } else {
@@ -218,18 +278,65 @@ public class FirebaseDataFetcher {
     }
 
     // Store a new comment for a subcategory
-    public void storeNewComment(String subcategoryTitle, Comment newComment, final StoreCommentCallback callback) {
-        DatabaseReference subcategoryCommentsRef = commentsRef.child(subcategoryTitle);
+//    public void storeNewComment(String subcategoryTitle, Comment newComment, final StoreCommentCallback callback) {
+//        DatabaseReference subcategoryCommentsRef = commentsRef.child(subcategoryTitle);
+//
+//        // Generate a unique comment ID using push()
+//        String commentId = subcategoryCommentsRef.push().getKey();
+//
+//        if (commentId != null) {
+//            // Create a map to store the comment with replies
+//            Map<String, Object> commentMap = new HashMap<>();
+//            commentMap.put("commentText", newComment.getCommentText());
+//            commentMap.put("timestamp", newComment.getTimestamp());
+//            commentMap.put("upvote", newComment.getVoteCount());
+//            commentMap.put("username", newComment.getUsername());
+//            commentMap.put("userAvatar", newComment.getUserAvatar());
+//
+//            // Store replies if there are any (assuming the Comment object has a `getReplies()` method returning a List)
+//            if (newComment.getReplies() != null && !newComment.getReplies().isEmpty()) {
+//                List<Map<String, Object>> repliesList = new ArrayList<>();
+//                for (Comment reply : newComment.getReplies()) {
+//                    Map<String, Object> replyMap = new HashMap<>();
+//                    replyMap.put("commentText", reply.getCommentText());
+//                    replyMap.put("timestamp", reply.getTimestamp());
+//                    replyMap.put("upvote", reply.getVoteCount());
+//                    replyMap.put("username", reply.getUsername());
+//                    replyMap.put("userAvatar", reply.getUserAvatar());
+//                    repliesList.add(replyMap);
+//                }
+//                commentMap.put("replies", repliesList);
+//            }
+//
+//            // Store the comment with the generated comment ID
+//            subcategoryCommentsRef.child(commentId).setValue(commentMap)
+//                    .addOnSuccessListener(aVoid -> callback.onCommentStored())
+//                    .addOnFailureListener(e -> callback.onError("Failed to store comment"));
+//        } else {
+//            callback.onError("Failed to generate comment ID");
+//        }
+//    }
 
-        String commentId = subcategoryCommentsRef.push().getKey();
-        if (commentId != null) {
-            subcategoryCommentsRef.child(commentId).setValue(newComment)
-                    .addOnSuccessListener(aVoid -> callback.onCommentStored())
-                    .addOnFailureListener(e -> callback.onError("Failed to store comment"));
-        } else {
-            callback.onError("Failed to generate comment ID");
-        }
+    public void storeNewComment(final String subcategory, final Comment comment, final StoreCommentCallback callback) {
+        // Assuming you have a reference to Firebase's Realtime Database or Firestore for modules
+        DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference("modules").child(subcategory).child("comments");
+
+        // Push the new comment to Firebase
+        commentRef.push().setValue(comment)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully added the comment to Firebase
+                    Log.d("FirebaseDataFetcher", "Comment added successfully for module: " + subcategory);
+                    callback.onCommentStored(); // Notify success
+                })
+                .addOnFailureListener(e -> {
+                    // Failed to add the comment to Firebase
+                    Log.e("FirebaseDataFetcher", "Error adding comment: " + e.getMessage());
+                    callback.onError("Error adding comment for module: " + e.getMessage()); // Notify error
+                });
     }
+
+
+
 
     public void addReplyToComment(Comment comment, Comment reply) {
         DatabaseReference commentRef = FirebaseDatabase.getInstance().getReference("comments")
@@ -263,14 +370,6 @@ public class FirebaseDataFetcher {
 
         void onError(String errorMessage);
     }
-
-    // Callback interface for storing comment
-    public interface StoreCommentCallback {
-        void onCommentStored();
-
-        void onError(String errorMessage);
-    }
-
     // Callback interface for data fetching
     public interface FirebaseCallback {
 

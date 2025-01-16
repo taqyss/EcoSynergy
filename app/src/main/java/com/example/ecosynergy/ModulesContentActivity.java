@@ -127,7 +127,6 @@ public class ModulesContentActivity extends BaseActivity {
         detailDescription = findViewById(R.id.detail_description); // Initialize VideoView
         favoriteButton = findViewById(R.id.favorite_button);
         downloadButton = findViewById(R.id.download_button);
-        transcriptButton = findViewById(R.id.transcript_button);
     }
 
     // Fetch Subcategory Data from Firebase
@@ -265,21 +264,6 @@ public class ModulesContentActivity extends BaseActivity {
             }
             String fileName = "video.mp4";
             downloadVideo(videoUrl, fileName);
-        });
-
-        transcriptButton.setOnClickListener(view -> {
-            int currentId = getIntent().getIntExtra("subcategoryId", -1);
-            String videoUrl = DataModule.getURLBasedOnID(currentId);
-
-            if (videoUrl != null && !videoUrl.isEmpty()) {
-                Toast.makeText(this, "Opening YouTube...", Toast.LENGTH_SHORT).show();
-
-                Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
-                youtubeIntent.putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://com.google.android.youtube"));
-                startActivity(youtubeIntent);
-            } else {
-                Toast.makeText(this, "Link is unavailable", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 
