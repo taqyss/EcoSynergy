@@ -9,7 +9,6 @@ public class CollabSearchUserActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collab_discuss1);
 
         // Set up the toolbar with back button enabled
         setupToolbar(true);
