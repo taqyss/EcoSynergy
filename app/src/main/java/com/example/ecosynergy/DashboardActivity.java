@@ -279,28 +279,29 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void loadModuleProgress() {
-        progressRef.orderByChild("timestamp").limitToLast(2)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        int index = 0;
-                        for (DataSnapshot progressSnapshot : snapshot.getChildren()) {
-                            DashboardModuleProgress progress = progressSnapshot.getValue(DashboardModuleProgress.class);
-                            if (progress != null && index < progressCards.length) {
-                                updateProgressCard(index, progress);
-                                index++;
-                            }
-                        }
+        progressRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int index = 0;
+                for (DataSnapshot progressSnapshot : snapshot.getChildren()) {
+                    DashboardModuleProgress progress = progressSnapshot.getValue(DashboardModuleProgress.class);
+                    if (progress != null && index < progressCards.length) {
+                        updateProgressCard(index, progress);
+                        index++;
                     }
+                }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Handle error
-                    }
-                });
+                for (int i = index; i < progressCards.length; i++) {
+                    progressCards[i].setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("DashboardActivity", "Error loading module progress: " + error.getMessage());
+            }
+        });
     }
-
-
 
     private void updateProgressCard(int index, DashboardModuleProgress progress) {
         progressCards[index].setVisibility(View.VISIBLE);
@@ -308,13 +309,40 @@ public class DashboardActivity extends BaseActivity {
         progressBars[index].setProgress(progress.getProgressPercentage());
         progressPercentages[index].setText(progress.getProgressPercentage() + "%");
 
-        // Set click listener
+        // Set click listener to navigate to subcategory page
         progressCards[index].setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, LearningActivity.class);
-            intent.putExtra("moduleId", progress.getModuleId());
+            Intent intent = new Intent(DashboardActivity.this, SubCategoryModuleActivity.class);
+            intent.putExtra("CATEGORY_NAME", progress.getModuleName());
             startActivity(intent);
         });
     }
+
+    public void updateProgress(String moduleId, int incrementPercentage) {
+        progressRef.child(moduleId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                DashboardModuleProgress progress;
+                if (snapshot.exists()) {
+                    progress = snapshot.getValue(DashboardModuleProgress.class);
+                    if (progress != null) {
+                        int newPercentage = Math.min(progress.getProgressPercentage() + incrementPercentage, 100);
+                        progress.setProgressPercentage(newPercentage);
+                        progressRef.child(moduleId).setValue(progress);
+                    }
+                } else {
+                    progress = new DashboardModuleProgress(moduleId, "Module Name", 100, incrementPercentage);
+                    progressRef.child(moduleId).setValue(progress);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("DashboardActivity", "Error updating progress: " + error.getMessage());
+            }
+        });
+    }
+
+
 
 
     private void navigateToActivity(DashboardRecentActivity activity) {

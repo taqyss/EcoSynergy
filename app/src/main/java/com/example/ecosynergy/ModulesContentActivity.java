@@ -340,6 +340,15 @@ public class ModulesContentActivity extends BaseActivity {
                         recentActivitiesRef.child(activityId).setValue(recentActivity);
                     }
                 }
+
+                // Track progress
+                ProgressTracker progressTracker = new ProgressTracker(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                progressTracker.trackModuleAccess(
+                        String.valueOf(subcategoryId),
+                        moduleLevel,
+                        100, // Example total subcategories, replace with actual value
+                        null
+                );
             }
 
             @Override

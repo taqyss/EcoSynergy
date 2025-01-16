@@ -32,7 +32,7 @@ public class ProgressTracker {
                 if (snapshot.exists()) {
                     progress = snapshot.getValue(DashboardModuleProgress.class);
                     if (progress != null) {
-                        progress.setCompletedItems(progress.getCompletedItems() + 1);
+                        progress.setCompletedItems(progress.getCompletedItems() + 20);
                     }
                 } else {
                     progress = new DashboardModuleProgress(categoryId, categoryName, totalSubcategories, 1);
