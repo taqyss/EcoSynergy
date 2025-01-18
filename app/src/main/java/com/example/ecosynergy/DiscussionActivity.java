@@ -24,7 +24,6 @@ public class DiscussionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discussion);
 
-        // Set up Toolbar
         setupToolbar(true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Discussion");
@@ -51,6 +50,10 @@ public class DiscussionActivity extends BaseActivity {
         }
 
         // Load the fragment
+        loadDiscussionFragment();
+    }
+
+    private void loadDiscussionFragment() {
         DiscussionFragment fragment = new DiscussionFragment();
         Bundle arguments = new Bundle();
         arguments.putString("SUBCATEGORY", currentSubcategoryTitle);
@@ -157,7 +160,6 @@ public class DiscussionActivity extends BaseActivity {
             @Override
             public void onCommentStored() {
                 Toast.makeText(DiscussionActivity.this, "Comment stored successfully!", Toast.LENGTH_SHORT).show();
-                // Optionally, refresh the comments list
                 if (discussionType == CommentType.MODULE) {
                     fetchCommentsForModules(subcategory);
                 } else if (discussionType == CommentType.RESOURCE) {
