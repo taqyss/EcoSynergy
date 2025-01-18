@@ -2,6 +2,7 @@ package com.example.ecosynergy;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         Comment comment = comments.get(position);
         holder.commentText.setText(comment.getCommentText());
-        holder.commentTime.setText(comment.getTimestamp());
+        holder.commentTime.setText(Utility.formatTimestamp(comment.getTimestamp()));
         holder.voteCount.setText(comment.getVoteCount() + " votes");
 
         holder.upvoteButton.setOnClickListener(v -> {
@@ -107,14 +108,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             if (!commentText.isEmpty()) {
                 // Get the username from Firebase Authentication
                 String username = getUserDisplayName();
-
                 // Create a new Comment object with a drawable avatar
                 Comment newComment = new Comment(
-                        ContextCompat.getDrawable(context, R.drawable.ic_default_avatar), // Set default avatar drawable
-                        username, // Use the actual username here
                         commentText,
+                        username,
+                        ContextCompat.getDrawable(context, R.drawable.ic_default_avatar), // Set default avatar drawable
                         0, // Vote count, or other field if needed
-                        "Just now" // Timestamp or other logic for time
+                        Utility.getCurrentTimestamp() // Timestamp or other logic for time
                 );
 
                 // Add the new comment to the list
@@ -144,5 +144,4 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             return "Anonymous";
         }
     }
-
 }
