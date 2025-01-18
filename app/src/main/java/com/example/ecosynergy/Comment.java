@@ -15,40 +15,22 @@ public class Comment {
 
     private String id;
 
-    public Comment(Drawable userAvatar, String username, String commentText, int upvote, String timestamp) {
-        this.avatar = userAvatar;
+    public Comment(String commentText, String username, Drawable userAvatar, int upvote, String timestamp) {
         this.commentText = commentText;
+        this.avatar = userAvatar;
         this.upvote = upvote;
         this.timestamp = timestamp;
         this.username = username;
         this.replies = new ArrayList<>();
     }
 
-    public Comment(String userAvatar, String username, String commentText, int upvote, String timestamp) {
+    public Comment(String commentText,String username,String userAvatar,int upvote, String timestamp) {
         this.userAvatar = userAvatar;
         this.commentText = commentText;
         this.upvote = upvote;
         this.timestamp = timestamp;
         this.username = username;
         this.replies = new ArrayList<>();
-    }
-
-    public Comment(String userAvatar, String username, String commentText, int upvote, String timestamp, List<Comment> replies) {
-        this.userAvatar = userAvatar;
-        this.commentText = commentText;
-        this.upvote = upvote;
-        this.timestamp = timestamp;
-        this.username = username;
-        this.replies = replies;
-    }
-
-    public Comment(Drawable userAvatar, String username, String commentText, int upvote, String timestamp, List<Comment> replies) {
-        this.avatar = userAvatar;
-        this.commentText = commentText;
-        this.upvote = upvote;
-        this.timestamp = timestamp;
-        this.username = username;
-        this.replies = replies;
     }
 
     public Drawable getAvatar() {
@@ -104,4 +86,3 @@ public class Comment {
         this.replies.add(reply);
     }
 }
-
