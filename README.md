@@ -4,7 +4,7 @@
 
 Welcome to the **EcoSynergy** project! hai :DDDDDDD
 
-**IMPORANT NOTES**
+**IMPORTANT NOTES**
 
 -The main branch is called ```main```
 
